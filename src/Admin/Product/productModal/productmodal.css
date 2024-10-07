@@ -1,0 +1,62 @@
+.dynamic-delete-button {
+    position: relative;
+    top: 4px;
+    margin: 0 8px;
+    color: #999;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .dynamic-delete-button:hover {
+    color: #777;
+  }
+  .dynamic-delete-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .fields{
+    display: flex;
+    flex-direction: column;
+  }
+  .des-spec-parernt{
+    display: flex;
+    justify-content: space-around;
+  }
+  :where(.css-dev-only-do-not-override-ccdg5a).ant-input:placeholder-shown {
+    width: 450px;
+    padding: 10px 10px;
+  }
+
+
+  .arrayfield-parent{
+    display: flex;
+  }
+  label {
+    color: #787474;
+    font-size: 20px;
+  }
+  .des-spec-parernt {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping of fields */
+    justify-content: space-between; /* Space fields evenly */
+}
+
+.fields {
+    width: 48%; /* Adjust width for two fields in one line */
+    margin-bottom: 16px;
+}
+
+input, textarea, .ant-select-selector, .ant-input-number {
+    width: 100%; /* Increase field size */
+}
+
+.ant-form-item-explain {
+    color: red; 
+}
+
+/* Optional: Additional styles for field arrays */
+.arrayfield-parent .fields {
+    width: 100%; 
+}
+
