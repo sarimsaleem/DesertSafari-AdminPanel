@@ -29,6 +29,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
     useEffect(() => {
         if (!open) {
             setFileList([]);
+            setBannerImgList([])
         }
     }, [open]);
 
@@ -48,6 +49,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                     setSubmitting(false);
                     resetForm();
                     setFileList([]);
+                    setBannerImgList([])
                     setOpen(false);
                 }}
             >
@@ -147,9 +149,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                         </div>
                         {/* array fieldss  */}
                         <div className="arrayfield-wrapper">
-                            {/* Package Includes and Timings - Both will take up 40% of the width */}
                             <div className="arrayfield-group">
-                                {/* Package Includes Field */}
                                 <div className="fields">
                                     <label>Package Includes</label>
                                     <FieldArray
@@ -181,7 +181,6 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                     />
                                 </div>
 
-                                {/* Timings Field */}
                                 <div className="fields">
                                     <label>Timings</label>
                                     <FieldArray
@@ -214,8 +213,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                 </div>
                             </div>
 
-                            {/* Notes Field - Takes up 40% of the width */}
-                            <div className="fields" style={{ width: '40%' }}>
+                            <div className="fields">
                                 <label>Notes</label>
                                 <FieldArray
                                     name="notes"
@@ -246,7 +244,6 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                 />
                             </div>
                         </div>
-
                         {/* images section */}
                         <div className="des-spec-parernt">
                             {/* Product Image Upload */}

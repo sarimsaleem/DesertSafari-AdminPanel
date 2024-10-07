@@ -1,62 +1,84 @@
 .dynamic-delete-button {
-    position: relative;
-    top: 4px;
-    margin: 0 8px;
-    color: #999;
-    font-size: 24px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .dynamic-delete-button:hover {
-    color: #777;
-  }
-  .dynamic-delete-button[disabled] {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-  
-  .fields{
-    display: flex;
-    flex-direction: column;
-  }
-  .des-spec-parernt{
-    display: flex;
-    justify-content: space-around;
-  }
-  :where(.css-dev-only-do-not-override-ccdg5a).ant-input:placeholder-shown {
-    width: 450px;
-    padding: 10px 10px;
-  }
-
-
-  .arrayfield-parent{
-    display: flex;
-  }
-  label {
-    color: #787474;
-    font-size: 20px;
-  }
-  .des-spec-parernt {
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping of fields */
-    justify-content: space-between; /* Space fields evenly */
+  position: relative;
+  top: 4px;
+  margin: 0 8px;
+  color: #999;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.dynamic-delete-button:hover {
+  color: #777;
+}
+.dynamic-delete-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .fields {
-    width: 48%; /* Adjust width for two fields in one line */
-    margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.des-spec-parernt {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-between; 
+}
+
+.fields {
+  width: 48%; 
 }
 
 input, textarea, .ant-select-selector, .ant-input-number {
-    width: 100%; /* Increase field size */
+  width: 100%;
 }
 
 .ant-form-item-explain {
-    color: red; 
+  color: red; 
 }
 
-/* Optional: Additional styles for field arrays */
-.arrayfield-parent .fields {
-    width: 100%; 
+/* Array fields */
+.arrayfield-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; 
+}
+
+.arrayfield-group .fields {
+  width: 48%; 
+}
+
+.arrayfield-group .ant-input {
+  width: 100%; 
+}
+
+label {
+  color: #787474;
+  font-size: 20px;
+}
+
+.arrayfield-group .fields input, 
+.arrayfield-group .fields .ant-input,
+.arrayfield-group .fields .ant-input-number {
+  background-color: #f5f5f5; 
+  padding: 8px; 
+  border-radius: 4px; 
+}
+
+.arrayfield-group .fields .ant-input:hover, 
+.arrayfield-group .fields .ant-input-number:hover {
+  border-color: #40a9ff; 
+}
+
+/* Ensure array fields (packageIncludes, timings, and notes) are one per line and 50% width */
+.arrayfield-group {
+  width: 100%; 
+}
+
+.arrayfield-group .fields {
+  width: 48%; 
+  margin-bottom: 16px;
 }
 

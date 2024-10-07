@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Table, Space } from 'antd';
 import "./product.css";
-import ProductModal from './productModal/productModal';
+import ProductModal from './productModal/ProductModal';
 import { Add, fetchProducts, deleteProduct } from './Function/productFunction';
 
 const { Header, Sider, Content } = Layout;
@@ -26,7 +26,7 @@ const Product = () => {
 
     const handleDeleteProduct = async (productId, imageUrl) => {
         await deleteProduct(productId, imageUrl);
-        await loadProducts(); // Reload products after deletion
+        await loadProducts(); 
     };
 
     useEffect(() => {
@@ -102,6 +102,7 @@ const Product = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
+                    <Button warning >Edit</Button>
                     <Button danger onClick={() => handleDeleteProduct(record.id, record.productImage)} >Delete</Button>
                 </Space>
             )
