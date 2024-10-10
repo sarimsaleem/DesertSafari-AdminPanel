@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Table, Space } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
@@ -17,6 +18,8 @@ const Product = () => {
         setProducts(fetchedProducts);
     };
 
+    const navigate = useNavigate()
+
     const handleAddProduct = async (product) => {
         await Add(product);
         const fetchedProducts = await fetchProducts();
@@ -26,7 +29,7 @@ const Product = () => {
 
     const handleDeleteProduct = async (productId, imageUrl) => {
         await deleteProduct(productId, imageUrl);
-        await loadProducts(); 
+        await loadProducts();
     };
 
     useEffect(() => {
@@ -35,50 +38,50 @@ const Product = () => {
 
     const columns = [
         {
-            title: 'Product Name',
-            dataIndex: 'productName',
-            key: 'productName',
+            title: 'image_text',
+            dataIndex: 'image_text',
+            key: 'image_text',
         },
         {
-            title: 'Product Card Detail',
-            dataIndex: 'productCardDetail',
-            key: 'productCardDetail',
+            title: 'event_name',
+            dataIndex: 'event_name',
+            key: 'event_name',
         },
         {
-            title: 'Most Popular',
-            dataIndex: 'productIsMostPopular',
-            key: 'productIsMostPopular',
+            title: 'most_popular',
+            dataIndex: 'most_popular',
+            key: 'most_popular',
             render: (value) => (value ? 'Yes' : 'No'),
         },
         {
             title: 'Category',
-            dataIndex: 'productCategory',
-            key: 'productCategory',
+            dataIndex: 'category',
+            key: 'category',
         },
         {
             title: 'Price',
-            dataIndex: 'productPrice',
-            key: 'productPrice',
+            dataIndex: 'price',
+            key: 'price',
         },
         {
-            title: 'Product Image',
-            dataIndex: 'productImage',
-            key: 'productImage',
+            title: 'image_url',
+            dataIndex: 'image_url',
+            key: 'image_url',
+            render: (image) => image ? <img src={image} alt="image_url" width={100} /> : 'No Image',
+        },
+        {
+            title: 'banner_image_url',
+            dataIndex: 'banner_image_url',
+            key: 'banner_image_url',
             render: (image) => image ? <img src={image} alt="Product" width={100} /> : 'No Image',
         },
         {
-            title: 'Banner Image',
-            dataIndex: 'bannerImg',
-            key: 'bannerImg',
-            render: (image) => image ? <img src={image} alt="Product" width={100} /> : 'No Image',
+            title: 'special_note',
+            dataIndex: 'special_note',
+            key: 'special_note',
         },
         {
-            title: 'Special Note',
-            dataIndex: 'specialNote',
-            key: 'specialNote',
-        },
-        {
-            title: 'Description',
+            title: 'description',
             dataIndex: 'description',
             key: 'description',
         },
@@ -103,7 +106,7 @@ const Product = () => {
             render: (_, record) => (
                 <Space size="middle">
                     <Button warning >Edit</Button>
-                    <Button danger onClick={() => handleDeleteProduct(record.id, record.productImage)} >Delete</Button>
+                    <Button danger onClick={() => handleDeleteProduct(record.id, record.image_url)} >Delete</Button>
                 </Space>
             )
         }
@@ -121,20 +124,18 @@ const Product = () => {
                         {
                             key: '1',
                             icon: <UserOutlined />,
-                            label: 'nav 1',
+                            label: 'Product',
+                            onClick: () => navigate('/'),
                         },
                         {
                             key: '2',
                             icon: <VideoCameraOutlined />,
-                            label: 'nav 2',
-                        },
-                        {
-                            key: '3',
-                            icon: <UploadOutlined />,
-                            label: 'nav 3',
+                            label: 'Category',
+                            onClick: () => navigate('/categories'), // Navigate to Category
                         },
                     ]}
                 />
+
             </Sider>
             <Layout>
                 <Header
@@ -164,7 +165,7 @@ const Product = () => {
                         overflowX: "scroll"
                     }}
                 >
-                    <Table dataSource={products} columns={columns} rowKey="id" /> {/* Use unique product id */}
+                    <Table dataSource={products} columns={columns} rowKey="id" />
 
                     <ProductModal
                         open={openModal}
