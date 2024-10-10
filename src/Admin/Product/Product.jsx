@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Table, Space } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
 import { Add, fetchProducts, deleteProduct } from './Function/productFunction';
+import { useNavigate } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
@@ -12,12 +12,10 @@ const Product = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [products, setProducts] = useState([]);
-
     const loadProducts = async () => {
         const fetchedProducts = await fetchProducts();
         setProducts(fetchedProducts);
     };
-
     const navigate = useNavigate()
 
     const handleAddProduct = async (product) => {
@@ -131,11 +129,10 @@ const Product = () => {
                             key: '2',
                             icon: <VideoCameraOutlined />,
                             label: 'Category',
-                            onClick: () => navigate('/categories'), // Navigate to Category
+                            onClick: () => navigate('/categories'),
                         },
                     ]}
                 />
-
             </Sider>
             <Layout>
                 <Header
@@ -165,7 +162,7 @@ const Product = () => {
                         overflowX: "scroll"
                     }}
                 >
-                    <Table dataSource={products} columns={columns} rowKey="id" />
+                    <Table dataSource={products} columns={columns} rowKey="id" /> {/* Use unique product id */}
 
                     <ProductModal
                         open={openModal}

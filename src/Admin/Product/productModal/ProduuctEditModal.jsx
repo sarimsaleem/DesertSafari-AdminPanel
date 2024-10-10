@@ -11,18 +11,21 @@ const ProductEditModal = ({ open, setOpen, updateProduct, currentProduct }) => {
     const [fileList, setFileList] = useState([]);
     const [imageFiles, setImageFiles] = useState([]); // To manage uploaded images
 
-    // Set initial values for the form
-    // Set initial values for the form
     const initialValues = {
-        productName: currentProduct?.productName || '',
-        productCardDetail: currentProduct?.productCardDetail || '',
-        productIsMostPopular: currentProduct?.productIsMostPopular || false,
-        productCategory: currentProduct?.productCategory || '',
-        productPrice: currentProduct?.productPrice || 0,
-        specialNote: currentProduct?.specialNote || '',
-        description: currentProduct?.description || '',
-        additionalFields: currentProduct?.additionalFields || [''],
+        image_text: '',
+        event_name: '',
+        most_popular: false,
+        category: '',
+        price: 0,
+        special_note: '',
+        description: '',
+        packageIncludes: [],
+        notes: [],
+        timings: [],
+        image_url: null,
+        banner_image_url: null
     };
+
 
     useEffect(() => {
         if (currentProduct) {

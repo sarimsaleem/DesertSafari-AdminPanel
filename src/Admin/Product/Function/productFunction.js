@@ -26,7 +26,6 @@ const deleteImage = async (imageUrl) => {
     console.error('Error deleting image:', error);
   }
 };
-
 // Add product to Firestore with image URLs
 export const Add = async (product) => {
   try {
@@ -45,8 +44,6 @@ export const Add = async (product) => {
     console.error('Error adding product:', error);
   }
 };
-
-
 // fetchProducts 
 export const fetchProducts = async () => {
   try {
@@ -72,19 +69,4 @@ export const deleteProduct = async (productId, imageUrl) => {
     console.error('Error deleting product:', error);
   }
 };
-// export const updateProduct = async (productId, updatedProductData) => {
-//   const productRef = doc(db, 'products', productId);
-//   try {
-//     if (updatedProductData.productImage) {
-//       const imageUrl = await uploadImage(updatedProductData.productImage);
-//       updatedProductData.productImage = imageUrl; // Update the URL with the new upload
-//   } else {
-//       const existingProduct = await fetchProductById(productId); // Fetch the current product
-//       updatedProductData.productImage = existingProduct.productImage; // Keep the existing image
-//   }
-//     await updateDoc(productRef, updatedProductData);
-//     console.log('Product updated successfully');
-//   } catch (error) {
-//     console.error('Error updating product: ', error);
-//   }
-// }
+
