@@ -79,17 +79,18 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                 <Field name="most_popular" type="checkbox" as={Checkbox} />
                             </div>
                             <div className="des-spec-parernt">
+
                                 <div className="fields" style={{ marginBottom: '16px' }}>
-                                    <label>Product Category</label> 
+                                    <label>Product Category</label>
                                     <Field name="category">
                                         {({ field, form: { touched, errors, setFieldValue } }) => (
                                             <Select
                                                 {...field}
                                                 placeholder="Select category"
-                                                onChange={(value) => setFieldValue('category', value)}
+                                                onChange={(value) => setFieldValue('category', value)} // Store _id instead of name
                                             >
                                                 {categories.map((category) => (
-                                                    <Option key={category._id} value={category.name}>
+                                                    <Option key={category._id} value={category._id}> {/* Use _id here */}
                                                         {category.category_name}
                                                     </Option>
                                                 ))}
@@ -100,6 +101,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                         <div className="ant-form-item-explain">{errors.category}</div>
                                     ) : null}
                                 </div>
+
                                 {/* Product Price Field */}
                                 <div className="fields" style={{ marginBottom: '16px' }}>
                                     <label>Product Price</label>

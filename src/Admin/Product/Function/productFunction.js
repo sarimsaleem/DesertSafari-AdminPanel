@@ -32,11 +32,22 @@ export const Add = async (product) => {
     const imageUrl = product.image_url ? await uploadImage(product.image_url) : null;
     const bannerImageUrl = product.banner_image_url ? await uploadImage(product.banner_image_url) : null;
 
+    // Validate or set a default value for category
+    const category = product.category ? product.category : null;
+
     const productData = {
       ...product,
       image_url: imageUrl,
-      banner_image_url: bannerImageUrl
+      banner_image_url: bannerImageUrl,
+      category // Ensure category is not undefined
     };
+
+    // Remove undefined fields
+    Object.keys(productData).forEach(key => {
+      if (productData[key] === undefined) {
+        delete productData[key];
+      }
+    });
 
     await addDoc(productCollectionRef, productData);
     console.log('Product added successfully');
@@ -44,6 +55,7 @@ export const Add = async (product) => {
     console.error('Error adding product:', error);
   }
 };
+
 // fetchProducts 
 export const fetchProducts = async () => {
   try {
@@ -71,34 +83,47 @@ export const deleteProduct = async (productId, imageUrl) => {
 };
 
 // Function to update product in Firestore
-export const update = async (productId, updatedProduct, ) => {
+export const update = async (productId, updatedProduct) => {
   try {
     const productDocRef = doc(db, 'products', productId);
 
     if (!updatedProduct) {
       throw new Error('Updated product data is undefined');
     }
+
     const imageUrl = updatedProduct.image_url || null;
     const bannerImageUrl = updatedProduct.banner_image_url || null;
-    const newImageUrl = '';
-    const newBannerImageUrl = '';
+    let newImageUrl = '';
+    let newBannerImageUrl = '';
+
     if (imageUrl) {
       newImageUrl = imageUrl ? await uploadImage(imageUrl) : null;
     }
     if (bannerImageUrl) {
       newBannerImageUrl = bannerImageUrl ? await uploadImage(bannerImageUrl) : null;
     }
+
+    // Construct the product data to update
     const productData = {
       ...updatedProduct,
       ...((newImageUrl || imageUrl) && { image_url: newImageUrl || imageUrl }),
       ...((newBannerImageUrl || bannerImageUrl) && { banner_image_url: newBannerImageUrl || bannerImageUrl }),
     };
 
+    // Check if category is defined and valid
+    if (updatedProduct.category !== undefined) {
+      productData.category = updatedProduct.category._id || updatedProduct.category;
+    } else {
+      delete productData.category; // Remove undefined category
+    }
+
+    // Update the document in Firestore
     await updateDoc(productDocRef, productData);
     console.log('Product updated successfully');
   } catch (error) {
     console.error('Error updating product:', error);
   }
 };
+
 
 

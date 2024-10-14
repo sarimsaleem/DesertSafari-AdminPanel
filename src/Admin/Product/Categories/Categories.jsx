@@ -5,15 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import CategoriesModal from './CategoryModal/CategoriesModal';
 import { Add, Update, fetchCategories, deleteCategory } from './CategoriesFunctions/CategoriesFunction';
 import { v4 as uuidv4 } from 'uuid';
-
+import logo from "../../assets/logo2.png"
 const { Header, Sider, Content } = Layout;
 
 const Categories = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [categories, setCategories] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); 
-  const [currentCategory, setCurrentCategory] = useState(null); 
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState(null);
 
   const navigate = useNavigate();
 
@@ -99,7 +99,9 @@ const Categories = () => {
     <div className="categories">
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="demo-logo-vertical" />
+          <div className="admin-logo">
+            <img src={logo} alt="" />
+          </div>
           <Menu
             theme="dark"
             mode="inline"
