@@ -109,7 +109,7 @@ const Categories = () => {
                 key: '1',
                 icon: <UserOutlined />,
                 label: 'Product',
-                onClick: () => navigate('/'),
+                onClick: () => navigate('/product'),
               },
               {
                 key: '2',
@@ -128,6 +128,7 @@ const Categories = () => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              // backgrounf: "primary"
             }}
           >
             <Button
@@ -141,7 +142,7 @@ const Categories = () => {
               }}
             />
             <Button
-              type="primary"
+              // type="primary"
               icon={<PlusOutlined />}
               onClick={handleAddCategory}
               style={{ marginRight: '16px' }}

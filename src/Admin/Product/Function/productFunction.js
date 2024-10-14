@@ -34,8 +34,8 @@ export const Add = async (product) => {
 
     const productData = {
       ...product,
-      image_url: imageUrl,         
-      banner_image_url: bannerImageUrl  
+      image_url: imageUrl,
+      banner_image_url: bannerImageUrl
     };
 
     await addDoc(productCollectionRef, productData);
@@ -69,4 +69,36 @@ export const deleteProduct = async (productId, imageUrl) => {
     console.error('Error deleting product:', error);
   }
 };
+
+// Function to update product in Firestore
+export const update = async (productId, updatedProduct, ) => {
+  try {
+    const productDocRef = doc(db, 'products', productId);
+
+    if (!updatedProduct) {
+      throw new Error('Updated product data is undefined');
+    }
+    const imageUrl = updatedProduct.image_url || null;
+    const bannerImageUrl = updatedProduct.banner_image_url || null;
+    const newImageUrl = '';
+    const newBannerImageUrl = '';
+    if (imageUrl) {
+      newImageUrl = imageUrl ? await uploadImage(imageUrl) : null;
+    }
+    if (bannerImageUrl) {
+      newBannerImageUrl = bannerImageUrl ? await uploadImage(bannerImageUrl) : null;
+    }
+    const productData = {
+      ...updatedProduct,
+      ...((newImageUrl || imageUrl) && { image_url: newImageUrl || imageUrl }),
+      ...((newBannerImageUrl || bannerImageUrl) && { banner_image_url: newBannerImageUrl || bannerImageUrl }),
+    };
+
+    await updateDoc(productDocRef, productData);
+    console.log('Product updated successfully');
+  } catch (error) {
+    console.error('Error updating product:', error);
+  }
+};
+
 

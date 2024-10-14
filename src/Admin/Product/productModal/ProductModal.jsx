@@ -7,7 +7,7 @@ import "./productmodal.css";
 
 const { Option } = Select;
 
-const ProductModal = ({ open, setOpen, addProduct }) => {
+const ProductModal = ({ open, setOpen, addProduct, categories }) => {
     const [fileList, setFileList] = useState([]);
     const [bannerImgList, setBannerImgList] = useState([]);
 
@@ -54,10 +54,10 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                 }}
             >
                 {({ setFieldValue, handleSubmit, isSubmitting, values, errors, touched }) => {
-                    console.log(errors,"errors")
-                   return (
+                    console.log(errors, "errors")
+                    return (
                         <Form onSubmit={handleSubmit}>
-                            {console.log(handleSubmit,"handleSubmit")}
+                            {console.log(handleSubmit, "handleSubmit")}
                             <div className="des-spec-parernt">
                                 {/* Product Name Field */}
                                 <div className="fields">
@@ -65,7 +65,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                     <Field name="image_text" as={Input} placeholder="Enter product name" />
                                     {touched.image_text && errors.image_text ? <div className="ant-form-item-explain">{errors.image_text}</div> : null}
                                 </div>
-    
+
                                 {/* Product Card Detail Field */}
                                 <div className="fields">
                                     <label>Product Card Detail</label>
@@ -80,21 +80,25 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                             </div>
                             <div className="des-spec-parernt">
                                 <div className="fields" style={{ marginBottom: '16px' }}>
-                                    <label>Product Category</label>
+                                    <label>Product Category</label> 
                                     <Field name="category">
-                                        {({ field }) => (
+                                        {({ field, form: { touched, errors, setFieldValue } }) => (
                                             <Select
                                                 {...field}
                                                 placeholder="Select category"
                                                 onChange={(value) => setFieldValue('category', value)}
                                             >
-                                                <Option value="category1">Category 1</Option>
-                                                <Option value="category2">Category 2</Option>
-                                                <Option value="category3">Category 3</Option>
+                                                {categories.map((category) => (
+                                                    <Option key={category._id} value={category.name}>
+                                                        {category.category_name}
+                                                    </Option>
+                                                ))}
                                             </Select>
                                         )}
                                     </Field>
-                                    {touched.category && errors.category ? <div className="ant-form-item-explain">{errors.category}</div> : null}
+                                    {touched.category && errors.category ? (
+                                        <div className="ant-form-item-explain">{errors.category}</div>
+                                    ) : null}
                                 </div>
                                 {/* Product Price Field */}
                                 <div className="fields" style={{ marginBottom: '16px' }}>
@@ -110,7 +114,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                             />
                                         )}
                                     </Field>
-                                    {touched.price && errors.price ? <div className="ant-form-item-explain">{errors.price   }</div> : null}
+                                    {touched.price && errors.price ? <div className="ant-form-item-explain">{errors.price}</div> : null}
                                 </div>
                             </div>
                             {/* special note and description  */}
@@ -129,7 +133,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                     </Field>
                                     {touched.special_note && errors.special_note ? <div className="ant-form-item-explain">{errors.special_note}</div> : null}
                                 </div>
-    
+
                                 {/* Description Field */}
                                 <div className="fields" style={{ marginBottom: '16px' }}>
                                     <label>Description</label>
@@ -178,7 +182,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                             )}
                                         />
                                     </div>
-    
+
                                     <div className="fields">
                                         <label>Timings</label>
                                         <FieldArray
@@ -210,7 +214,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                         />
                                     </div>
                                 </div>
-    
+
                                 <div className="fields">
                                     <label>Notes</label>
                                     <FieldArray
@@ -265,7 +269,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                                     </Upload>
                                     {touched.image_url && errors.image_url ? <div className="ant-form-item-explain">{errors.image_url}</div> : null}
                                 </div>
-    
+
                                 {/* product banner Image   */}
                                 <div className="fields" style={{ marginBottom: '16px' }}>
                                     <label>Banner Img</label>
@@ -295,7 +299,7 @@ const ProductModal = ({ open, setOpen, addProduct }) => {
                     )
                 }}
             </Formik>
-        </Modal>
+        </Modal >
     );
 };
 
