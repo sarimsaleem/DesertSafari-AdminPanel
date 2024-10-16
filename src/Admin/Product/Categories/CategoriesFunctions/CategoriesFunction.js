@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc, deleteDoc, updateDoc, where, query } from "firebase/firestore";
 import { db, storage } from "../../../Firebase/firebaseConfig";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 
@@ -91,22 +91,28 @@ export const Update = async (payload) => {
       throw new Error('Updated category data is undefined');
     }
 
-    // Set default values for image URLs
     let uploadedImageLink = payload?.image_url || null;
 
     if (uploadedImageLink instanceof File) {
       uploadedImageLink = await uploadImage(uploadedImageLink);
 
-      await deleteImage(payload?.oldImageUrl);
-    }
+      // await deleteImage(payload?.oldImageUrl);
 
+      // if (payload?.oldImageUrl) {
+      //   const categoriesCollection = collection(db, PARENT_COLLECTION_NAME);
+      //   const q = query(categoriesCollection, where('image_url', '==', payload.oldImageUrl));
+      //   const querySnapshot = await getDocs(q);
+
+      //   if (querySnapshot.size === 1) { 
+      //     await deleteImage(payload?.oldImageUrl); 
+      //   }
+      // } 
+    }
     const categoryData = {
       _id: payload?._id,
       category_name: payload?.category_name,
       image_url: uploadedImageLink
     };
-
-    
 
     await updateDoc(categoryRef, categoryData);
     console.log('Category updated successfully');

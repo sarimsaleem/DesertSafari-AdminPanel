@@ -27,10 +27,7 @@ const Categories = () => {
     }
   };
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
+ 
   const addCategory = async (newCategory) => {
     const categoryId = uuidv4();
     const categoryData = { ...newCategory, _id: categoryId };
@@ -46,14 +43,23 @@ const Categories = () => {
       _id: values._id,
       image_url: values?.image,
       category_name: values?.category_name,
-      oldImageUrl: values?.oldImageUrl
-    }
+      oldImageUrl: values?.oldImageUrl,
+    };
+    console.log("values.image",values.image)
+
     await Update(payload);
+
     setCategories((prevCategories) =>
-      prevCategories.map((category) => (category._id === values._id ? values : category))
+      prevCategories.map((category) =>
+        category._id === values._id
+          ? { ...category, category_name: values.category_name, image_url: values.image_url }
+          : category
+      )
     );
-    setModalOpen(false);
+    loadCategories()
+    setModalOpen(false); 
   };
+
 
   const handleAddCategory = () => {
     setIsEditing(false);
@@ -73,6 +79,9 @@ const Categories = () => {
       prevCategories.filter((category) => category._id !== categoryId)
     );
   };
+  useEffect(() => {
+    loadCategories();
+  }, []);
 
   const columns = [
     {
@@ -174,9 +183,10 @@ const Categories = () => {
               padding: 24,
               minHeight: 280,
               background: '#fff',
+              overflowY : "scroll"
             }}
           >
-            <Table dataSource={categories} columns={columns} rowKey="_id" />
+            <Table dataSource={categories} columns={columns} rowKey="_id" loading={(true)} />
           </Content>
         </Layout>
       </Layout>

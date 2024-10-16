@@ -61,7 +61,6 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
             <Formik
                 enableReinitialize={true}
                 initialValues={initialValues}
-                // enableReinitialize={true}
                 validationSchema={CategorySchema}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
                     if (isEditing) {
