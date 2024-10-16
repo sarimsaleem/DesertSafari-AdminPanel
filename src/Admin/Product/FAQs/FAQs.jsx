@@ -1,97 +1,97 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Space, Table, Popconfirm } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import CategoriesModal from './CategoryModal/CategoriesModal';
-import { Add, Update, fetchCategories, deleteCategory } from './CategoriesFunctions/CategoriesFunction';
-import { v4 as uuidv4 } from 'uuid';
+import FAQModal from './FAQsModal/FAQsModal';
+import { addFAQ, updateFAQs, fetchFAQs, deleteFAQs } from './Functions/functions'; 
 import logo from "../../assets/logo2.png";
+
 const { Header, Sider, Content } = Layout;
 
-const Categories = () => {
+const FAQs = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [faqs, setFaqs] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState(null);
+  const [currentFAQ, setCurrentFAQ] = useState(null);
 
   const navigate = useNavigate();
 
-  const loadCategories = async () => {
+  const loadFAQs = async () => {
     try {
-      const fetchedCategories = await fetchCategories();
-      console.log('Fetched Categories:', fetchedCategories);
-      setCategories(fetchedCategories);
+      const fetchedFAQs = await fetchFAQs();
+      setFaqs(fetchedFAQs);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('Error fetching FAQs:', error);
     }
   };
 
   useEffect(() => {
-    loadCategories();
+    loadFAQs();
   }, []);
 
-  const addCategory = async (newCategory) => {
-    const categoryId = uuidv4();
-    const categoryData = { ...newCategory, _id: categoryId };
-
-    await Add(categoryData, (addedCategory) => {
-      setCategories((prevCategories) => [...prevCategories, addedCategory]);
+  const handleAddFAQ = async (newFAQ) => {
+    try {
+      const addedFAQ = await addFAQ(newFAQ); // Use the addFAQ function to get the added FAQ
+      setFaqs((prevFAQs) => [...prevFAQs, addedFAQ]); // Use the added FAQ with the generated ID
       setModalOpen(false);
-    });
+    } catch (error) {
+      console.error('Error adding FAQ:', error);
+    }
   };
 
-  const updateCategory = async (updatedCategory) => {
-    const oldImageUrl = currentCategory ? currentCategory.background_image : null;
-    await Update(updatedCategory._id, { ...updatedCategory, oldImageUrl });
-    setCategories((prevCategories) =>
-      prevCategories.map((category) => (category._id === updatedCategory._id ? updatedCategory : category))
-    );
-    setModalOpen(false);
+  const handleUpdateFAQ = async (updatedFAQ) => {
+    if (!updatedFAQ.id || typeof updatedFAQ.id !== 'string') {
+      console.error('No valid FAQ ID provided for update.');
+      return;
+    }
+
+    try {
+      await updateFAQs(updatedFAQ); // Call with the whole object
+      setFaqs((prevFAQs) => 
+        prevFAQs.map((faq) => (faq.id === updatedFAQ.id ? updatedFAQ : faq))
+      );
+      setModalOpen(false);
+    } catch (error) {
+      console.error('Error updating FAQ:', error);
+    }
   };
 
-  const handleAddCategory = () => {
-    setIsEditing(false);
-    setCurrentCategory(null); 
-    setModalOpen(true);
+  const handleDeleteFAQ = async (faqId) => {
+    try {
+      await deleteFAQs(faqId); // Directly call with faqId
+      setFaqs((prevFAQs) => prevFAQs.filter((faq) => faq.id !== faqId));
+    } catch (error) {
+      console.error('Error deleting FAQ:', error);
+    }
   };
 
-  const handleEditCategory = (category) => {
+  const handleEditFAQ = (faq) => {
     setIsEditing(true);
-    setCurrentCategory(category); 
+    setCurrentFAQ(faq);
     setModalOpen(true);
-  };
-
-  const handleDelete = async (categoryId, imageUrl) => {
-    await deleteCategory(categoryId, imageUrl);
-    setCategories((prevCategories) =>
-      prevCategories.filter((category) => category._id !== categoryId)
-    );
   };
 
   const columns = [
     {
-      title: 'Category Name',
-      dataIndex: 'category_name',
-      key: 'category_name',
+      title: 'Question',
+      dataIndex: 'question',
+      key: 'question',
     },
     {
-      title: "Background Image",
-      dataIndex: "image_url",  
-      key: "image_url",
-      render: (text, record) => (
-        <img src={record.image_url} alt={record.category_name} style={{ width: 100 }} />
-      ),
+      title: 'Answer',
+      dataIndex: 'answer',
+      key: 'answer',
     },
     {
       title: 'Actions',
       key: 'actions',
       render: (_, record) => (
         <Space size="middle">
-          <Button onClick={() => handleEditCategory(record)}>Edit</Button>
+          <Button onClick={() => handleEditFAQ(record)}>Edit</Button>
           <Popconfirm
-            title="Are you sure to delete this category?"
-            onConfirm={() => handleDelete(record._id, record.background_image)}
+            title="Are you sure to delete this FAQ?"
+            onConfirm={() => handleDeleteFAQ(record.id)} // Use id for deletion
             okText="Yes"
             cancelText="No"
           >
@@ -103,7 +103,7 @@ const Categories = () => {
   ];
 
   return (
-    <div className="categories">
+    <div className="faqs">
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="admin-logo">
@@ -112,7 +112,7 @@ const Categories = () => {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={['2']}
+            defaultSelectedKeys={['3']}
             items={[
               {
                 key: '1',
@@ -122,8 +122,8 @@ const Categories = () => {
               },
               {
                 key: '2',
-                icon: <VideoCameraOutlined />,
-                label: 'Category',
+                icon: <UserOutlined />,
+                label: 'Categories',
                 onClick: () => navigate('/categories'),
               },
               {
@@ -157,10 +157,14 @@ const Categories = () => {
             />
             <Button
               icon={<PlusOutlined />}
-              onClick={handleAddCategory}
+              onClick={() => {
+                setIsEditing(false);
+                setCurrentFAQ(null);
+                setModalOpen(true);
+              }}
               style={{ marginRight: '16px' }}
             >
-              Add Category
+              Add FAQ
             </Button>
           </Header>
           <Content
@@ -169,23 +173,24 @@ const Categories = () => {
               padding: 24,
               minHeight: 280,
               background: '#fff',
+              overflowY: "scroll"
             }}
           >
-            <Table dataSource={categories} columns={columns} rowKey="_id" />
+            <Table dataSource={faqs} columns={columns} rowKey="id" /> {/* Use 'id' as the row key */}
           </Content>
         </Layout>
       </Layout>
 
-      <CategoriesModal
+      <FAQModal
         open={modalOpen}
         setOpen={setModalOpen}
-        addCategory={addCategory}
-        updateCategory={updateCategory}
+        addFAQ={handleAddFAQ}
+        updateFAQ={handleUpdateFAQ}
         isEditing={isEditing}
-        currentCategory={currentCategory}
+        currentFAQ={currentFAQ}
       />
     </div>
   );
 };
 
-export default Categories;
+export default FAQs;

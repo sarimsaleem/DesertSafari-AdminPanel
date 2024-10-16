@@ -32,11 +32,12 @@ const Product = () => {
     const handleAddProduct = async (product) => {
         await Add({
             ...product,
-            category: product.category._id, // Use the category ID
+            // category: product.category._id,
         });
         await loadProducts();
         setOpenModal(false);
     };
+    
 
     const handleEditProduct = async (productId, updatedProduct) => {
         await update(productId, {
@@ -68,6 +69,7 @@ const Product = () => {
         setOpenDrawer(true);
     };
 
+
     const columns = [
         {
             title: 'Product Name',
@@ -87,11 +89,11 @@ const Product = () => {
         },
         {
             title: 'Product Category',
-            dataIndex: 'category',
+            dataIndex: 'category', // This should match the key you are saving in the product
             key: 'category',
             render: (categoryId) => {
                 const category = categories.find(cat => cat._id === categoryId);
-                return category ? category.category_name : 'N/A';
+                return category ? category.category_name : '//'; 
             },
         },
         {
@@ -149,6 +151,7 @@ const Product = () => {
 
     return (
         <>
+        {/* <h1>{categories.categories_name} sarim</h1> */}
             <Drawer
                 title={drawerTitle}
                 placement="right"
@@ -207,6 +210,12 @@ const Product = () => {
                                 label: 'Category',
                                 onClick: () => navigate('/categories'),
                             },
+                            {
+                                key: '3',
+                                icon: <UserOutlined />,
+                                label: 'FAQs',
+                                onClick: () => navigate('/faqs'),
+                              },
                         ]}
                     />
                 </Sider>
@@ -230,7 +239,7 @@ const Product = () => {
                         >Add Product</Button>
                     </Header>
                     <Content style={{ margin: '24px 16px', padding: 24, minHeight: 280, background: '#fff', overflowX: "scroll" }}>
-                        <Table dataSource={products} columns={columns} rowKey="id" />
+                        <Table dataSource={products} columns={columns} rowKey="id"  />
 
                         <ProductModal
                             open={openModal}

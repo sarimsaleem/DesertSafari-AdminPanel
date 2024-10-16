@@ -1,0 +1,13 @@
+.category-Label{
+    margin-bottom: 10px;
+}
+
+.categoryTitle{
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+
+:where(.css-dev-only-do-not-override-ccdg5a).ant-modal .ant-modal-content{
+    padding: 30px;
+}

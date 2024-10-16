@@ -26,6 +26,8 @@ const deleteImage = async (imageUrl) => {
     console.error('Error deleting image:', error);
   }
 };
+
+
 // Add product to Firestore with image URLs
 export const Add = async (product) => {
   try {
@@ -67,6 +69,8 @@ export const fetchProducts = async () => {
     return [];
   }
 };
+
+
 export const deleteProduct = async (productId, imageUrl) => {
   try {
     const productDocRef = doc(db, 'products', productId);

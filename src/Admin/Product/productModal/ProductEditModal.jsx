@@ -9,13 +9,12 @@ import TextArea from 'antd/es/input/TextArea';
 const { Option } = Select;
 
 const ProductEditModal = ({ open, setOpen, update, currentProduct, categories }) => {
+    
     const [fileList, setFileList] = useState([]);
     const [bannerImgList, setBannerImgList] = useState([]);
     const formikRef = useRef()
     console.log('currentProduct:', currentProduct);
 
-    // Initial values for the form
-    const [initialValues, setInitialValues] = useState({});
 
     useEffect(() => {
         if (currentProduct) {
@@ -36,25 +35,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
             setFileList([]);
             setBannerImgList([]);
         }
-        if (open) {
-            console.log('open', open)
-            setInitialValues({
-                image_text: currentProduct?.image_text || '',
-                event_name: currentProduct?.event_name || '',
-                most_popular: currentProduct?.most_popular || false,
-                category: currentProduct?.category || '',
-                price: currentProduct?.price || 0,
-                special_note: currentProduct?.special_note || '',
-                description: currentProduct?.description || '',
-                packageIncludes: currentProduct?.packageIncludes || [],
-                notes: currentProduct?.notes || [],
-                timings: currentProduct?.timings || [],
-                image_url: currentProduct?.image_url || null,
-                banner_image_url: currentProduct?.banner_image_url || null,
-                additionalFields: currentProduct?.additionalFields || []
-            })
-        } else {
-            console.log('close', open)
+        if (!open) {
             formikRef?.current?.resetForm();
         }
     }, [currentProduct, open]);
@@ -94,7 +75,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                     category: currentProduct?.category || '',
                     price: currentProduct?.price || 0,
                     special_note: currentProduct?.special_note || '',
-                    description: currentProduct?.description || 'Ssarim',
+                    description: currentProduct?.description || '',
                     packageIncludes: currentProduct?.packageIncludes || [],
                     notes: currentProduct?.notes || [],
                     timings: currentProduct?.timings || [],
@@ -102,14 +83,13 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                     banner_image_url: currentProduct?.banner_image_url || null,
                     additionalFields: currentProduct?.additionalFields || []
                 }}
+                enableReinitialize={true}
                 validateOnChange={true}
                 validationSchema={ProductSchema}
                 onSubmit={onSubmitHandler}
             >
                 {({ setFieldValue, handleSubmit, isSubmitting, errors, touched, values }) => (
                     <Form onSubmit={handleSubmit}>
-                        {console.log('values', values)}
-                        {console.log('initialValues', initialValues)}
                         {/* Product Name Field Product Card Detail Field*/}
                         <div className="des-spec-parernt">
                             <div className="fields">
