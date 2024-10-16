@@ -83,45 +83,31 @@ export const deleteCategory = async (categoryId, imageUrl) => {
   }
 };
 
-export const Update = async (categoryId, updatedCategory) => {
+export const Update = async (payload) => {
   try {
-    const categoryRef = doc(db, PARENT_COLLECTION_NAME, categoryId);
+    const categoryRef = doc(db, PARENT_COLLECTION_NAME, payload?._id);
 
-    if (!updatedCategory) {
+    if (!payload) {
       throw new Error('Updated category data is undefined');
     }
 
     // Set default values for image URLs
-    let newImageUrl = updatedCategory.image_url || null;
+    let uploadedImageLink = payload?.image_url || null;
 
-    // Check if a new image is uploaded (ensure it's a File object)
-    if (updatedCategory.newImage instanceof File) {
-      newImageUrl = await uploadImage(updatedCategory.newImage);  
+    if (uploadedImageLink instanceof File) {
+      uploadedImageLink = await uploadImage(uploadedImageLink);
 
-      // Delete the old image if it exists
-      if (updatedCategory.oldImageUrl) {
-        await deleteImage(updatedCategory.oldImageUrl); 
-      }
+      await deleteImage(payload?.oldImageUrl);
     }
 
-    // Construct the category data to update
     const categoryData = {
-      ...updatedCategory,
-      image_url: newImageUrl,  // Set the updated image URL
+      _id: payload?._id,
+      category_name: payload?.category_name,
+      image_url: uploadedImageLink
     };
 
-    // Remove raw file and unnecessary properties
-    delete categoryData.newImage;
-    delete categoryData.oldImageUrl;
+    
 
-    // Remove any undefined or File object fields
-    Object.keys(categoryData).forEach((key) => {
-      if (categoryData[key] === undefined || categoryData[key] instanceof File) {
-        delete categoryData[key];
-      }
-    });
-
-    // Update the category document in Firestore with valid data
     await updateDoc(categoryRef, categoryData);
     console.log('Category updated successfully');
   } catch (error) {

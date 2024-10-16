@@ -41,24 +41,29 @@ const Categories = () => {
     });
   };
 
-  const updateCategory = async (updatedCategory) => {
-    const oldImageUrl = currentCategory ? currentCategory.background_image : null;
-    await Update(updatedCategory._id, { ...updatedCategory, oldImageUrl });
+  const updateCategory = async (values) => {
+    const payload = {
+      _id: values._id,
+      image_url: values?.image,
+      category_name: values?.category_name,
+      oldImageUrl: values?.oldImageUrl
+    }
+    await Update(payload);
     setCategories((prevCategories) =>
-      prevCategories.map((category) => (category._id === updatedCategory._id ? updatedCategory : category))
+      prevCategories.map((category) => (category._id === values._id ? values : category))
     );
     setModalOpen(false);
   };
 
   const handleAddCategory = () => {
     setIsEditing(false);
-    setCurrentCategory(null); 
+    setCurrentCategory(null);
     setModalOpen(true);
   };
 
   const handleEditCategory = (category) => {
     setIsEditing(true);
-    setCurrentCategory(category); 
+    setCurrentCategory(category);
     setModalOpen(true);
   };
 
@@ -77,7 +82,7 @@ const Categories = () => {
     },
     {
       title: "Background Image",
-      dataIndex: "image_url",  
+      dataIndex: "image_url",
       key: "image_url",
       render: (text, record) => (
         <img src={record.image_url} alt={record.category_name} style={{ width: 100 }} />

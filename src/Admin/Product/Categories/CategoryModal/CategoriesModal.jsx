@@ -65,7 +65,7 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
                 validationSchema={CategorySchema}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
                     if (isEditing) {
-                        updateCategory({ ...currentCategory, ...values, image: fileList[0]?.originFileObj });
+                        updateCategory({ ...currentCategory, ...values, oldImageUrl: currentCategory?.image_url, image: fileList[0]?.originFileObj ? fileList[0]?.originFileObj : fileList[0]?.url });
                     } else {
                         addCategory({ ...values, image: fileList[0]?.originFileObj });
                     }
