@@ -10,11 +10,11 @@ import { v4 as uuidv4 } from 'uuid';
 const { Option } = Select;
 
 const ProductEditModal = ({ open, setOpen, update, currentProduct, categories }) => {
-    
+
     const [fileList, setFileList] = useState([]);
     const [bannerImgList, setBannerImgList] = useState([]);
     const formikRef = useRef()
-    console.log('currentProduct:', currentProduct);
+    // console.log('currentProduct:', currentProduct);
 
 
     useEffect(() => {
@@ -45,25 +45,26 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
         setOpen(false); // Close the modal
     };
 
-const onSubmitHandler = (values, { setSubmitting, resetForm }) => {
-    const productId = currentProduct?._id || uuidv4(); 
-    
-    // Remove image_url and banner_image_url if they are strings (i.e., if they're not newly uploaded)
-    if (typeof values?.image_url === 'string') {
-        delete values.image_url;
+    const onSubmitHandler = (values, { setSubmitting, resetForm }) => {
+        const productId = currentProduct?._id;
+
+        if (typeof values?.image_url === 'string') {
+            delete values.image_url;
+        }
+        if (typeof values?.banner_image_url === 'string') {
+            delete values.banner_image_url;
+        }
+        const updatedValues = {
+            ...values,
+            category: values.category
+        };
+        console.log(values, "values")
+
+        update(productId, updatedValues);
+
+        resetForm();
+        setOpen(false);
     }
-    if (typeof values?.banner_image_url === 'string') {
-        delete values.banner_image_url;
-    }
-
-    // Call the update function with the ID and form values
-    update(productId, values);
-
-    resetForm();
-    setOpen(false); // Close the modal
-}
-
-
     return (
         <Modal
             centered
@@ -137,7 +138,7 @@ const onSubmitHandler = (values, { setSubmitting, resetForm }) => {
                                 </Field>
                                 {touched.category && errors.category ? (
                                     <div className="ant-form-item-explain">{errors.category}</div>
-                                ) : null}   
+                                ) : null}
                             </div>
 
                             <div className="fields" style={{ marginBottom: '16px' }}>
@@ -176,12 +177,12 @@ const onSubmitHandler = (values, { setSubmitting, resetForm }) => {
                                 <label>Description</label>
                                 <Field name="description">
                                     {({ field }) => (
-                                    <TextArea
-                                        {...field}
-                                        placeholder="Enter product description"
-                                        value={values?.description}
-                                        rows={4}
-                                    />
+                                        <TextArea
+                                            {...field}
+                                            placeholder="Enter product description"
+                                            value={values?.description}
+                                            rows={4}
+                                        />
                                     )}
                                 </Field>
                                 {touched.description && errors.description ? <div className="ant-form-item-explain">{errors.description}</div> : null}
@@ -299,11 +300,11 @@ const onSubmitHandler = (values, { setSubmitting, resetForm }) => {
                                         status: 'done',
                                         url: URL.createObjectURL(file),
                                     }]);
-                                    return false; 
+                                    return false;
                                 }}
                                 onRemove={() => {
-                                    setFieldValue('image_url', null); 
-                                    setFileList([]); 
+                                    setFieldValue('image_url', null);
+                                    setFileList([]);
                                 }}
                                 listType="picture"
                             >
@@ -328,11 +329,11 @@ const onSubmitHandler = (values, { setSubmitting, resetForm }) => {
                                         status: 'done',
                                         url: URL.createObjectURL(file),
                                     }]);
-                                    return false; 
+                                    return false;
                                 }}
                                 onRemove={() => {
-                                    setFieldValue('banner_image_url', null); 
-                                    setBannerImgList([]); 
+                                    setFieldValue('banner_image_url', null);
+                                    setBannerImgList([]);
                                 }}
                                 listType="picture"
                             >

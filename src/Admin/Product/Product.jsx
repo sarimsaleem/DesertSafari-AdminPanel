@@ -49,14 +49,10 @@ const Product = () => {
     };
 
     const handleEditProduct = async (productId, updatedProduct) => {
-        console.log('Editing product ID:', productId); 
+        console.log('Editing product ID:', productId, updatedProduct); 
         setLoading(true);
-        await update(productId, {
-            ...updatedProduct,
-            category: updatedProduct.category._id, 
-        });
-        // console.log(up)
-        await loadProducts();
+        await update(productId, updatedProduct);
+        await loadProducts();   
         setLoading(false);
     };
     

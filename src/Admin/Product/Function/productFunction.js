@@ -92,7 +92,7 @@ export const update = async (productId, updatedProduct) => {
   try {
     const productDocRef = doc(db, 'products', productId);
     console.log(productDocRef, "Product Document Reference");
-    // Check if the product exists
+
     const productSnapshot = await getDoc(productDocRef);
     if (!productSnapshot.exists()) {
       console.error(`No product found with ID: ${productId}. Snapshot exists: ${productSnapshot.exists()}`);
@@ -109,10 +109,21 @@ export const update = async (productId, updatedProduct) => {
       ...updatedProduct,
       ...(newImageUrl ? { image_url: newImageUrl } : {}),
       ...(newBannerImageUrl ? { banner_image_url: newBannerImageUrl } : {}),
-      // category: updatedProduct.category
-
     };
-    console.log(productData, "productData")
+
+    // Only add category if it is defined
+    if (updatedProduct.category) {
+      productData.category = updatedProduct.category;
+    }
+
+    // Remove undefined fields
+    Object.keys(productData).forEach(key => {
+      if (productData[key] === undefined) {
+        delete productData[key];
+      }
+    });
+
+    console.log(productData, "productData");
 
     await updateDoc(productDocRef, productData);
     console.log('Product updated successfully');
@@ -120,3 +131,4 @@ export const update = async (productId, updatedProduct) => {
     console.error('Error updating product:', error);
   }
 };
+  
