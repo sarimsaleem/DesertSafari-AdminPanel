@@ -82,3 +82,7 @@ label {
   margin-bottom: 16px;
 }
 
+
+:where(.css-dev-only-do-not-override-ccdg5a).ant-modal .ant-modal-footer{
+  display: none;
+}

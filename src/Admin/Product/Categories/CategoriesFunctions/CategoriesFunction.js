@@ -95,25 +95,16 @@ export const Update = async (payload) => {
 
     if (uploadedImageLink instanceof File) {
       uploadedImageLink = await uploadImage(uploadedImageLink);
-
-      // await deleteImage(payload?.oldImageUrl);
-
-      // if (payload?.oldImageUrl) {
-      //   const categoriesCollection = collection(db, PARENT_COLLECTION_NAME);
-      //   const q = query(categoriesCollection, where('image_url', '==', payload.oldImageUrl));
-      //   const querySnapshot = await getDocs(q);
-
-      //   if (querySnapshot.size === 1) { 
-      //     await deleteImage(payload?.oldImageUrl); 
-      //   }
-      // } 
     }
+
     const categoryData = {
       _id: payload?._id,
       category_name: payload?.category_name,
-      image_url: uploadedImageLink
+      image_url: uploadedImageLink,
+      show_on_homepage: payload?.show_on_homepage || false, 
     };
 
+    // Update the category in Firebase
     await updateDoc(categoryRef, categoryData);
     console.log('Category updated successfully');
   } catch (error) {

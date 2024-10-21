@@ -14,16 +14,19 @@ const FAQs = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentFAQ, setCurrentFAQ] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate();
 
   const loadFAQs = async () => {
     try {
+      setLoading(true)
       const fetchedFAQs = await fetchFAQs();
       setFaqs(fetchedFAQs);
     } catch (error) {
       console.error('Error fetching FAQs:', error);
     }
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -32,15 +35,18 @@ const FAQs = () => {
 
   const handleAddFAQ = async (newFAQ) => {
     try {
+      setLoading(true)
       const addedFAQ = await addFAQ(newFAQ); // Use the addFAQ function to get the added FAQ
       setFaqs((prevFAQs) => [...prevFAQs, addedFAQ]); // Use the added FAQ with the generated ID
       setModalOpen(false);
     } catch (error) {
       console.error('Error adding FAQ:', error);
     }
+    setLoading(false)
   };
 
   const handleUpdateFAQ = async (updatedFAQ) => {
+    setLoading(true)
     if (!updatedFAQ.id || typeof updatedFAQ.id !== 'string') {
       console.error('No valid FAQ ID provided for update.');
       return;
@@ -55,6 +61,7 @@ const FAQs = () => {
     } catch (error) {
       console.error('Error updating FAQ:', error);
     }
+    setLoading(false)
   };
 
   const handleDeleteFAQ = async (faqId) => {
@@ -176,7 +183,7 @@ const FAQs = () => {
               overflowY: "scroll"
             }}
           >
-            <Table dataSource={faqs} columns={columns} rowKey="id" /> {/* Use 'id' as the row key */}
+            <Table dataSource={faqs} columns={columns} rowKey="id" loading={loading} /> {/* Use 'id' as the row key */}
           </Content>
         </Layout>
       </Layout>

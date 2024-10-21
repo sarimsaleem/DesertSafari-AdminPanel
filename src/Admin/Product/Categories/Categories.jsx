@@ -14,36 +14,42 @@ const Categories = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
-
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   const loadCategories = async () => {
     try {
+      setLoading(true);
       const fetchedCategories = await fetchCategories();
       console.log('Fetched Categories:', fetchedCategories);
       setCategories(fetchedCategories);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
+    setLoading(false);
   };
 
  
   const addCategory = async (newCategory) => {
+    setLoading(true);
     const categoryId = uuidv4();
     const categoryData = { ...newCategory, _id: categoryId };
 
     await Add(categoryData, (addedCategory) => {
       setCategories((prevCategories) => [...prevCategories, addedCategory]);
       setModalOpen(false);
+      setLoading(false);
     });
   };
 
   const updateCategory = async (values) => {
+    setLoading(true);
     const payload = {
       _id: values._id,
       image_url: values?.image,
       category_name: values?.category_name,
       oldImageUrl: values?.oldImageUrl,
+      show_on_homepage: values?.show_on_homepage
     };
     console.log("values.image",values.image)
 
@@ -58,6 +64,7 @@ const Categories = () => {
     );
     loadCategories()
     setModalOpen(false); 
+    setLoading(false);
   };
 
 
@@ -90,11 +97,19 @@ const Categories = () => {
       key: 'category_name',
     },
     {
+      title: 'Is Shown On Home Page ',
+      dataIndex: 'show_on_homepage',
+      key: 'show_on_homepage',
+      render: (show_on_homepage) => (
+        show_on_homepage ? 'Yes' : 'No'
+      ),
+    },
+    {
       title: "Background Image",
       dataIndex: "image_url",
       key: "image_url",
       render: (text, record) => (
-        <img src={record.image_url} alt={record.category_name} style={{ width: 100 }} />
+        <img src={record.image_url}  style={{ width: 100 }} />
       ),
     },
     {
@@ -186,7 +201,7 @@ const Categories = () => {
               overflowY : "scroll"
             }}
           >
-            <Table dataSource={categories} columns={columns} rowKey="_id" loading={(true)} />
+            <Table dataSource={categories} columns={columns} rowKey="_id" loading={loading} />
           </Content>
         </Layout>
       </Layout>

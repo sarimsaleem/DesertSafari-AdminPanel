@@ -11,6 +11,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
     const [fileList, setFileList] = useState([]);
     const [bannerImgList, setBannerImgList] = useState([]);
 
+    // Initialize form values with a UUID
     const initialValues = {
         image_text: '',
         event_name: '',
@@ -29,7 +30,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
     useEffect(() => {
         if (!open) {
             setFileList([]);
-            setBannerImgList([])
+            setBannerImgList([]);
         }
     }, [open]);
 
@@ -49,15 +50,13 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                     setSubmitting(false);
                     resetForm();
                     setFileList([]);
-                    setBannerImgList([])
+                    setBannerImgList([]);
                     setOpen(false);
                 }}
             >
                 {({ setFieldValue, handleSubmit, isSubmitting, values, errors, touched }) => {
-                    console.log(errors, "errors")
                     return (
                         <Form onSubmit={handleSubmit}>
-                            {console.log(handleSubmit, "handleSubmit")}
                             <div className="des-spec-parernt">
                                 {/* Product Name Field */}
                                 <div className="fields">
@@ -73,13 +72,15 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     {touched.event_name && errors.event_name ? <div className="ant-form-item-explain">{errors.event_name}</div> : null}
                                 </div>
                             </div>
+
                             {/* Is Product Most Popular */}
                             <div className="fields" style={{ marginBottom: '16px' }}>
                                 <label>Is Product Most Popular?</label>
                                 <Field name="most_popular" type="checkbox" as={Checkbox} />
                             </div>
-                            <div className="des-spec-parernt">
 
+                            <div className="des-spec-parernt">
+                                {/* Product Category */}
                                 <div className="fields" style={{ marginBottom: '16px' }}>
                                     <label>Product Category</label>
                                     <Field name="category">
@@ -87,10 +88,10 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                             <Select
                                                 {...field}
                                                 placeholder="Select category"
-                                                onChange={(value) => setFieldValue('category', value)} // Store _id instead of name
+                                                onChange={(value) => setFieldValue('category', value)}
                                             >
                                                 {categories.map((category) => (
-                                                    <Option key={category._id} value={category._id}> {/* Use _id here */}
+                                                    <Option key={category._id} value={category._id}>
                                                         {category.category_name}
                                                     </Option>
                                                 ))}
@@ -119,7 +120,8 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     {touched.price && errors.price ? <div className="ant-form-item-explain">{errors.price}</div> : null}
                                 </div>
                             </div>
-                            {/* special note and description  */}
+
+                            {/* Special Note and Description */}
                             <div className="des-spec-parernt">
                                 {/* Special Note Field */}
                                 <div className="fields" style={{ marginBottom: '16px' }}>
@@ -151,7 +153,8 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     {touched.description && errors.description ? <div className="ant-form-item-explain">{errors.description}</div> : null}
                                 </div>
                             </div>
-                            {/* array fieldss  */}
+
+                            {/* Package Includes, Timings, and Notes */}
                             <div className="arrayfield-wrapper">
                                 <div className="arrayfield-group">
                                     <div className="fields">
@@ -248,8 +251,10 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     />
                                 </div>
                             </div>
-                            {/* images section */}
-                            <div className="des-spec-parernt">
+
+                            {/* Images Section */}
+                               {/* images section */}
+                               <div className="des-spec-parernt">
                                 {/* Product Image Upload */}
                                 <div className="fields" style={{ marginBottom: '16px' }}>
                                     <label>Product Image</label>
@@ -291,17 +296,25 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     >
                                         <Button>Upload Banner Image</Button>
                                     </Upload>
-                                    {touched.banner_image_url && errors.banner_image_url ? <div className="ant-form-item-explain">{errors.banner_image_url}</div> : null}
                                 </div>
                             </div>
-                            <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                                Submit
-                            </Button>
+
+                            {/* Submit Button */}
+                            <div style={{ textAlign: 'right', marginTop: '16px' }}>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    loading={isSubmitting}
+                                    disabled={isSubmitting}
+                                >
+                                    Add Product
+                                </Button>
+                            </div>
                         </Form>
-                    )
+                    );
                 }}
             </Formik>
-        </Modal >
+        </Modal>
     );
 };
 

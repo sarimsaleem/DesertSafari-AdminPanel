@@ -5,6 +5,7 @@ import { ProductSchema } from "./ProductSchema";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import "./productmodal.css";
 import TextArea from 'antd/es/input/TextArea';
+import { v4 as uuidv4 } from 'uuid';
 
 const { Option } = Select;
 
@@ -44,20 +45,24 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
         setOpen(false); // Close the modal
     };
 
-    const onSubmitHandler = (values, { setSubmitting, resetForm }) => {
-        if (typeof values?.image_url === 'string') {
-            delete values.image_url;
-        }
-        if (typeof values?.banner_image_url === 'string') {
-            delete values.banner_image_url;
-        }
-        // console.log('Updated Product values:', values);
-
-        update(currentProduct.id, values);
-        // setSubmitting(false);
-        resetForm();
-        setOpen(false);
+const onSubmitHandler = (values, { setSubmitting, resetForm }) => {
+    const productId = currentProduct?._id || uuidv4(); 
+    
+    // Remove image_url and banner_image_url if they are strings (i.e., if they're not newly uploaded)
+    if (typeof values?.image_url === 'string') {
+        delete values.image_url;
     }
+    if (typeof values?.banner_image_url === 'string') {
+        delete values.banner_image_url;
+    }
+
+    // Call the update function with the ID and form values
+    update(productId, values);
+
+    resetForm();
+    setOpen(false); // Close the modal
+}
+
 
     return (
         <Modal
@@ -123,7 +128,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                             onChange={(value) => setFieldValue('category', value)}
                                         >
                                             {categories.map((category) => (
-                                                <Option key={category._id} value={category.name}>
+                                                <Option key={category._id} value={category._id}>
                                                     {category.category_name}
                                                 </Option>
                                             ))}
@@ -132,7 +137,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                 </Field>
                                 {touched.category && errors.category ? (
                                     <div className="ant-form-item-explain">{errors.category}</div>
-                                ) : null}
+                                ) : null}   
                             </div>
 
                             <div className="fields" style={{ marginBottom: '16px' }}>
@@ -292,13 +297,13 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                         uid: file.uid,
                                         name: file.name,
                                         status: 'done',
-                                        url: URL.createObjectURL(file), // Generate URL for display
+                                        url: URL.createObjectURL(file),
                                     }]);
-                                    return false; // Prevent auto-upload
+                                    return false; 
                                 }}
                                 onRemove={() => {
-                                    setFieldValue('image_url', null); // Clear the field value in Formik
-                                    setFileList([]); // Reset file list
+                                    setFieldValue('image_url', null); 
+                                    setFileList([]); 
                                 }}
                                 listType="picture"
                             >
@@ -321,13 +326,13 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                         uid: file.uid,
                                         name: file.name,
                                         status: 'done',
-                                        url: URL.createObjectURL(file), // Generate URL for display
+                                        url: URL.createObjectURL(file),
                                     }]);
-                                    return false; // Prevent auto-upload
+                                    return false; 
                                 }}
                                 onRemove={() => {
-                                    setFieldValue('banner_image_url', null); // Clear the field value in Formik
-                                    setBannerImgList([]); // Reset banner image list
+                                    setFieldValue('banner_image_url', null); 
+                                    setBannerImgList([]); 
                                 }}
                                 listType="picture"
                             >

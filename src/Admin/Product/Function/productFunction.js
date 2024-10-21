@@ -1,6 +1,7 @@
-import { addDoc, collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, storage } from '../../Firebase/firebaseConfig';
+import { v4 as uuidv4 } from 'uuid'; // Ensure you import uuidv4
 
 const productCollectionRef = collection(db, 'products');
 
@@ -14,6 +15,7 @@ const uploadImage = async (file) => {
 
   return url;
 };
+
 // Function to delete image from Firebase Storage
 const deleteImage = async (imageUrl) => {
   if (!imageUrl) return;
@@ -27,21 +29,17 @@ const deleteImage = async (imageUrl) => {
   }
 };
 
-
-// Add product to Firestore with image URLs
+// Add product to Firestore with image URLs and UUID
 export const Add = async (product) => {
   try {
     const imageUrl = product.image_url ? await uploadImage(product.image_url) : null;
     const bannerImageUrl = product.banner_image_url ? await uploadImage(product.banner_image_url) : null;
 
-    // Validate or set a default value for category
-    const category = product.category ? product.category : null;
-
     const productData = {
       ...product,
       image_url: imageUrl,
       banner_image_url: bannerImageUrl,
-      category // Ensure category is not undefined
+      category: product.category || null,
     };
 
     // Remove undefined fields
@@ -51,18 +49,22 @@ export const Add = async (product) => {
       }
     });
 
-    await addDoc(productCollectionRef, productData);
-    console.log('Product added successfully');
+    // const product = uuidv4(); 
+    const productDocRef = doc(productCollectionRef, product._id);
+
+    await setDoc(productDocRef, productData);
+
+
+    console.log('Product added successfully with UUID:', product._id);
   } catch (error) {
     console.error('Error adding product:', error);
   }
 };
 
-// fetchProducts 
 export const fetchProducts = async () => {
   try {
     const data = await getDocs(productCollectionRef);
-    const productsList = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    const productsList = data.docs.map((doc) => ({ ...doc.data(), _id: doc.id }));
     return productsList;
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -70,7 +72,7 @@ export const fetchProducts = async () => {
   }
 };
 
-
+// Delete product by UUID
 export const deleteProduct = async (productId, imageUrl) => {
   try {
     const productDocRef = doc(db, 'products', productId);
@@ -86,48 +88,35 @@ export const deleteProduct = async (productId, imageUrl) => {
   }
 };
 
-// Function to update product in Firestore
 export const update = async (productId, updatedProduct) => {
   try {
     const productDocRef = doc(db, 'products', productId);
-
-    if (!updatedProduct) {
-      throw new Error('Updated product data is undefined');
+    console.log(productDocRef, "Product Document Reference");
+    // Check if the product exists
+    const productSnapshot = await getDoc(productDocRef);
+    if (!productSnapshot.exists()) {
+      console.error(`No product found with ID: ${productId}. Snapshot exists: ${productSnapshot.exists()}`);
+      return;
     }
 
     const imageUrl = updatedProduct.image_url || null;
     const bannerImageUrl = updatedProduct.banner_image_url || null;
-    let newImageUrl = '';
-    let newBannerImageUrl = '';
 
-    if (imageUrl) {
-      newImageUrl = imageUrl ? await uploadImage(imageUrl) : null;
-    }
-    if (bannerImageUrl) {
-      newBannerImageUrl = bannerImageUrl ? await uploadImage(bannerImageUrl) : null;
-    }
+    let newImageUrl = imageUrl ? await uploadImage(imageUrl) : null;
+    let newBannerImageUrl = bannerImageUrl ? await uploadImage(bannerImageUrl) : null;
 
-    // Construct the product data to update
     const productData = {
       ...updatedProduct,
-      ...((newImageUrl || imageUrl) && { image_url: newImageUrl || imageUrl }),
-      ...((newBannerImageUrl || bannerImageUrl) && { banner_image_url: newBannerImageUrl || bannerImageUrl }),
+      ...(newImageUrl ? { image_url: newImageUrl } : {}),
+      ...(newBannerImageUrl ? { banner_image_url: newBannerImageUrl } : {}),
+      // category: updatedProduct.category
+
     };
+    console.log(productData, "productData")
 
-    // Check if category is defined and valid
-    if (updatedProduct.category !== undefined) {
-      productData.category = updatedProduct.category._id || updatedProduct.category;
-    } else {
-      delete productData.category; // Remove undefined category
-    }
-
-    // Update the document in Firestore
     await updateDoc(productDocRef, productData);
     console.log('Product updated successfully');
   } catch (error) {
     console.error('Error updating product:', error);
   }
 };
-
-
-

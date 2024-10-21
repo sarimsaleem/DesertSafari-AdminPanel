@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, Table, Space, Drawer, Radio } from 'antd';
+import { Button, Layout, Menu, Table, Space, Drawer } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
 import ProductEditModal from './productModal/ProductEditModal';
@@ -8,6 +8,7 @@ import { Add, fetchProducts, deleteProduct, update } from './Function/productFun
 import { useNavigate } from 'react-router-dom';
 import { fetchCategories } from './Categories/CategoriesFunctions/CategoriesFunction';
 import logo from "../assets/logo2.png";
+import { v4 as uuidv4 } from 'uuid'; // Import UUID generator
 
 const { Header, Sider, Content } = Layout;
 
@@ -18,38 +19,53 @@ const Product = () => {
     const [currentProduct, setCurrentProduct] = useState(null);
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [openDrawer, setOpenDrawer] = useState(false); // State to manage drawer
-    const [drawerContent, setDrawerContent] = useState(''); // State for dynamic content in the drawer
-    const [drawerTitle, setDrawerTitle] = useState(''); // State for dynamic title in the drawer
+    const [openDrawer, setOpenDrawer] = useState(false);
+    const [drawerContent, setDrawerContent] = useState('');
+    const [drawerTitle, setDrawerTitle] = useState('');
+    const [loading, setLoading] = useState(false)
 
     const loadProducts = async () => {
+        setLoading(true);
         const fetchedProducts = await fetchProducts();
         setProducts(fetchedProducts);
+        setLoading(false);
     };
 
     const navigate = useNavigate();
 
     const handleAddProduct = async (product) => {
+        setLoading(true);
+
+        const productId = uuidv4();
+
         await Add({
             ...product,
-            // category: product.category._id,
+            _id: productId,
         });
+
         await loadProducts();
         setOpenModal(false);
+        setLoading(false);
+    };
+
+    const handleEditProduct = async (productId, updatedProduct) => {
+        console.log('Editing product ID:', productId); 
+        setLoading(true);
+        await update(productId, {
+            ...updatedProduct,
+            category: updatedProduct.category._id, 
+        });
+        // console.log(up)
+        await loadProducts();
+        setLoading(false);
     };
     
 
-    const handleEditProduct = async (productId, updatedProduct) => {
-        await update(productId, {
-            ...updatedProduct,
-            category: updatedProduct.category._id, // Use the category ID
-        });
-        await loadProducts();
-    };
-
     const handleDeleteProduct = async (productId, imageUrl) => {
+        setLoading(true);
         await deleteProduct(productId, imageUrl);
         await loadProducts();
+        setLoading(false);
     };
 
     const loadCategories = async () => {
@@ -62,13 +78,11 @@ const Product = () => {
         loadCategories();
     }, []);
 
-    // Function to handle opening the Drawer
     const showDrawer = (fieldTitle, details) => {
         setDrawerTitle(fieldTitle);
-        setDrawerContent(details); 
+        setDrawerContent(details);
         setOpenDrawer(true);
     };
-
 
     const columns = [
         {
@@ -89,11 +103,11 @@ const Product = () => {
         },
         {
             title: 'Product Category',
-            dataIndex: 'category', // This should match the key you are saving in the product
+            dataIndex: 'category',
             key: 'category',
             render: (categoryId) => {
                 const category = categories.find(cat => cat._id === categoryId);
-                return category ? category.category_name : '//'; 
+                return category ? category.category_name : '--';
             },
         },
         {
@@ -105,7 +119,7 @@ const Product = () => {
             title: 'Product Image',
             dataIndex: 'image_url',
             key: 'image_url',
-            render: (image) => image ? <img src={image} alt="image_url" width={100} /> : 'No Image',
+            render: (image) => image ? <img src={image} alt="Product" width={100} /> : 'No Image',
         },
         {
             title: 'Banner Image',
@@ -142,16 +156,14 @@ const Product = () => {
                         setCurrentProduct(record);
                         setOpenEditModal(true);
                     }}>Edit</Button>
-                    <Button danger onClick={() => handleDeleteProduct(record.id, record.image_url)}>Delete</Button>
+                    <Button danger onClick={() => handleDeleteProduct(record._id, record.image_url)}>Delete</Button>
                 </Space>
             )
         }
     ];
 
-
     return (
         <>
-        {/* <h1>{categories.categories_name} sarim</h1> */}
             <Drawer
                 title={drawerTitle}
                 placement="right"
@@ -191,7 +203,7 @@ const Product = () => {
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <div className="admin-logo">
-                        <img src={logo} alt="" />
+                        <img src={logo} alt="Logo" />
                     </div>
                     <Menu
                         theme="dark"
@@ -215,7 +227,7 @@ const Product = () => {
                                 icon: <UserOutlined />,
                                 label: 'FAQs',
                                 onClick: () => navigate('/faqs'),
-                              },
+                            },
                         ]}
                     />
                 </Sider>
@@ -239,7 +251,7 @@ const Product = () => {
                         >Add Product</Button>
                     </Header>
                     <Content style={{ margin: '24px 16px', padding: 24, minHeight: 280, background: '#fff', overflowX: "scroll" }}>
-                        <Table dataSource={products} columns={columns} rowKey="id"  />
+                        <Table dataSource={products} columns={columns} rowKey="_id" loading={loading} />
 
                         <ProductModal
                             open={openModal}

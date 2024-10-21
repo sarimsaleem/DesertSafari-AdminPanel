@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Input, Button, Typography, Upload } from 'antd';
+import { Modal, Input, Button, Typography, Upload, Checkbox } from 'antd'; // Import Checkbox
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { PlusOutlined } from '@ant-design/icons';
@@ -10,7 +10,7 @@ const { Title } = Typography;
 // Schema validation
 const CategorySchema = Yup.object().shape({
     category_name: Yup.string().required('Category name is required'),
-    image: Yup.mixed().required('Image is required')  // Image validation
+    show_on_homepage: Yup.boolean(),
 });
 
 const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing, currentCategory }) => {
@@ -18,9 +18,9 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
 
     const initialValues = {
         category_name: currentCategory?.category_name || '',
-        image: currentCategory?.image_url || null,
+        image: currentCategory?.image_url || "null",
+        show_on_homepage: currentCategory?.show_on_homepage || false, 
     };
-
 
     // Handle image change
     const handleImageChange = ({ fileList: newFileList }) => {
@@ -36,18 +36,16 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
     useEffect(() => {
         if (open && currentCategory) {
             setFileList(currentCategory.image_url ? [{
-                uid: currentCategory.image_url, 
+                uid: currentCategory.image_url,
                 name: 'Category Image',
                 status: 'done',
                 url: currentCategory.image_url,
             }] : []);
         } else {
-            setFileList([]); 
+            setFileList([]);
         }
     }, [currentCategory, open]);
-    
-    
-    
+
     return (
         <Modal
             centered
@@ -73,8 +71,8 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
                     setOpen(false);
                     setFileList([]);
                 }}
-                >
-                {({ handleSubmit, isSubmitting, errors, touched, setFieldValue }) => (
+            >
+                {({ handleSubmit, isSubmitting, errors, touched, setFieldValue, values }) => (
                     <Form onSubmit={handleSubmit}>
                         <div className="fields">
                             <label className='category-Label'>Category Name</label>
@@ -88,6 +86,17 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
                             ) : null}
                         </div>
 
+                        {/* Shown on Home Page */}
+                        <div className="fields">
+                            <label className='category-Label'>Show on Home Page</label>
+                            <Checkbox
+                                checked={values.show_on_homepage}  // Directly bind to Formik values
+                                onChange={(e) => setFieldValue('show_on_homepage', e.target.checked)}  // Update Formik state
+                            >
+                                Shown on Home Page
+                            </Checkbox>
+                        </div>
+
                         {/* Image Upload Field */}
                         <div className="fields">
                             <label className='category-Label'>Category Image</label>
@@ -98,8 +107,8 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
                                     handleImageChange(info);
                                     setFieldValue('image', info.fileList[0]?.originFileObj);  // Set image in Formik state
                                 }}
-                                beforeUpload={() => false} 
-                                maxCount={1} 
+                                beforeUpload={() => false}
+                                maxCount={1}
                             >
                                 {fileList?.length < 1 && (
                                     <div>
@@ -108,9 +117,6 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
                                     </div>
                                 )}
                             </Upload>
-                            {touched.image && errors.image ? (
-                                <div className="ant-form-item-explain">{errors.image}</div>
-                            ) : null}
                         </div>
 
                         <Button type="primary" htmlType="submit" loading={isSubmitting}>
