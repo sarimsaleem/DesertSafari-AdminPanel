@@ -1,7 +1,6 @@
 import { collection, getDocs, doc, deleteDoc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, storage } from '../../Firebase/firebaseConfig';
-import { v4 as uuidv4 } from 'uuid'; // Ensure you import uuidv4
 
 const productCollectionRef = collection(db, 'products');
 
@@ -32,14 +31,17 @@ const deleteImage = async (imageUrl) => {
 // Add product to Firestore with image URLs and UUID
 export const Add = async (product) => {
   try {
+    // Upload images if provided
     const imageUrl = product.image_url ? await uploadImage(product.image_url) : null;
     const bannerImageUrl = product.banner_image_url ? await uploadImage(product.banner_image_url) : null;
 
+    // Construct the product data object
     const productData = {
       ...product,
       image_url: imageUrl,
       banner_image_url: bannerImageUrl,
       category: product.category || null,
+      items: product.items || [], // Ensure items is included
     };
 
     // Remove undefined fields
@@ -49,17 +51,18 @@ export const Add = async (product) => {
       }
     });
 
-    // const product = uuidv4(); 
-    const productDocRef = doc(productCollectionRef, product._id);
+    // Create a document reference for Firestore
+    const productDocRef = doc(productCollectionRef, product._id); // Ensure product._id is defined
 
+    // Add the product to Firestore
     await setDoc(productDocRef, productData);
-
 
     console.log('Product added successfully with UUID:', product._id);
   } catch (error) {
     console.error('Error adding product:', error);
-  }
+  } 
 };
+
 
 export const fetchProducts = async () => {
   try {

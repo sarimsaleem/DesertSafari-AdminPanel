@@ -86,3 +86,7 @@ label {
 :where(.css-dev-only-do-not-override-ccdg5a).ant-modal .ant-modal-footer{
   display: none;
 }
+
+.ant-typography{
+  display: none
+}

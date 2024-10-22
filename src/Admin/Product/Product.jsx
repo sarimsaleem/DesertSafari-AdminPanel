@@ -8,7 +8,7 @@ import { Add, fetchProducts, deleteProduct, update } from './Function/productFun
 import { useNavigate } from 'react-router-dom';
 import { fetchCategories } from './Categories/CategoriesFunctions/CategoriesFunction';
 import logo from "../assets/logo2.png";
-import { v4 as uuidv4 } from 'uuid'; // Import UUID generator
+import { v4 as uuidv4 } from 'uuid';
 
 const { Header, Sider, Content } = Layout;
 
@@ -37,7 +37,6 @@ const Product = () => {
         setLoading(true);
 
         const productId = uuidv4();
-
         await Add({
             ...product,
             _id: productId,
@@ -49,13 +48,13 @@ const Product = () => {
     };
 
     const handleEditProduct = async (productId, updatedProduct) => {
-        console.log('Editing product ID:', productId, updatedProduct); 
+        console.log('Editing product ID:', productId, updatedProduct);
         setLoading(true);
         await update(productId, updatedProduct);
-        await loadProducts();   
+        await loadProducts();
         setLoading(false);
     };
-    
+
 
     const handleDeleteProduct = async (productId, imageUrl) => {
         setLoading(true);
@@ -132,9 +131,7 @@ const Product = () => {
                         const details = {
                             specialNote: record.special_note || 'No Special Note',
                             description: record.description || 'No Description',
-                            packageIncludes: record.packageIncludes || 'No Package Includes',
-                            timings: record.timings || 'No Timings',
-                            notes: record.notes || 'No Notes',
+                            items: record.items || "no items"
                         };
                         showDrawer('Product Details', details);
                     }}
@@ -180,21 +177,32 @@ const Product = () => {
                                 <p>{drawerContent.description}</p>
                             </div>
                             <div className="detail-item">
-                                <strong>Package Includes:</strong>
-                                <p>{drawerContent.packageIncludes}</p>
-                            </div>
-                            <div className="detail-item">
-                                <strong>Timings:</strong>
-                                <p>{drawerContent.timings}</p>
-                            </div>
-                            <div className="detail-item">
-                                <strong>Notes:</strong>
-                                <p>{drawerContent.notes}</p>
+                                <strong>Items:</strong>
+                                {Array.isArray(drawerContent.items) && drawerContent.items.length > 0 ? (
+                                    <ul>
+                                        {drawerContent.items.map((item, index) => (
+                                            <li key={index}>
+                                                <strong>Name:</strong> {item.name}<br />
+                                                <strong>List:</strong>
+                                                <ul>
+                                                    {item.list.map((listItem, listIndex) => (
+                                                        <li key={listIndex}>
+                                                            {listItem.first} - {listItem.second}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>No items available</p>
+                                )}
                             </div>
                         </>
                     )}
                 </div>
             </Drawer>
+
 
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>

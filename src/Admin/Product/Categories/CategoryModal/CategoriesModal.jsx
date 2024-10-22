@@ -11,6 +11,7 @@ const { Title } = Typography;
 const CategorySchema = Yup.object().shape({
     category_name: Yup.string().required('Category name is required'),
     show_on_homepage: Yup.boolean(),
+    show_on_menu: Yup.boolean(),
 });
 
 const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing, currentCategory }) => {
@@ -20,6 +21,7 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
         category_name: currentCategory?.category_name || '',
         image: currentCategory?.image_url || "null",
         show_on_homepage: currentCategory?.show_on_homepage || false, 
+        show_on_menu: currentCategory?.show_on_menu || false, 
     };
 
     // Handle image change
@@ -94,6 +96,17 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
                                 onChange={(e) => setFieldValue('show_on_homepage', e.target.checked)}  // Update Formik state
                             >
                                 Shown on Home Page
+                            </Checkbox>
+                        </div>
+
+                         {/* Shown on menu */}
+                         <div className="fields">
+                            <label className='category-Label'>Show On Menu</label>
+                            <Checkbox
+                                checked={values.show_on_menu}  
+                                onChange={(e) => setFieldValue('show_on_menu', e.target.checked)}  // Update Formik state
+                            >   
+                                Shown On Menu
                             </Checkbox>
                         </div>
 
