@@ -28,7 +28,6 @@ const deleteImage = async (imageUrl) => {
   }
 };
 
-// Add product to Firestore with image URLs and UUID
 export const Add = async (product) => {
   try {
     // Upload images if provided
@@ -41,7 +40,6 @@ export const Add = async (product) => {
       image_url: imageUrl,
       banner_image_url: bannerImageUrl,
       category: product.category || null,
-      items: product.items || [], // Ensure items is included
     };
 
     // Remove undefined fields
@@ -62,6 +60,7 @@ export const Add = async (product) => {
     console.error('Error adding product:', error);
   } 
 };
+
 
 
 export const fetchProducts = async () => {

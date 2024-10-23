@@ -131,7 +131,7 @@ const Product = () => {
                         const details = {
                             specialNote: record.special_note || 'No Special Note',
                             description: record.description || 'No Description',
-                            items: record.items || "no items"
+                            content: record.content || "no content"
                         };
                         showDrawer('Product Details', details);
                     }}
@@ -177,17 +177,17 @@ const Product = () => {
                                 <p>{drawerContent.description}</p>
                             </div>
                             <div className="detail-item">
-                                <strong>Items:</strong>
-                                {Array.isArray(drawerContent.items) && drawerContent.items.length > 0 ? (
+                                <strong>content:</strong>
+                                {Array.isArray(drawerContent.content) && drawerContent.content.length > 0 ? (
                                     <ul>
-                                        {drawerContent.items.map((item, index) => (
+                                        {drawerContent.content.map((item, index) => (
                                             <li key={index}>
-                                                <strong>Name:</strong> {item.name}<br />
-                                                <strong>List:</strong>
+                                                <strong>Title:</strong> {item.title}<br />
+                                                <strong>Data:</strong>
                                                 <ul>
-                                                    {item.list.map((listItem, listIndex) => (
+                                                    {item.data.map((listItem, listIndex) => (
                                                         <li key={listIndex}>
-                                                            {listItem.first} - {listItem.second}
+                                                            {listItem.item} - {listItem.itemDescription}
                                                         </li>
                                                     ))}
                                                 </ul>
@@ -195,7 +195,7 @@ const Product = () => {
                                         ))}
                                     </ul>
                                 ) : (
-                                    <p>No items available</p>
+                                    <p>No content available</p>
                                 )}
                             </div>
                         </>
