@@ -85,25 +85,23 @@ export const deleteCategory = async (categoryId, imageUrl) => {
 
 export const Update = async (payload) => {
   try {
-    if (!payload) {
-      throw new Error('Updated category data is undefined');
+    if (!payload || !payload._id) {
+      throw new Error('Updated category data is undefined or missing ID');
     }
 
     const categoryRef = doc(db, PARENT_COLLECTION_NAME, payload._id);
 
     let uploadedImageLink = payload?.image_url || null;
 
-    // Check if the image is a File object and needs to be uploaded
     if (payload?.image instanceof File) {
       uploadedImageLink = await uploadImage(payload.image);
     }
 
     const categoryData = {
-      _id: payload._id,
       category_name: payload.category_name,
       image_url: uploadedImageLink,
-      show_on_homepage: payload.show_on_homepage || false, 
-      show_on_menu: payload.show_on_menu || false,
+      show_on_homepage: payload.show_on_homepage ?? false, 
+      show_on_menu: payload.show_on_menu ?? false,
     };
 
     // Update the category in Firebase

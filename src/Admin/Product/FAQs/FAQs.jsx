@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PlusOutlined, LogoutOutlined, VideoCameraOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Space, Table, Popconfirm } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import FAQModal from './FAQsModal/FAQsModal';
@@ -129,15 +129,21 @@ const FAQs = () => {
               },
               {
                 key: '2',
-                icon: <UserOutlined />,
+                icon: <VideoCameraOutlined />,
                 label: 'Categories',
                 onClick: () => navigate('/categories'),
               },
               {
                 key: '3',
-                icon: <UserOutlined />,
+                icon: <UploadOutlined />,
                 label: 'FAQs',
                 onClick: () => navigate('/faqs'),
+              },
+              {
+                key: '4',
+                icon: <LogoutOutlined />,
+                label: 'Sign Out',
+                onClick: () => navigate('/'),
               },
             ]}
           />

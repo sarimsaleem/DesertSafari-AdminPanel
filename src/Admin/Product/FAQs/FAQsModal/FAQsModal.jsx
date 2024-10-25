@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Input, Button, Typography } from 'antd';
+import React from 'react';
+import { Modal, Input, Button, Typography, Row, Col } from 'antd';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-    
+import "../faqs.css"
 const { Title } = Typography;
 
 // Schema validation
@@ -19,16 +19,10 @@ const FAQModal = ({ open, setOpen, addFAQ, updateFAQ, isEditing, currentFAQ }) =
     };
 
     const modalTitle = (
-        <Title className='faqTitle' level={3} style={{ marginTop: "10px", marginBottom: "35px" }}>
+        <Title className='faqTitle' level={3} style={{ marginTop: "0px", fontWeight: "700" }}>
             {isEditing ? 'Edit FAQ' : 'Add FAQ'}
         </Title>
     );
-
-    useEffect(() => {
-        if (open && currentFAQ) {
-            // If editing, set initial values to current FAQ
-        }
-    }, [currentFAQ, open]);
 
     return (
         <Modal
@@ -41,49 +35,46 @@ const FAQModal = ({ open, setOpen, addFAQ, updateFAQ, isEditing, currentFAQ }) =
             padding="30px"
         >
             <Formik
-                 enableReinitialize={true}
-                 initialValues={initialValues}
-                 validationSchema={FAQSchema}
-                 onSubmit={(values, { setSubmitting, resetForm }) => {
-                    console.log("Current FAQ before update:", currentFAQ);
+                enableReinitialize={true}
+                initialValues={initialValues}
+                validationSchema={FAQSchema}
+                onSubmit={(values, { setSubmitting, resetForm }) => {
                     if (isEditing) {
                         updateFAQ({ ...currentFAQ, ...values });
                     } else {
                         addFAQ(values);
                     }
                     setSubmitting(false);
-                    resetForm();
-                    setOpen(false);
+                    resetForm(); // Reset form after submission
+                    setOpen(false); // Close modal after submission
                 }}
             >
                 {({ handleSubmit, isSubmitting, errors, touched }) => (
                     <Form onSubmit={handleSubmit}>
-                        <div className="fields">
-                            <label className='faq-Label'>Question</label>
-                            <Field
-                                name="question"
-                                as={Input}
-                                placeholder="Enter question"
-                            />
-                            {touched.question && errors.question ? (
-                                <div className="ant-form-item-explain">{errors.question}</div>
-                            ) : null}
-                        </div>
+                        <Row gutter={20}>
+                            <Col className="gutter-row" span={24}>
+                                <Typography.Title level={5}>Question</Typography.Title>
+                                <Field name="question" as={Input} placeholder="Enter question"  />
+                                {touched.question && errors.question ? (
+                                    <div className="ant-form-item-explain">{errors.question}</div>
+                                ) : null}
+                            </Col>
 
-                        <div className="fields">
-                            <label className='faq-Label'>Answer</label>
-                            <Field
-                                name="answer"
-                                as={Input.TextArea}
-                                placeholder="Enter answer"
-                                rows={4}
-                            />
-                            {touched.answer && errors.answer ? (
-                                <div className="ant-form-item-explain">{errors.answer}</div>
-                            ) : null}
-                        </div>
+                            <Col className="gutter-row" span={24}>
+                                <Typography.Title level={5}>Answer</Typography.Title>
+                                <Field name="answer" as={Input.TextArea} placeholder="Enter answer" rows={5} />
+                                {touched.answer && errors.answer ? (
+                                    <div className="ant-form-item-explain">{errors.answer}</div>
+                                ) : null}
+                            </Col>
+                        </Row>
 
-                        <Button type="primary" htmlType="submit" loading={isSubmitting}>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isSubmitting}
+                            style={{ marginTop: "20px" }}
+                        >
                             {isEditing ? 'Update' : 'Submit'}
                         </Button>
                     </Form>

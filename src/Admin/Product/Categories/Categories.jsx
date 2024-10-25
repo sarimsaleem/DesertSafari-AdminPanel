@@ -1,5 +1,5 @@
   import React, { useState, useEffect } from 'react';
-  import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined } from '@ant-design/icons';
+  import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined, LogoutOutlined, UploadOutlined } from '@ant-design/icons';
   import { Button, Layout, Menu, Space, Table, Popconfirm } from 'antd';
   import { useNavigate } from 'react-router-dom';
   import CategoriesModal from './CategoryModal/CategoriesModal';
@@ -49,7 +49,8 @@
         image_url: values?.image,
         category_name: values?.category_name,
         oldImageUrl: values?.oldImageUrl,
-        show_on_homepage: values?.show_on_homepage
+        show_on_homepage: values?.show_on_homepage,
+        show_on_menu: values?.show_on_menu
       };
       console.log("values.image",values.image)
 
@@ -165,9 +166,15 @@
                 },
                 {
                   key: '3',
-                  icon: <UserOutlined />,
+                  icon: <UploadOutlined />,
                   label: 'FAQs',
                   onClick: () => navigate('/faqs'),
+                },
+                {
+                  key: '4',
+                  icon: <LogoutOutlined />,
+                  label: 'Sign Out',
+                  onClick: () => navigate('/'),
                 },
               ]}
             />

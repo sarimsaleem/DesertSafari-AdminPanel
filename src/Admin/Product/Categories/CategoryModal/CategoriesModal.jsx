@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Input, Button, Typography, Upload, Checkbox } from 'antd'; // Import Checkbox
+import { Modal, Input, Button, Typography, Upload, Checkbox, Row, Col } from 'antd'; // Import Checkbox
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { PlusOutlined } from '@ant-design/icons';
@@ -20,17 +20,16 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
     const initialValues = {
         category_name: currentCategory?.category_name || '',
         image: currentCategory?.image_url || "null",
-        show_on_homepage: currentCategory?.show_on_homepage || false, 
-        show_on_menu: currentCategory?.show_on_menu || false, 
+        show_on_homepage: currentCategory?.show_on_homepage || false,
+        show_on_menu: currentCategory?.show_on_menu || false,
     };
 
-    // Handle image change
     const handleImageChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
     };
 
     const modalTitle = (
-        <Title className='categoryTitle' level={3} style={{ marginTop: "10px", marginBottom: "35px" }}>
+        <Title className='categoryTitle' level={3} style={{ marginTop: "10px", marginBottom: "20px", fontWeight:"700" }}>
             {isEditing ? 'Edit Category' : 'Add Category'}
         </Title>
     );
@@ -76,63 +75,55 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
             >
                 {({ handleSubmit, isSubmitting, errors, touched, setFieldValue, values }) => (
                     <Form onSubmit={handleSubmit}>
-                        <div className="fields">
-                            <label className='category-Label'>Category Name</label>
-                            <Field
-                                name="category_name"
-                                as={Input}
-                                placeholder="Enter category name"
-                            />
-                            {touched.category_name && errors.category_name ? (
-                                <div className="ant-form-item-explain">{errors.category_name}</div>
-                            ) : null}
-                        </div>
 
-                        {/* Shown on Home Page */}
-                        <div className="fields">
-                            <label className='category-Label'>Show on Home Page</label>
-                            <Checkbox
-                                checked={values.show_on_homepage}  // Directly bind to Formik values
-                                onChange={(e) => setFieldValue('show_on_homepage', e.target.checked)}  // Update Formik state
-                            >
-                                Shown on Home Page
-                            </Checkbox>
-                        </div>
-
-                         {/* Shown on menu */}
-                         <div className="fields">
-                            <label className='category-Label'>Show On Menu</label>
-                            <Checkbox
-                                checked={values.show_on_menu}  
-                                onChange={(e) => setFieldValue('show_on_menu', e.target.checked)}  // Update Formik state
-                            >   
-                                Shown On Menu
-                            </Checkbox>
-                        </div>
-
-                        {/* Image Upload Field */}
-                        <div className="fields">
-                            <label className='category-Label'>Category Image</label>
-                            <Upload
-                                listType="picture-card"
-                                fileList={fileList}
-                                onChange={(info) => {
-                                    handleImageChange(info);
-                                    setFieldValue('image', info.fileList[0]?.originFileObj);  // Set image in Formik state
-                                }}
-                                beforeUpload={() => false}
-                                maxCount={1}
-                            >
-                                {fileList?.length < 1 && (
-                                    <div>
-                                        <PlusOutlined />
-                                        <div style={{ marginTop: 8 }}>Upload</div>
-                                    </div>
-                                )}
-                            </Upload>
-                        </div>
-
-                        <Button type="primary" htmlType="submit" loading={isSubmitting}>
+                        <Row gutter={20}>
+                            <Col className="gutter-row" span={24}>
+                                <Typography.Title level={5}>Category Name</Typography.Title>
+                                <Field name="category_name" as={Input} placeholder="Enter category name" />
+                                {touched.category_name && errors.category_name ? (
+                                    <div className="ant-form-item-explain">{errors.category_name}</div>
+                                ) : null}
+                            </Col>
+                            <Col className="gutter-row" span={12}>
+                                <Typography.Title level={5}>Shown on Home Page</Typography.Title>
+                                <Checkbox className='checkbox-Cat' checked={values.show_on_homepage}
+                                    onChange={(e) => setFieldValue('show_on_homepage', e.target.checked)}
+                                >
+                                    Shown on Home Page
+                                </Checkbox>
+                            </Col>
+                            <Col className="gutter-row" span={12}>
+                                <Typography.Title level={5}>Shown On Menu</Typography.Title>
+                                <Checkbox
+                                    className='checkbox-Cat'
+                                    checked={values.show_on_menu}
+                                    onChange={(e) => setFieldValue('show_on_menu', e.target.checked)}
+                                >
+                                    Shown On Menu
+                                </Checkbox>
+                            </Col>
+                            <Col className="gutter-row" span={12}>
+                                <Typography.Title level={5}>Category Image</Typography.Title>
+                                <Upload
+                                    listType="picture-card"
+                                    fileList={fileList}
+                                    onChange={(info) => {
+                                        handleImageChange(info);
+                                        setFieldValue('image', info.fileList[0]?.originFileObj);
+                                    }}
+                                    beforeUpload={() => false}
+                                    maxCount={1}
+                                >
+                                    {fileList?.length < 1 && (
+                                        <div>
+                                            <PlusOutlined />
+                                            <div style={{ marginTop: 8 }}>Upload</div>
+                                        </div>
+                                    )}
+                                </Upload>
+                            </Col>
+                        </Row>
+                        <Button type="primary" htmlType="submit" loading={isSubmitting} style={{ marginTop: "20px" }}>
                             {isEditing ? 'Update' : 'Submit'}
                         </Button>
                     </Form>

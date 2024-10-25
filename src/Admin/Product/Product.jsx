@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, Table, Space, Drawer } from 'antd';
+import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, Row, Col, Divider } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
 import ProductEditModal from './productModal/ProductEditModal';
@@ -20,9 +20,9 @@ const Product = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [openDrawer, setOpenDrawer] = useState(false);
-    const [drawerContent, setDrawerContent] = useState('');
+    const [drawerContent, setDrawerContent] = useState({});
     const [drawerTitle, setDrawerTitle] = useState('');
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     const loadProducts = async () => {
         setLoading(true);
@@ -35,26 +35,19 @@ const Product = () => {
 
     const handleAddProduct = async (product) => {
         setLoading(true);
-
         const productId = uuidv4();
-        await Add({
-            ...product,
-            _id: productId,
-        });
-
+        await Add({ ...product, _id: productId });
         await loadProducts();
         setOpenModal(false);
         setLoading(false);
     };
 
     const handleEditProduct = async (productId, updatedProduct) => {
-        console.log('Editing product ID:', productId, updatedProduct);
         setLoading(true);
         await update(productId, updatedProduct);
         await loadProducts();
         setLoading(false);
     };
-
 
     const handleDeleteProduct = async (productId, imageUrl) => {
         setLoading(true);
@@ -73,9 +66,9 @@ const Product = () => {
         loadCategories();
     }, []);
 
-    const showDrawer = (fieldTitle, details) => {
-        setDrawerTitle(fieldTitle);
-        setDrawerContent(details);
+    const showDrawer = (product) => {
+        setDrawerTitle(product.image_text || 'Product Details');
+        setDrawerContent(product);
         setOpenDrawer(true);
     };
 
@@ -126,16 +119,7 @@ const Product = () => {
             title: 'Details',
             key: 'details',
             render: (_, record) => (
-                <Button
-                    onClick={() => {
-                        const details = {
-                            specialNote: record.special_note || 'No Special Note',
-                            description: record.description || 'No Description',
-                            content: record.content || "no content"
-                        };
-                        showDrawer('Product Details', details);
-                    }}
-                >
+                <Button onClick={() => showDrawer(record)}>
                     View
                 </Button>
             ),
@@ -155,54 +139,82 @@ const Product = () => {
         }
     ];
 
+    const headingStyle = {
+        fontWeight: 'bold',
+        fontSize: '16px',
+    };
+
+    const subHeadingStyle = {
+        fontWeight: '700',
+        fontSize: '15px',
+    };
+
+    const contentStyle = {
+        fontSize: '14px',
+    };
+    const itemStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        marginBottom: '16px',
+    };
+
     return (
         <>
             <Drawer
                 title={drawerTitle}
                 placement="right"
                 closable
-                size='large'
+                width={"60%"}
                 onClose={() => setOpenDrawer(false)}
                 open={openDrawer}
             >
-                <div className="drawer-details">
-                    {drawerContent && (
-                        <>
-                            <div className="detail-item">
-                                <strong>Special Note:</strong>
-                                <p>{drawerContent.specialNote}</p>
-                            </div>
-                            <div className="detail-item">
-                                <strong>Description:</strong>
-                                <p>{drawerContent.description}</p>
-                            </div>
-                            <div className="detail-item">
-                                <strong>content:</strong>
-                                {Array.isArray(drawerContent.content) && drawerContent.content.length > 0 ? (
-                                    <ul>
-                                        {drawerContent.content.map((item, index) => (
-                                            <li key={index}>
-                                                <strong>Title:</strong> {item.title}<br />
-                                                <strong>Data:</strong>
-                                                <ul>
-                                                    {item.data.map((listItem, listIndex) => (
-                                                        <li key={listIndex}>
-                                                            {listItem.item} - {listItem.itemDescription}
+                <Descriptions bordered column={1}>
+                    <Descriptions.Item label={<span style={headingStyle}>Special Note</span>}>
+                        {drawerContent.special_note || 'No Special Note'}
+                    </Descriptions.Item>
+                    <Descriptions.Item label={<span style={headingStyle}>Description</span>}>
+                        {drawerContent.description || 'No Description'}
+                    </Descriptions.Item>
+                    <Descriptions.Item label={<span style={headingStyle}>Hide Icon</span>}>
+                        <Tag color="geekblue" bordered={false}>
+                            {drawerContent.hide_icon ? 'True' : 'False'}
+                        </Tag>
+                    </Descriptions.Item>
+
+                    {/* <Divider style={{ borderColor: '#7cb305', }} /> */}
+
+                    <Descriptions.Item label={<span style={headingStyle}>Content Details</span>}>
+                        {Array.isArray(drawerContent.content) && drawerContent.content.length > 0 ? (
+                            <Descriptions bordered>
+                                {drawerContent.content.map((contentItem, index) => (
+                                    <div key={index} style={itemStyle}>
+                                        <span style={subHeadingStyle}>{contentItem.title || 'No Title'}</span>
+
+                                        <div>
+                                            {Array.isArray(contentItem.data) && contentItem.data.length > 0 ? (
+                                                <ul style={{ padding: 0, margin: 0 }}>
+                                                    {contentItem.data.map((dataItem, dataIndex) => (
+                                                        <li key={dataIndex} style={{ listStyleType: 'none', ...contentStyle }}>
+                                                            {dataItem.item.trim() === "" && dataItem.itemDescription.trim() === ""
+                                                                ? 'No Content Available'
+                                                                : `${dataItem.item} - ${dataItem.itemDescription}`}
                                                         </li>
                                                     ))}
                                                 </ul>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>No content available</p>
-                                )}
-                            </div>
-                        </>
-                    )}
-                </div>
-            </Drawer>
+                                            ) : (
+                                                'No data available'
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </Descriptions>
+                        ) : (
+                            'No Content'
+                        )}
+                    </Descriptions.Item>
 
+                </Descriptions>
+            </Drawer>
 
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -228,9 +240,15 @@ const Product = () => {
                             },
                             {
                                 key: '3',
-                                icon: <UserOutlined />,
+                                icon: <UploadOutlined />,
                                 label: 'FAQs',
                                 onClick: () => navigate('/faqs'),
+                            },
+                            {
+                                key: '4',
+                                icon: <LogoutOutlined />,
+                                label: 'Sign Out',
+                                onClick: () => navigate('/'),
                             },
                         ]}
                     />
@@ -254,26 +272,36 @@ const Product = () => {
                             style={{ marginRight: '16px' }}
                         >Add Product</Button>
                     </Header>
-                    <Content style={{ margin: '24px 16px', padding: 24, minHeight: 280, background: '#fff', overflowX: "scroll" }}>
-                        <Table dataSource={products} columns={columns} rowKey="_id" loading={loading} />
-
-                        <ProductModal
-                            open={openModal}
-                            setOpen={setOpenModal}
-                            addProduct={handleAddProduct}
-                            categories={categories}
-                        />
-
-                        <ProductEditModal
-                            open={openEditModal}
-                            setOpen={setOpenEditModal}
-                            update={handleEditProduct}
-                            currentProduct={currentProduct}
-                            categories={categories}
-                        />
+                    <Content style={{ margin: '24px 16px 0' }}>
+                        <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                            <Table
+                                loading={loading}
+                                columns={columns}
+                                dataSource={products}
+                                rowKey="_id"
+                                pagination={{
+                                    pageSize: 5,
+                                }}
+                            />
+                        </div>
                     </Content>
                 </Layout>
             </Layout>
+            {openModal && (
+                <ProductModal
+                    visible={openModal}
+                    onCancel={() => setOpenModal(false)}
+                    onAdd={handleAddProduct}
+                />
+            )}
+            {openEditModal && (
+                <ProductEditModal
+                    visible={openEditModal}
+                    onCancel={() => setOpenEditModal(false)}
+                    onEdit={handleEditProduct}
+                    currentProduct={currentProduct}
+                />
+            )}
         </>
     );
 };

@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button } from 'antd';
-import { Formik, Form, Field, FieldArray } from 'formik';
-import { ProductSchema } from "./ProductSchema";
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card, Space, Switch } from 'antd';
+import { Formik, Form as MainForm, Field } from 'formik';import { ProductSchema } from "./ProductSchema";
 import "./productmodal.css";
+import { CloseOutlined } from '@ant-design/icons';
 import TextArea from 'antd/es/input/TextArea';
-import { v4 as uuidv4 } from 'uuid';
 
 const { Option } = Select;
 
 const ProductEditModal = ({ open, setOpen, update, currentProduct, categories }) => {
-
     const [fileList, setFileList] = useState([]);
     const [bannerImgList, setBannerImgList] = useState([]);
-    const formikRef = useRef()
-    // console.log('currentProduct:', currentProduct);
-
+    const formikRef = useRef();
+    const [form] = Form.useForm();
 
     useEffect(() => {
         if (currentProduct) {
@@ -32,6 +28,8 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                 status: 'done',
                 url: currentProduct.banner_image_url,
             }] : []);
+
+            form.setFieldValue('content', currentProduct?.content)
         } else {
             setFileList([]);
             setBannerImgList([]);
@@ -58,13 +56,13 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
             ...values,
             category: values.category
         };
-        console.log(values, "values")
+        console.log(values, "values");
 
         update(productId, updatedValues);
-
         resetForm();
         setOpen(false);
     }
+    // console.log(currentProduct,'currentProduct')
     return (
         <Modal
             centered
@@ -82,12 +80,10 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                     price: currentProduct?.price || 0,
                     special_note: currentProduct?.special_note || '',
                     description: currentProduct?.description || '',
-                    packageIncludes: currentProduct?.packageIncludes || [],
-                    notes: currentProduct?.notes || [],
-                    timings: currentProduct?.timings || [],
                     image_url: currentProduct?.image_url || null,
                     banner_image_url: currentProduct?.banner_image_url || null,
-                    additionalFields: currentProduct?.additionalFields || []
+                    content: currentProduct?.content || [{ title: " ", data: [{ item: "", itemDescription: "" }] }]
+                    
                 }}
                 enableReinitialize={true}
                 validateOnChange={true}
@@ -95,8 +91,8 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                 onSubmit={onSubmitHandler}
             >
                 {({ setFieldValue, handleSubmit, isSubmitting, errors, touched, values }) => (
-                    <Form onSubmit={handleSubmit}>
-                        {/* Product Name Field Product Card Detail Field*/}
+                    <MainForm onSubmit={handleSubmit}>
+                        {/* Product Name Field */}
                         <div className="des-spec-parernt">
                             <div className="fields">
                                 <label>Product Name</label>
@@ -117,7 +113,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                             <Field name="most_popular" type="checkbox" as={Checkbox} />
                         </div>
 
-                        {/* Product Category Product Price Field  */}
+                        {/* Product Category and Price Field */}
                         <div className="des-spec-parernt">
                             <div className="fields" style={{ marginBottom: '16px' }}>
                                 <label>Product Category</label>
@@ -158,13 +154,13 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                             </div>
                         </div>
 
-                        {/* special note and description  */}
+                        {/* Special Note and Description */}
                         <div className="des-spec-parernt">
                             <div className="fields" style={{ marginBottom: '16px' }}>
                                 <label>Special Note</label>
                                 <Field name="special_note">
                                     {({ field }) => (
-                                        <Input.TextArea
+                                        <TextArea
                                             {...field}
                                             placeholder="Enter special note"
                                             rows={4}
@@ -180,7 +176,6 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                         <TextArea
                                             {...field}
                                             placeholder="Enter product description"
-                                            value={values?.description}
                                             rows={4}
                                         />
                                     )}
@@ -189,165 +184,124 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                             </div>
                         </div>
 
-                        {/* array fieldss  */}
-                        <div className="arrayfield-wrapper">
-                            <div className="arrayfield-group">
-                                <div className="fields">
-                                    <label>Package Includes</label>
-                                    <FieldArray
-                                        name="packageIncludes"
-                                        render={arrayHelpers => (
-                                            <>
-                                                {values?.packageIncludes?.map((_, index) => (
-                                                    <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                                                        <Field
-                                                            name={`packageIncludes.${index}`}
-                                                            as={Input}
-                                                            placeholder="Enter additional info"
-                                                        />
-                                                        <MinusCircleOutlined
-                                                            style={{ marginLeft: '8px' }}
-                                                            onClick={() => arrayHelpers.remove(index)}
-                                                        />
-                                                    </div>
-                                                ))}
-                                                <Button
-                                                    type="dashed"
-                                                    onClick={() => arrayHelpers.push('')}
-                                                    icon={<PlusOutlined />}
-                                                >
-                                                    Add Additional Info
-                                                </Button>
-                                            </>
-                                        )}
-                                    />
-                                </div>
+                        <Form form={form} name="dynamic_form_complex" onValuesChange={(changedValues, allValues) => {
+                            setFieldValue("content", allValues.content);
+                        }} style={{ maxWidth: "100%" }} autoComplete="off">
+                            <Form.Item label="Hide Icon">
+                                <Switch defaultChecked={false} onChange={(checked) => setFieldValue('featureEnabled', checked)} />
+                            </Form.Item>
 
-                                <div className="fields">
-                                    <label>Timings</label>
-                                    <FieldArray
-                                        name="timings"
-                                        render={arrayHelpers => (
-                                            <>
-                                                {values?.timings?.map((_, index) => (
-                                                    <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                                                        <Field
-                                                            name={`timings.${index}`}
-                                                            as={Input}
-                                                            placeholder="Enter additional info"
-                                                        />
-                                                        <MinusCircleOutlined
-                                                            style={{ marginLeft: '8px' }}
-                                                            onClick={() => arrayHelpers.remove(index)}
-                                                        />
-                                                    </div>
-                                                ))}
-                                                <Button
-                                                    type="dashed"
-                                                    onClick={() => arrayHelpers.push('')}
-                                                    icon={<PlusOutlined />}
-                                                >
-                                                    Add Additional Info
-                                                </Button>
-                                            </>
-                                        )}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="fields">
-                                <label>Notes</label>
-                                <FieldArray
-                                    name="notes"
-                                    render={arrayHelpers => (
-                                        <>
-                                            {values?.notes?.map((_, index) => (
-                                                <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                                                    <Field
-                                                        name={`notes.${index}`}
-                                                        as={Input}
-                                                        placeholder="Enter additional info"
-                                                    />
-                                                    <MinusCircleOutlined
-                                                        style={{ marginLeft: '8px' }}
-                                                        onClick={() => arrayHelpers.remove(index)}
-                                                    />
-                                                </div>
-                                            ))}
-                                            <Button
-                                                type="dashed"
-                                                onClick={() => arrayHelpers.push('')}
-                                                icon={<PlusOutlined />}
+                            <Form.List name="content">
+                                {(fields, { add, remove }) => (
+                                    <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
+                                        {console.log('fields',fields)}
+                                        {fields.map((field) => (
+                                            <Card
+                                                size="small"
+                                                title="Content"  // Updated title
+                                                key={field.key}
+                                                extra={<CloseOutlined onClick={() => remove(field.name)} />}
                                             >
-                                                Add Additional Info
-                                            </Button>
-                                        </>
-                                    )}
-                                />
+                                                <Form.Item label="Title" name={[field.name, 'title']}>
+                                                    <Input />
+                                                </Form.Item>
+
+                                                <Form.Item label="Data">
+                                                    <Form.List name={[field.name, 'data']}>
+                                                        {(dataFields, dataOpt) => (
+                                                            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
+                                                                {dataFields.map((dataField) => (
+                                                                    <Space key={dataField.key}>
+                                                                        <Form.Item name={[dataField.name, 'item']} noStyle>
+                                                                            <Input placeholder="Item" />
+                                                                        </Form.Item>
+                                                                        <Form.Item name={[dataField.name, 'itemDescription']} noStyle>
+                                                                            <Input placeholder="Item Description" />
+                                                                        </Form.Item>
+                                                                        <CloseOutlined onClick={() => dataOpt.remove(dataField.name)} />
+                                                                    </Space>
+                                                                ))}
+                                                                <Button type="dashed" onClick={() => dataOpt.add()} block>
+                                                                    + Add Data Item
+                                                                </Button>
+                                                            </div>
+                                                        )}
+                                                    </Form.List>
+                                                </Form.Item>
+                                            </Card>
+                                        ))}
+
+                                        <Button type="dashed" onClick={() => add()} block style={{ marginBottom: "35px" }}>
+                                            + Add Content Item
+                                        </Button>
+                                    </div>
+                                )}
+                            </Form.List>
+                        </Form>
+
+                        <div className="des-spec-parernt">
+                            {/* Product Image Upload */}
+                            <div className="fields" style={{ marginBottom: '16px' }}>
+                                <label>Product Image</label>
+                                <Upload
+                                    name="image_url"
+                                    fileList={fileList}
+                                    beforeUpload={(file) => {
+                                        setFieldValue('image_url', file);
+                                        setFileList([{
+                                            uid: file.uid,
+                                            name: file.name,
+                                            status: 'done',
+                                            url: URL.createObjectURL(file),
+                                        }]);
+                                        return false;
+                                    }}
+                                    onRemove={() => {
+                                        setFieldValue('image_url', null);
+                                        setFileList([]);
+                                    }}
+                                    listType="picture"
+                                >
+                                    <Button>Upload Product Image</Button>
+                                </Upload>
+                                {touched.image_url && errors.image_url ? (
+                                    <div className="ant-form-item-explain">{errors.image_url}</div>
+                                ) : null}
+                            </div>
+
+                            {/* Banner Image Upload */}
+                            <div className="fields" style={{ marginBottom: '16px' }}>
+                                <label>Banner Image</label>
+                                <Upload
+                                    name="banner_image_url"
+                                    fileList={bannerImgList}
+                                    beforeUpload={(file) => {
+                                        setFieldValue('banner_image_url', file);
+                                        setBannerImgList([{
+                                            uid: file.uid,
+                                            name: file.name,
+                                            status: 'done',
+                                            url: URL.createObjectURL(file),
+                                        }]);
+                                        return false;
+                                    }}
+                                    onRemove={() => {
+                                        setFieldValue('banner_image_url', null);
+                                        setBannerImgList([]);
+                                    }}
+                                    listType="picture"
+                                >
+                                    <Button>Upload Banner Image</Button>
+                                </Upload>
+                                {touched.banner_image_url && errors.banner_image_url ? (
+                                    <div className="ant-form-item-explain">{errors.banner_image_url}</div>
+                                ) : null}
                             </div>
                         </div>
-
-                        <div className="fields" style={{ marginBottom: '16px' }}>
-                            <label>Product Image</label>
-                            <Upload
-                                name="image_url"
-                                fileList={fileList}
-                                beforeUpload={(file) => {
-                                    setFieldValue('image_url', file);
-                                    setFileList([{
-                                        uid: file.uid,
-                                        name: file.name,
-                                        status: 'done',
-                                        url: URL.createObjectURL(file),
-                                    }]);
-                                    return false;
-                                }}
-                                onRemove={() => {
-                                    setFieldValue('image_url', null);
-                                    setFileList([]);
-                                }}
-                                listType="picture"
-                            >
-                                <Button>Upload Product Image</Button>
-                            </Upload>
-                            {touched.image_url && errors.image_url ? (
-                                <div className="ant-form-item-explain">{errors.image_url}</div>
-                            ) : null}
-                        </div>
-
-                        {/* Banner Image Upload */}
-                        <div className="fields" style={{ marginBottom: '16px' }}>
-                            <label>Banner Image</label>
-                            <Upload
-                                name="banner_image_url"
-                                fileList={bannerImgList}
-                                beforeUpload={(file) => {
-                                    setFieldValue('banner_image_url', file);
-                                    setBannerImgList([{
-                                        uid: file.uid,
-                                        name: file.name,
-                                        status: 'done',
-                                        url: URL.createObjectURL(file),
-                                    }]);
-                                    return false;
-                                }}
-                                onRemove={() => {
-                                    setFieldValue('banner_image_url', null);
-                                    setBannerImgList([]);
-                                }}
-                                listType="picture"
-                            >
-                                <Button>Upload Banner Image</Button>
-                            </Upload>
-                            {touched.banner_image_url && errors.banner_image_url ? (
-                                <div className="ant-form-item-explain">{errors.banner_image_url}</div>
-                            ) : null}
-                        </div>
-
                         <Button type="primary" htmlType="submit" loading={isSubmitting}>
                             Submit
                         </Button>
-                    </Form>
+                    </MainForm>
                 )}
             </Formik>
         </Modal>

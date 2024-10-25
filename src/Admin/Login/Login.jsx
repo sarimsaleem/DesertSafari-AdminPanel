@@ -1,93 +1,104 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Typography, message } from 'antd';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import { Input, Button } from 'antd';
 
 const Login = () => {
-  const auth = getAuth(); // Initialize Firebase Auth
+  const auth = getAuth();
   const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage(); // Create message API
 
-  // Validation schema using Yup
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .email('Invalid email address')
-      .required('Email is required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
-  });
+  const showSuccessMessage = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Login successful! Redirecting...',
+    });
+  };
 
-  const handleLogin = (values, { setSubmitting, setErrors }) => {
+  const showErrorMessage = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Invalid email or password. Please try again.',
+    });
+  };
+
+  const handleLogin = async (values) => {
     const { email, password } = values;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        navigate('/product');
-        console.log('Logged in:', user);
-        // Redirect to dashboard or show success message
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error('Error:', errorCode, errorMessage);
-        alert('Incorrect password');
-        setErrors({ email: 'Invalid email or password' });
-        setSubmitting(false);
-      });
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('Logged in:', user);
+      showSuccessMessage(); // Show success message
+      
+      // Delay navigation to allow the message to be displayed
+      setTimeout(() => {
+        navigate('/product'); 
+      }, 2000); // Adjust the delay time (2000ms = 2 seconds) as needed
+
+    } catch (error) {
+      console.error('Error:', error.code, error.message);
+      form.setFields([
+        { name: 'email', errors: [''] },
+        { name: 'password', errors: [] },
+      ]);
+      showErrorMessage(); // Show error message
+    }
   };
 
   return (
-    <div className='login-container'>
-      <div className='login-box'>
-        <h2 className='login-heading'>Login</h2>
-        <Formik
-          initialValues={{ email: '', password: '' }}
-          validationSchema={validationSchema}
-          onSubmit={handleLogin}
+    <div className="login-container">
+      {contextHolder} {/* Render the context holder for messages */}
+      <div className="login-box">
+        <Typography.Title level={2} className="login-heading">Login</Typography.Title>
+        
+        <Form
+          form={form}
+          name="login"
+          initialValues={{ remember: true }}
+          onFinish={handleLogin}
+          layout="vertical"
+          validateTrigger="onSubmit"
         >
-          {({ isSubmitting }) => (
-            <Form>
-              <div className='form-group'>
-                <label className='login-label' htmlFor="email">Email</label>
-                <Field name="email">
-                  {({ field }) => (
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder="Enter your email"
-                      size="large"
-                    />
-                  )}
-                </Field>
-                <ErrorMessage name="email" component="div" className="error-message" />
-              </div>
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: 'Please input your Email!' },
+              { type: 'email', message: 'The input is not a valid email!' },
+            ]}
+          >
+            <Input prefix={<UserOutlined />} placeholder="Email" size="large" />
+          </Form.Item>
 
-              <div className='form-group'>
-                <label className='login-label' htmlFor="password">Password</label>
-                <Field name="password">
-                  {({ field }) => (
-                    <Input.Password
-                      {...field}
-                      placeholder="Enter your password"
-                      size="large"
-                    />
-                  )}
-                </Field>
-                <ErrorMessage name="password" component="div" className="error-message" />
-              </div>
+          <Form.Item
+            name="password"
+            rules={[
+              { required: true, message: 'Please input your Password!' },
+              { min: 6, message: 'Password must be at least 6 characters!' }, // Password length validation
+            ]}
+          >
+            <Input.Password prefix={<LockOutlined />} placeholder="Password" size="large" />
+          </Form.Item>
 
-              {/* <div className='form-group'> */}
-                <Button type="primary" htmlType="submit" className='login-btn' disabled={isSubmitting} block size="large">
-                  {isSubmitting ? 'Logging in...' : 'Log In'}
-                </Button>
-              {/* </div> */}
-            </Form>
-          )}
-        </Formik>
+          <Form.Item>
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+            <a className="login-form-forgot" href="">
+              {/* Forgot password */}
+            </a>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block size="large">
+              Log in
+            </Button>
+            {/* Or <a href="">register now!</a> */}
+          </Form.Item>
+        </Form>
       </div>
     </div>
   );
