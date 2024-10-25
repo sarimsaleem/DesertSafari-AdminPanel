@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, Row, Col, Divider } from 'antd';
+import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
 import ProductEditModal from './productModal/ProductEditModal';
@@ -177,7 +177,7 @@ const Product = () => {
                     </Descriptions.Item>
                     <Descriptions.Item label={<span style={headingStyle}>Hide Icon</span>}>
                         <Tag color="geekblue" bordered={false}>
-                            {drawerContent.hide_icon ? 'True' : 'False'}
+                            {drawerContent.hide_icon ? 'Yes' : 'No'}
                         </Tag>
                     </Descriptions.Item>
 
@@ -287,21 +287,20 @@ const Product = () => {
                     </Content>
                 </Layout>
             </Layout>
-            {openModal && (
-                <ProductModal
-                    visible={openModal}
-                    onCancel={() => setOpenModal(false)}
-                    onAdd={handleAddProduct}
-                />
-            )}
-            {openEditModal && (
-                <ProductEditModal
-                    visible={openEditModal}
-                    onCancel={() => setOpenEditModal(false)}
-                    onEdit={handleEditProduct}
-                    currentProduct={currentProduct}
-                />
-            )}
+            <ProductModal
+                open={openModal}
+                setOpen={setOpenModal}
+                addProduct={handleAddProduct}
+                categories={categories}
+            />
+
+            <ProductEditModal
+                open={openEditModal}
+                setOpen={setOpenEditModal}
+                update={handleEditProduct}
+                currentProduct={currentProduct}
+                categories={categories}
+            />
         </>
     );
 };

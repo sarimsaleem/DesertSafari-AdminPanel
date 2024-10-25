@@ -106,7 +106,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                                 style={{ width: '100%' }}
                                                 placeholder="Select category"
                                                 onChange={(value) => setFieldValue('category', value)}
-                                            >   
+                                            >
                                                 {categories?.map((category) => (
                                                     <Option key={category?._id} value={category?._id}>
                                                         {category?.category_name}
@@ -162,124 +162,70 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     {touched?.description && errors?.description ? renderError(errors?.description) : null}
                                 </Col>
                                 <Col className="gutter-row" span={24}>
-
                                     <FieldArray name="content">
-                                        {({ insert, remove, push }) => {
-                                            return (
-                                                <>
-                                                    {values?.content.map((value, index) => {
-                                                        return (
-                                                            <Card
-                                                                size="small"
-                                                                title={value?.title || 'Item'}
-                                                                key={index}
-                                                                extra={<CloseOutlined onClick={() => { remove(index); }} />}
-                                                            >
+                                        {({ insert, remove, push }) => (
+                                            <>
+                                                {values?.content.map((value, index) => (
+                                                    <Card
+                                                        size="small"
+                                                        title={value?.title || 'Item'}
+                                                        key={index}
+                                                        extra={<CloseOutlined onClick={() => remove(index)} />}
+                                                    >
+                                                        <Field name={`content.${index}.title`} as={Input} placeholder="Enter product name" />
+                                                        <Switch
+                                                            checked={value?.hide_icon}
+                                                            onChange={(checked) => setFieldValue(`content.${index}.hide_icon`, checked)}
+                                                        />
 
-                                                                <Field name={`content.${index}.title`} as={Input} placeholder="Enter product name" />
-                                                                <Switch
-                                                                    checked={value?.hide_icon} // Bind the switch value
-                                                                    onChange={(checked) => setFieldValue(`content.${index}.hide_icon`, checked)}
-                                                                />
-
-                                                                {/* </Form.Item> */}
-
-                                                                {/* <Form.Item label="Enable List Icon">
-                          <Switch
-                              checked={values.hide_icon} // Bind the switch value
-                              onChange={(checked) => setFieldValue('hide_icon', checked)}
-                          />
-                      </Form.Item>
-
-                      <Form.Item label="Data">
-                          <Form.List name={[field.name, 'data']}>
-                              {(dataFields, dataOpt) => (
-                                  <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
-                                      {dataFields.map((dataField) => (
-                                          <Space key={dataField.key}>
-                                              <Form.Item name={[dataField.name, 'item']} noStyle>
-                                                  <Input placeholder="Item" />
-                                              </Form.Item>
-                                              <Form.Item name={[dataField.name, 'itemDescription']} noStyle>
-                                                  <Input placeholder="Item Description" />
-                                              </Form.Item>
-                                              <CloseOutlined onClick={() => { dataOpt.remove(dataField.name); }} />
-                                          </Space>
-                                      ))}
-                                      <Button type="dashed" onClick={() => dataOpt.add()} block>
-                                          + Add Data Item
-                                      </Button>
-                                  </div>
-                              )}
-                          </Form.List>
-                      </Form.Item> */}
-                                                            </Card>
-                                                        )
-                                                    })}
-                                                    <Button type="dashed" onClick={() => push({
-                                                        _id: uuidv4(),
-                                                        title: '',
-                                                        content: [],
-                                                        hide_icon: true
-                                                    })} block>
-                                                        + Add Content Item
-                                                    </Button>
-                                                </>
-                                            )
-                                        }}
+                                                        {/* Nested FieldArray for data items */}
+                                                        <FieldArray name={`content.${index}.data`}>
+                                                            {({ remove, push }) => (
+                                                                <>
+                                                                    {value.data?.map((dataItem, dataIndex) => (
+                                                                        <Space key={dataIndex} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                                                            <Field
+                                                                                name={`content.${index}.data.${dataIndex}.item`}
+                                                                                as={Input}
+                                                                                placeholder="Item"
+                                                                            />
+                                                                            <Field
+                                                                                name={`content.${index}.data.${dataIndex}.itemDescription`}
+                                                                                as={Input}
+                                                                                placeholder="Item Description"
+                                                                            />
+                                                                            <CloseOutlined onClick={() => remove(dataIndex)} />
+                                                                        </Space>
+                                                                    ))}
+                                                                    <Button
+                                                                        type="dashed"
+                                                                        onClick={() => push({ item: '', itemDescription: '' })}
+                                                                        block
+                                                                    >
+                                                                        + Add Data Item
+                                                                    </Button>
+                                                                </>
+                                                            )}
+                                                        </FieldArray>
+                                                    </Card>
+                                                ))}
+                                                <Button
+                                                    type="dashed"
+                                                    onClick={() =>
+                                                        push({
+                                                            _id: uuidv4(),
+                                                            title: '',
+                                                            hide_icon: true,
+                                                            data: [{ item: '', itemDescription: '' }], 
+                                                        })
+                                                    }
+                                                    block
+                                                >
+                                                    + Add Content Item
+                                                </Button>
+                                            </>
+                                        )}
                                     </FieldArray>
-                                    {/* <Form.List name="content">
-                              {(fields, { add, remove }) => (
-                                  <div style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
-                                      {fields.map((field) => (
-                                          <Card
-                                              size="small"
-                                              title={`Item ${field.title + 1}`}
-                                              key={field.key}
-                                              extra={<CloseOutlined onClick={() => { remove(field.name); }} />}
-                                          >
-                                              <Form.Item label="Title" name={[field.name, 'title']}>
-                                                  <Input />
-                                              </Form.Item>
-
-                                              <Form.Item label="Enable List Icon">
-                                                  <Switch
-                                                      checked={values.hide_icon} // Bind the switch value
-                                                      onChange={(checked) => setFieldValue('hide_icon', checked)}
-                                                  />
-                                              </Form.Item>
-
-                                              <Form.Item label="Data">
-                                                  <Form.List name={[field.name, 'data']}>
-                                                      {(dataFields, dataOpt) => (
-                                                          <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
-                                                              {dataFields.map((dataField) => (
-                                                                  <Space key={dataField.key}>
-                                                                      <Form.Item name={[dataField.name, 'item']} noStyle>
-                                                                          <Input placeholder="Item" />
-                                                                      </Form.Item>
-                                                                      <Form.Item name={[dataField.name, 'itemDescription']} noStyle>
-                                                                          <Input placeholder="Item Description" />
-                                                                      </Form.Item>
-                                                                      <CloseOutlined onClick={() => { dataOpt.remove(dataField.name); }} />
-                                                                  </Space>
-                                                              ))}
-                                                              <Button type="dashed" onClick={() => dataOpt.add()} block>
-                                                                  + Add Data Item
-                                                              </Button>
-                                                          </div>
-                                                      )}
-                                                  </Form.List>
-                                              </Form.Item>
-                                          </Card>
-                                      ))}
-
-                                      <Button type="dashed" onClick={() => add()} block style={{ marginBottom: "35px" }}>
-                                          + Add Content Item
-                                      </Button>
-                                  </div>
-                              )}
-                          </Form.List> */}
                                 </Col>
                                 <Col className="gutter-row" span={12}>
 
@@ -325,57 +271,9 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     </Upload>
                                     {touched?.banner_image_url && errors?.banner_image_url ? renderError(errors?.banner_image_url) : null}
                                 </Col>
+
+                               
                             </Row>
-
-                            {/* Is Product Most Popular */}
-
-                            {/* <div className="des-spec-parernt"> */}
-                            {/* Product Category */}
-                            {/* <div className="fields" style={{ marginBottom: '16px' }}> */}
-
-                            {/* </div> */}
-
-                            {/* Product Price Field */}
-                            {/* <div className="fields" style={{ marginBottom: '16px' }}> */}
-                            {/* <label>Product Price</label> */}
-
-                            {/* </div> */}
-                            {/* </div> */}
-
-                            {/* Special Note and Description */}
-                            {/* <div className="des-spec-parernt">
-                                <div className="fields" style={{ marginBottom: '16px' }}>
-                                    <label>Special Note</label>
-                                  
-                                </div>
-
-                                <div className="fields" style={{ marginBottom: '16px' }}>
-                                    <label>Description</label>
-                                   
-                                </div>
-                            </div> */}
-
-                            {/* <FieldArray name="friends">
-{({ insert, remove, push }) => ( */}
-
-                            {/* Ant Design Form for Dynamic Fields */}
-                            {/* <Form
-                                form={form}
-                                name="dynamic_form_complex"
-                                onValuesChange={handleFormValuesChange}
-                                style={{ maxWidth: "100%" }}
-                                initialValues={initialValues}
-                                autoComplete="off"
-                            >
-                                {/* Switch Component */}
-
-
-
-                            {/* </Form> */}
-
-                            {/* Images Section */}
-
-                            {/* Submit Button */}
                             <Button type="primary" htmlType="submit" loading={isSubmitting}>
                                 Submit
                             </Button>
@@ -387,4 +285,4 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
     );
 };
 
-export default ProductModal;
+export default ProductModal;    
