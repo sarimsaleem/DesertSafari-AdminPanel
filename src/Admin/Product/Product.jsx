@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, } from 'antd';
+import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, Divider, } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
 import ProductEditModal from './productModal/ProductEditModal';
@@ -168,7 +168,7 @@ const Product = () => {
                 onClose={() => setOpenDrawer(false)}
                 open={openDrawer}
             >
-                <Descriptions bordered column={1}>
+                <Descriptions bordered column={1} layout='vertical' >
                     <Descriptions.Item label={<span style={headingStyle}>Special Note</span>}>
                         {drawerContent.special_note || 'No Special Note'}
                     </Descriptions.Item>
@@ -180,40 +180,35 @@ const Product = () => {
                             {drawerContent.hide_icon ? 'Yes' : 'No'}
                         </Tag>
                     </Descriptions.Item>
-
-                    {/* <Divider style={{ borderColor: '#7cb305', }} /> */}
-
-                    <Descriptions.Item label={<span style={headingStyle}>Content Details</span>}>
-                        {Array.isArray(drawerContent.content) && drawerContent.content.length > 0 ? (
-                            <Descriptions bordered>
-                                {drawerContent.content.map((contentItem, index) => (
-                                    <div key={index} style={itemStyle}>
-                                        <span style={subHeadingStyle}>{contentItem.title || 'No Title'}</span>
-
-                                        <div>
-                                            {Array.isArray(contentItem.data) && contentItem.data.length > 0 ? (
-                                                <ul style={{ padding: 0, margin: 0 }}>
-                                                    {contentItem.data.map((dataItem, dataIndex) => (
-                                                        <li key={dataIndex} style={{ listStyleType: 'none', ...contentStyle }}>
-                                                            {dataItem.item.trim() === "" && dataItem.itemDescription.trim() === ""
-                                                                ? 'No Content Available'
-                                                                : `${dataItem.item} - ${dataItem.itemDescription}`}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            ) : (
-                                                'No data available'
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </Descriptions>
-                        ) : (
-                            'No Content'
-                        )}
-                    </Descriptions.Item>
-
                 </Descriptions>
+                <Divider />
+                <Descriptions title="Content Details" bordered column={1} layout='vertical'>
+                    {Array.isArray(drawerContent?.content) && drawerContent?.content.length ? (
+                        drawerContent.content.map((contentItem, index) => (
+                            <Descriptions.Item
+                                key={index}
+                                label={<span style={headingStyle}>{contentItem.title || 'No Title'}</span>}
+                            >
+                                {Array.isArray(contentItem.data) && contentItem.data.length > 0 ? (
+                                    <ul style={{ padding: 0, margin: 0 }}>
+                                        {contentItem.data.map((dataItem, dataIndex) => (
+                                            <li key={dataIndex} style={{ listStyleType: 'none', ...contentStyle }}>
+                                                {(!dataItem.item && !dataItem.itemDescription)
+                                                    ? 'No Content Available'
+                                                    : `${dataItem.item || ''} - ${dataItem.itemDescription || ''}`}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    'No data available'
+                                )}
+                            </Descriptions.Item>
+                        ))
+                    ) : (
+                        'No Content'
+                    )}
+                </Descriptions>
+
             </Drawer>
 
             <Layout>
@@ -272,8 +267,8 @@ const Product = () => {
                             style={{ marginRight: '16px' }}
                         >Add Product</Button>
                     </Header>
-                    <Content style={{ margin: '24px 16px 0' }}>
-                        <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                    <Content style={{ margin: '24px 16px 0'  }} >
+                        <div style={{ padding: 24, minHeight: 360, background: '#fff', overflowX: 'scroll', }}>
                             <Table
                                 loading={loading}
                                 columns={columns}
@@ -291,6 +286,7 @@ const Product = () => {
                 open={openModal}
                 setOpen={setOpenModal}
                 addProduct={handleAddProduct}
+                // currentProduct={currentProduct}
                 categories={categories}
             />
 

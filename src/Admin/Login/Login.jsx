@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Typography, message } from 'antd';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
@@ -10,6 +10,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage(); // Create message API
+
+  const [loading, setLoading] = useState(false)
 
   const showSuccessMessage = () => {
     messageApi.open({
@@ -29,16 +31,17 @@ const Login = () => {
     const { email, password } = values;
 
     try {
+      setLoading(true)
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log('Logged in:', user);
-      showSuccessMessage(); // Show success message
+      showSuccessMessage();
       
       // Delay navigation to allow the message to be displayed
       setTimeout(() => {
-        navigate('/product'); 
+        navigate('/product');
       }, 2000); // Adjust the delay time (2000ms = 2 seconds) as needed
-
+      
     } catch (error) {
       console.error('Error:', error.code, error.message);
       form.setFields([
@@ -46,6 +49,8 @@ const Login = () => {
         { name: 'password', errors: [] },
       ]);
       showErrorMessage(); // Show error message
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -54,7 +59,7 @@ const Login = () => {
       {contextHolder} {/* Render the context holder for messages */}
       <div className="login-box">
         <Typography.Title level={2} className="login-heading">Login</Typography.Title>
-        
+
         <Form
           form={form}
           name="login"
@@ -93,10 +98,9 @@ const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block size="large">
-              Log in
+            <Button type="primary" htmlType="submit" block size="large" loading={loading}>
+              {loading ? 'Logging in...' : 'Login'}
             </Button>
-            {/* Or <a href="">register now!</a> */}
           </Form.Item>
         </Form>
       </div>

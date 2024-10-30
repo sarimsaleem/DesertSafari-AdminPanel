@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card, Space, Switch } from 'antd';
-import { Formik, Form as MainForm, Field } from 'formik';import { ProductSchema } from "./ProductSchema";
+import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card, Space, Switch, Row, Col, Typography } from 'antd';
+import { Formik, Form as MainForm, Field, FieldArray } from 'formik';import { ProductSchema } from "./ProductSchema";
 import "./productmodal.css";
 import { CloseOutlined } from '@ant-design/icons';
 import TextArea from 'antd/es/input/TextArea';
@@ -93,214 +93,211 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                 {({ setFieldValue, handleSubmit, isSubmitting, errors, touched, values }) => (
                     <MainForm onSubmit={handleSubmit}>
                         {/* Product Name Field */}
-                        <div className="des-spec-parernt">
-                            <div className="fields">
-                                <label>Product Name</label>
-                                <Field name="image_text" as={Input} placeholder="Enter product name" />
-                                {touched.image_text && errors.image_text ? <div className="ant-form-item-explain">{errors.image_text}</div> : null}
-                            </div>
-
-                            <div className="fields">
-                                <label>Product Card Detail</label>
-                                <Field name="event_name" as={Input} placeholder="Enter product card detail" />
-                                {touched.event_name && errors.event_name ? <div className="ant-form-item-explain">{errors.event_name}</div> : null}
-                            </div>
-                        </div>
-
-                        {/* Is Product Most Popular */}
-                        <div className="fields" style={{ marginBottom: '16px' }}>
-                            <label>Is Product Most Popular?</label>
-                            <Field name="most_popular" type="checkbox" as={Checkbox} />
-                        </div>
-
-                        {/* Product Category and Price Field */}
-                        <div className="des-spec-parernt">
-                            <div className="fields" style={{ marginBottom: '16px' }}>
-                                <label>Product Category</label>
-                                <Field name="category">
-                                    {({ field, form: { touched, errors, setFieldValue } }) => (
-                                        <Select
-                                            {...field}
-                                            placeholder="Select category"
-                                            onChange={(value) => setFieldValue('category', value)}
-                                        >
-                                            {categories.map((category) => (
-                                                <Option key={category._id} value={category._id}>
-                                                    {category.category_name}
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    )}
-                                </Field>
-                                {touched.category && errors.category ? (
-                                    <div className="ant-form-item-explain">{errors.category}</div>
-                                ) : null}
-                            </div>
-
-                            <div className="fields" style={{ marginBottom: '16px' }}>
-                                <label>Product Price</label>
-                                <Field name="price">
-                                    {({ field }) => (
-                                        <InputNumber
-                                            {...field}
-                                            onChange={(value) => setFieldValue('price', value)}
-                                            min={0}
-                                            placeholder="Enter product price"
-                                            style={{ width: '100%' }}
-                                        />
-                                    )}
-                                </Field>
-                                {touched.price && errors.price ? <div className="ant-form-item-explain">{errors.price}</div> : null}
-                            </div>
-                        </div>
-
-                        {/* Special Note and Description */}
-                        <div className="des-spec-parernt">
-                            <div className="fields" style={{ marginBottom: '16px' }}>
-                                <label>Special Note</label>
-                                <Field name="special_note">
-                                    {({ field }) => (
-                                        <TextArea
-                                            {...field}
-                                            placeholder="Enter special note"
-                                            rows={4}
-                                        />
-                                    )}
-                                </Field>
-                                {touched.special_note && errors.special_note ? <div className="ant-form-item-explain">{errors.special_note}</div> : null}
-                            </div>
-                            <div className="fields" style={{ marginBottom: '16px' }}>
-                                <label>Description</label>
-                                <Field name="description">
-                                    {({ field }) => (
-                                        <TextArea
-                                            {...field}
-                                            placeholder="Enter product description"
-                                            rows={4}
-                                        />
-                                    )}
-                                </Field>
-                                {touched.description && errors.description ? <div className="ant-form-item-explain">{errors.description}</div> : null}
-                            </div>
-                        </div>
-
-                        <Form form={form} name="dynamic_form_complex" onValuesChange={(changedValues, allValues) => {
-                            setFieldValue("content", allValues.content);
-                        }} style={{ maxWidth: "100%" }} autoComplete="off">
-                            <Form.Item label="Hide Icon">
-                                <Switch defaultChecked={false} onChange={(checked) => setFieldValue('featureEnabled', checked)} />
-                            </Form.Item>
-
-                            <Form.List name="content">
-                                {(fields, { add, remove }) => (
-                                    <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
-                                        {console.log('fields',fields)}
-                                        {fields.map((field) => (
-                                            <Card
-                                                size="small"
-                                                title="Content"  // Updated title
-                                                key={field.key}
-                                                extra={<CloseOutlined onClick={() => remove(field.name)} />}
+                        <Row gutter={20}>
+                                <Col className="gutter-row" span={12}>
+                                    <Typography.Title level={5}>Prouct Name</Typography.Title>
+                                    <Field name="image_text" as={Input} placeholder="Enter product name" />
+                                    {touched?.image_text && errors?.image_text ? renderError(errors?.image_text) : null}
+                                </Col>
+                                <Col className="gutter-row" span={12}>
+                                    <Typography.Title level={5}>Product Card Detail</Typography.Title>
+                                    <Field name="event_name" as={Input} placeholder="Enter product card detail" />
+                                    {touched?.event_name && errors?.event_name ? renderError(errors?.event_name) : null}
+                                </Col>
+                                <Col className="gutter-row" span={24}>
+                                    <Typography.Title level={5}>Is Product Most Popular?</Typography.Title>
+                                    <Field name="most_popular">
+                                        {({ field }) => (
+                                            <Switch
+                                                {...field}
+                                                checked={values.most_popular} // Bind the switch value
+                                                onChange={(checked) => setFieldValue('most_popular', checked)}
+                                            />
+                                        )}
+                                    </Field>
+                                </Col>
+                                <Col className="gutter-row" span={12}>
+                                    <Typography.Title level={5}>Product Category</Typography.Title>
+                                    <Field name="category">
+                                        {({ field }) => (
+                                            <Select
+                                                {...field}
+                                                style={{ width: '100%' }}
+                                                placeholder="Select category"
+                                                onChange={(value) => setFieldValue('category', value)}
                                             >
-                                                <Form.Item label="Title" name={[field.name, 'title']}>
-                                                    <Input />
-                                                </Form.Item>
+                                                {categories?.map((category) => (
+                                                    <Option key={category?._id} value={category?._id}>
+                                                        {category?.category_name}
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    </Field>
 
-                                                <Form.Item label="Data">
-                                                    <Form.List name={[field.name, 'data']}>
-                                                        {(dataFields, dataOpt) => (
-                                                            <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
-                                                                {dataFields.map((dataField) => (
-                                                                    <Space key={dataField.key}>
-                                                                        <Form.Item name={[dataField.name, 'item']} noStyle>
-                                                                            <Input placeholder="Item" />
-                                                                        </Form.Item>
-                                                                        <Form.Item name={[dataField.name, 'itemDescription']} noStyle>
-                                                                            <Input placeholder="Item Description" />
-                                                                        </Form.Item>
-                                                                        <CloseOutlined onClick={() => dataOpt.remove(dataField.name)} />
-                                                                    </Space>
-                                                                ))}
-                                                                <Button type="dashed" onClick={() => dataOpt.add()} block>
-                                                                    + Add Data Item
-                                                                </Button>
-                                                            </div>
-                                                        )}
-                                                    </Form.List>
-                                                </Form.Item>
-                                            </Card>
-                                        ))}
+                                    {touched?.category && errors?.category ? renderError(errors?.category) : null}
 
-                                        <Button type="dashed" onClick={() => add()} block style={{ marginBottom: "35px" }}>
-                                            + Add Content Item
-                                        </Button>
-                                    </div>
-                                )}
-                            </Form.List>
-                        </Form>
+                                </Col>
+                                <Col className="gutter-row" span={12}>
+                                    <Typography.Title level={5}>Product Price</Typography.Title>
+                                    <Field name="price">
+                                        {({ field }) => (
+                                            <InputNumber
+                                                {...field}
+                                                onChange={(value) => setFieldValue('price', value)}
+                                                min={0}
+                                                placeholder="Enter product price"
+                                                style={{ width: '100%' }}
+                                            />
+                                        )}
+                                    </Field>
+                                    {touched?.price && errors?.price ? renderError(errors?.price) : null}
+                                </Col>
+                                <Col className="gutter-row" span={12}>
+                                    <Typography.Title level={5}>special Note</Typography.Title>
+                                    <Field name="special_note">
+                                        {({ field }) => (
+                                            <Input.TextArea
+                                                {...field}
+                                                placeholder="Enter special note"
+                                                rows={4}
+                                            />
+                                        )}
+                                    </Field>
+                                    {touched?.special_note && errors?.special_note ? renderError(errors?.special_note) : null}
+                                </Col>
+                                <Col className="gutter-row" span={12}>
+                                    <Typography.Title level={5}>Product description</Typography.Title>
 
-                        <div className="des-spec-parernt">
-                            {/* Product Image Upload */}
-                            <div className="fields" style={{ marginBottom: '16px' }}>
-                                <label>Product Image</label>
-                                <Upload
-                                    name="image_url"
-                                    fileList={fileList}
-                                    beforeUpload={(file) => {
-                                        setFieldValue('image_url', file);
-                                        setFileList([{
-                                            uid: file.uid,
-                                            name: file.name,
-                                            status: 'done',
-                                            url: URL.createObjectURL(file),
-                                        }]);
-                                        return false;
-                                    }}
-                                    onRemove={() => {
-                                        setFieldValue('image_url', null);
-                                        setFileList([]);
-                                    }}
-                                    listType="picture"
-                                >
-                                    <Button>Upload Product Image</Button>
-                                </Upload>
-                                {touched.image_url && errors.image_url ? (
-                                    <div className="ant-form-item-explain">{errors.image_url}</div>
-                                ) : null}
-                            </div>
+                                    <Field name="description">
+                                        {({ field }) => (
+                                            <Input.TextArea
+                                                {...field}
+                                                placeholder="Enter product description"
+                                                rows={4}
+                                            />
+                                        )}
+                                    </Field>
+                                    {touched?.description && errors?.description ? renderError(errors?.description) : null}
+                                </Col>
+                                <Col className="gutter-row" span={24}>
+                                    <FieldArray name="content">
+                                        {({ insert, remove, push }) => (
+                                            <>
+                                                {values?.content.map((value, index) => (
+                                                    <Card
+                                                        size="small"
+                                                        title={value?.title || 'Item'}
+                                                        key={index}
+                                                        extra={<CloseOutlined onClick={() => remove(index)} />}
+                                                    >
+                                                        <Field name={`content.${index}.title`} as={Input} placeholder="Enter product name" />
+                                                        <Switch
+                                                            checked={value?.hide_icon}
+                                                            style={{marginTop:"20px",marginBottom:"20px"}}
+                                                            onChange={(checked) => setFieldValue(`content.${index}.hide_icon`, checked)}
+                                                        />
 
-                            {/* Banner Image Upload */}
-                            <div className="fields" style={{ marginBottom: '16px' }}>
-                                <label>Banner Image</label>
-                                <Upload
-                                    name="banner_image_url"
-                                    fileList={bannerImgList}
-                                    beforeUpload={(file) => {
-                                        setFieldValue('banner_image_url', file);
-                                        setBannerImgList([{
-                                            uid: file.uid,
-                                            name: file.name,
-                                            status: 'done',
-                                            url: URL.createObjectURL(file),
-                                        }]);
-                                        return false;
-                                    }}
-                                    onRemove={() => {
-                                        setFieldValue('banner_image_url', null);
-                                        setBannerImgList([]);
-                                    }}
-                                    listType="picture"
-                                >
-                                    <Button>Upload Banner Image</Button>
-                                </Upload>
-                                {touched.banner_image_url && errors.banner_image_url ? (
-                                    <div className="ant-form-item-explain">{errors.banner_image_url}</div>
-                                ) : null}
-                            </div>
-                        </div>
-                        <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                            Submit
-                        </Button>
+                                                        {/* Nested FieldArray for data items */}
+                                                        <FieldArray name={`content.${index}.data`}>
+                                                            {({ remove, push }) => (
+                                                                <>
+                                                                    {value.data?.map((dataItem, dataIndex) => (
+                                                                        <Space key={dataIndex} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                                                            <Field
+                                                                                name={`content.${index}.data.${dataIndex}.item`}
+                                                                                as={Input}
+                                                                                placeholder="Item"
+                                                                            />
+                                                                            <Field
+                                                                                name={`content.${index}.data.${dataIndex}.itemDescription`}
+                                                                                as={Input}
+                                                                                placeholder="Item Description"
+                                                                            />
+                                                                            <CloseOutlined onClick={() => remove(dataIndex)} />
+                                                                        </Space>
+                                                                    ))}
+                                                                    <Button
+                                                                        type="dashed"
+                                                                        onClick={() => push({ item: '', itemDescription: '' })}
+                                                                        block
+                                                                    >
+                                                                        + Add Data Item
+                                                                    </Button>
+                                                                </>
+                                                            )}
+                                                        </FieldArray>
+                                                    </Card>
+                                                ))}
+                                                <Button
+                                                    type="dashed"
+                                                    onClick={() =>
+                                                        push({
+                                                            _id: uuidv4(),
+                                                            title: '',
+                                                            hide_icon: true,
+                                                            data: [{ item: '', itemDescription: '' }], 
+                                                        })
+                                                    }
+                                                    block
+                                                >
+                                                    + Add Content Item
+                                                </Button>
+                                            </>
+                                        )}
+                                    </FieldArray>
+                                </Col>
+                                <Col className="gutter-row" span={12}>
+
+                                    <Typography.Title level={5}>Product Image</Typography.Title>
+
+                                    <Upload
+                                        name="image_url"
+                                        fileList={fileList}
+                                        beforeUpload={(file) => {
+                                            setFieldValue('image_url', file);
+                                            setFileList([file]);
+                                            return false;
+                                        }}
+                                        onRemove={() => {
+                                            setFieldValue('image_url', null);
+                                            setFileList([]);
+                                        }}
+                                        listType="picture"
+                                        maxCount={1}
+                                    >
+                                        <Button>Select Image</Button>
+                                    </Upload>
+                                    {touched?.image_url && errors?.image_url ? renderError(errors?.image_url) : null}
+                                </Col>
+                                <Col className="gutter-row" span={12}>
+                                    <Typography.Title level={5}>Banner Image</Typography.Title>
+                                    <Upload
+                                        name="banner_image_url"
+                                        fileList={bannerImgList}
+                                        beforeUpload={(file) => {
+                                            setFieldValue('banner_image_url', file);
+                                            setBannerImgList([file]);
+                                            return false;
+                                        }}
+                                        onRemove={() => {
+                                            setFieldValue('banner_image_url', null);
+                                            setBannerImgList([]);
+                                        }}
+                                        listType="picture"
+                                        maxCount={1}
+                                    >
+                                        <Button>Select Banner Image</Button>
+                                    </Upload>
+                                    {touched?.banner_image_url && errors?.banner_image_url ? renderError(errors?.banner_image_url) : null}
+                                </Col>
+
+                               
+                            </Row>
+
+                            <Button type="primary" htmlType="submit" loading={isSubmitting} style={{marginTop:"20px"}}>
+                                Update
+                            </Button>
                     </MainForm>
                 )}
             </Formik>
