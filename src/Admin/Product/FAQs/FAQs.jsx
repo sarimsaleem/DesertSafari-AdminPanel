@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PlusOutlined, LogoutOutlined, VideoCameraOutlined, UploadOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PlusOutlined, LogoutOutlined, VideoCameraOutlined, UploadOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Space, Table, Popconfirm } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import FAQModal from './FAQsModal/FAQsModal';
-import { addFAQ, updateFAQs, fetchFAQs, deleteFAQs } from './Functions/functions'; 
+import { addFAQ, updateFAQs, fetchFAQs, deleteFAQs } from './Functions/functions';
 import logo from "../../assets/logo2.png";
 
 const { Header, Sider, Content } = Layout;
@@ -54,7 +54,7 @@ const FAQs = () => {
 
     try {
       await updateFAQs(updatedFAQ); // Call with the whole object
-      setFaqs((prevFAQs) => 
+      setFaqs((prevFAQs) =>
         prevFAQs.map((faq) => (faq.id === updatedFAQ.id ? updatedFAQ : faq))
       );
       setModalOpen(false);
@@ -141,6 +141,12 @@ const FAQs = () => {
               },
               {
                 key: '4',
+                icon: <ShoppingCartOutlined />,
+                label: 'Orders',
+                onClick: () => navigate('/orders'),
+              },
+              {
+                key: '5',
                 icon: <LogoutOutlined />,
                 label: 'Sign Out',
                 onClick: () => navigate('/'),

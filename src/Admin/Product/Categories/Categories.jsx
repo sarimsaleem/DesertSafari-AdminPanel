@@ -1,5 +1,5 @@
   import React, { useState, useEffect } from 'react';
-  import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined, LogoutOutlined, UploadOutlined } from '@ant-design/icons';
+  import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined, LogoutOutlined, UploadOutlined, ShoppingCartOutlined } from '@ant-design/icons';
   import { Button, Layout, Menu, Space, Table, Popconfirm } from 'antd';
   import { useNavigate } from 'react-router-dom';
   import CategoriesModal from './CategoryModal/CategoriesModal';
@@ -172,6 +172,12 @@
                 },
                 {
                   key: '4',
+                  icon: <ShoppingCartOutlined />,
+                  label: 'Orders',
+                  onClick: () => navigate('/orders'),
+              },
+                {
+                  key: '5',
                   icon: <LogoutOutlined />,
                   label: 'Sign Out',
                   onClick: () => navigate('/'),

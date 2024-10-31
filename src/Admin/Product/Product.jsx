@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, Divider, } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
@@ -241,6 +241,12 @@ const Product = () => {
                             },
                             {
                                 key: '4',
+                                icon: <ShoppingCartOutlined />,
+                                label: 'Orders',
+                                onClick: () => navigate('/orders'),
+                            },
+                            {
+                                key: '5',
                                 icon: <LogoutOutlined />,
                                 label: 'Sign Out',
                                 onClick: () => navigate('/'),
