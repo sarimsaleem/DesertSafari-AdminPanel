@@ -41,12 +41,26 @@ const Order = () => {
       dataIndex: 'orderInfo',
       key: 'fullName',
       render: (val) => val?.fullName,
+      width: 150
     },
     {
       title: 'Order ID',
       dataIndex: 'orderId',
       key: 'orderId',
     },
+    {
+      title: 'Email',
+      dataIndex: 'orderInfo',
+      key: 'email',
+      render: (val) => val?.email,
+    },
+    {
+      title: 'Total Amount',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
+      width: 120
+    },
+
     {
       title: 'Status',
       dataIndex: 'status',
@@ -60,17 +74,7 @@ const Order = () => {
         );
       }
     },
-    {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount',
-      key: 'totalAmount',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'orderInfo',
-      key: 'email',
-      render: (val) => val?.email,
-    },
+    
     {
       title: 'Actions',
       key: 'actions',

@@ -63,16 +63,16 @@ export const Add = async (product) => {
 
 
 
-export const fetchProducts = async () => {
-  try {
-    const data = await getDocs(productCollectionRef);
-    const productsList = data.docs.map((doc) => ({ ...doc.data(), _id: doc.id }));
-    return productsList;
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
-  }
-};
+  export const fetchProducts = async () => {
+    try {
+      const data = await getDocs(productCollectionRef);
+      const productsList = data.docs.map((doc) => ({ ...doc.data(), _id: doc.id }));
+      return productsList;
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
+  };
 
 // Delete product by UUID
 export const deleteProduct = async (productId, imageUrl) => {

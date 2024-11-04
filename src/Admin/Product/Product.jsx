@@ -77,6 +77,7 @@ const Product = () => {
             title: 'Product Name',
             dataIndex: 'image_text',
             key: 'image_text',
+            width: 250
         },
         {
             title: 'Product Card Detail',
@@ -144,19 +145,19 @@ const Product = () => {
         fontSize: '16px',
     };
 
-    const subHeadingStyle = {
-        fontWeight: '700',
-        fontSize: '15px',
-    };
+    // const subHeadingStyle = {
+    //     fontWeight: '700',
+    //     fontSize: '15px',
+    // };
 
     const contentStyle = {
         fontSize: '14px',
     };
-    const itemStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-        marginBottom: '16px',
-    };
+    // const itemStyle = {
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     marginBottom: '16px',
+    // };
 
     return (
         <>
@@ -273,9 +274,10 @@ const Product = () => {
                             style={{ marginRight: '16px' }}
                         >Add Product</Button>
                     </Header>
-                    <Content style={{ margin: '24px 16px 0'  }} >
-                        <div style={{ padding: 24, minHeight: 360, background: '#fff', overflowX: 'scroll', }}>
+                    <Content style={{ margin: '24px 16px 0', overflowY:"scroll",     }} >
+                        <div style={{ padding: 24, minHeight: 360, background: '#fff',  }}>
                             <Table
+                                // style={{overflowX:"auto"}}    
                                 loading={loading}
                                 columns={columns}
                                 dataSource={products}
@@ -283,6 +285,7 @@ const Product = () => {
                                 pagination={{
                                     pageSize: 5,
                                 }}
+                                scroll={{ x: 'max-content', }}
                             />
                         </div>
                     </Content>
@@ -292,7 +295,6 @@ const Product = () => {
                 open={openModal}
                 setOpen={setOpenModal}
                 addProduct={handleAddProduct}
-                // currentProduct={currentProduct}
                 categories={categories}
             />
 
