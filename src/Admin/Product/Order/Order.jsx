@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Layout, Menu, Tag, Drawer, Descriptions } from 'antd';
+import { Button, Table, Layout, Menu, Tag, Drawer, Descriptions, notification } from 'antd';
 import { UserOutlined, VideoCameraOutlined, UploadOutlined, ShoppingCartOutlined, LogoutOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { fetchOrders } from './OrderFunction/OrderFunction';
 import logo from './../../assets/logo2.png';
 import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from "./../../Firebase/firebaseConfig";
 
 const { Header, Content, Sider } = Layout;
 
@@ -86,6 +88,21 @@ const Order = () => {
     },
   ];
 
+  const handleLogout = () => {
+    signOut(auth)
+        .then(() => {
+            navigate("/");
+            notification.success({
+                message: "Logout Successful",
+            });
+        })
+        .catch((error) => {
+            notification.error({
+                message: "Logout Failed",
+            });
+        });
+};
+
   const expandedRowRender = (record) => {
     const bookingsColumns = [
       { title: 'Adults', dataIndex: 'adults', key: 'adults' },
@@ -133,7 +150,7 @@ const Order = () => {
             <Menu.Item key="2" icon={<VideoCameraOutlined />} onClick={() => navigate('/categories')}>Categories</Menu.Item>
             <Menu.Item key="3" icon={<UploadOutlined />} onClick={() => navigate('/faqs')}>FAQs</Menu.Item>
             <Menu.Item key="4" icon={<ShoppingCartOutlined />} onClick={() => navigate('/orders')}>Orders</Menu.Item>
-            <Menu.Item key="5" icon={<LogoutOutlined />} onClick={() => navigate('/')}>Sign Out</Menu.Item>
+            <Menu.Item key="5" icon={<LogoutOutlined />} onClick={() => handleLogout()}>Sign Out</Menu.Item>
           </Menu>
         </Sider>
         <Layout>

@@ -1,31 +1,33 @@
-import Categories from "./Admin/Product/Categories/Categories"
-import Product from "./Admin/Product/Product"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import "./app.css"
-import Login from "./Admin/Login/Login"
-import FAQs from "./Admin/Product/FAQs/FAQs"
-import Order from "./Admin/Product/Order/Order"
-// import Signup from "./Admin/Login/Signup/Signup"
-
-
+// App.js
+import { useEffect, useState } from "react";
+import { auth } from "./Admin/Firebase/firebaseConfig";
+import "./app.css";
+import Auth from "./Routes/Auth";
+import Protected from "./Routes/Protected";
+import LoadingOverlay from './Loading/Loading';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); 
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+      setLoading(false); 
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <LoadingOverlay />;
+  }
 
   return (
-    <>    
-      <Router>
-        <Routes>
-          <Route path="/product" element={<Product />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/faqs" element={<FAQs />} />
-          <Route path="/orders" element={<Order/>} />
-          <Route path="/" element={<Login/>} />
-
-          {/* <Route path="/" element={<Signup/>} /> */}
-        </Routes>
-      </Router >
+    <>
+      {user ? <Protected /> : <Auth />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

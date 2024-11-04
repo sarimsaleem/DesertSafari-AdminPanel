@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, Divider, } from 'antd';
+import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, Divider, Slider, notification } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
 import ProductEditModal from './productModal/ProductEditModal';
@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { fetchCategories } from './Categories/CategoriesFunctions/CategoriesFunction';
 import logo from "../assets/logo2.png";
 import { v4 as uuidv4 } from 'uuid';
+import { signOut } from 'firebase/auth';
+import { auth } from "./../Firebase/firebaseConfig";
 
 const { Header, Sider, Content } = Layout;
 
@@ -144,21 +146,24 @@ const Product = () => {
         fontWeight: 'bold',
         fontSize: '16px',
     };
-
-    // const subHeadingStyle = {
-    //     fontWeight: '700',
-    //     fontSize: '15px',
-    // };
-
     const contentStyle = {
         fontSize: '14px',
     };
-    // const itemStyle = {
-    //     display: 'flex',
-    //     flexDirection: 'column',
-    //     marginBottom: '16px',
-    // };
 
+    const handleLogout = () => {
+        signOut(auth)
+            .then(() => {
+                navigate("/");
+                notification.success({
+                    message: "Logout Successful",
+                });
+            })
+            .catch((error) => {
+                notification.error({
+                    message: "Logout Failed",
+                });
+            });
+    };
     return (
         <>
             <Drawer
@@ -250,7 +255,7 @@ const Product = () => {
                                 key: '5',
                                 icon: <LogoutOutlined />,
                                 label: 'Sign Out',
-                                onClick: () => navigate('/'),
+                                onClick: () => handleLogout(),
                             },
                         ]}
                     />
@@ -274,21 +279,23 @@ const Product = () => {
                             style={{ marginRight: '16px' }}
                         >Add Product</Button>
                     </Header>
-                    <Content style={{ margin: '24px 16px 0', overflowY:"scroll",     }} >
-                        <div style={{ padding: 24, minHeight: 360, background: '#fff',  }}>
-                            <Table
-                                // style={{overflowX:"auto"}}    
-                                loading={loading}
-                                columns={columns}
-                                dataSource={products}
-                                rowKey="_id"
-                                pagination={{
-                                    pageSize: 5,
-                                }}
-                                scroll={{ x: 'max-content', }}
-                            />
+                    <Content style={{ margin: '24px 16px 0', overflowY: "scroll", }}>
+                        <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                            <div className="table-container">
+                                <Table
+                                    loading={loading}
+                                    columns={columns}
+                                    dataSource={products}
+                                    rowKey="_id"
+                                    pagination={{
+                                        pageSize: 5,
+                                    }}
+                                    scroll={{ x: 'max-content' }}
+                                />
+                            </div>
                         </div>
                     </Content>
+
                 </Layout>
             </Layout>
             <ProductModal

@@ -9,7 +9,7 @@ const Login = () => {
   const auth = getAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage(); // Create message API
+  const [messageApi, contextHolder] = message.useMessage(); 
 
   const [loading, setLoading] = useState(false)
 
@@ -37,10 +37,9 @@ const Login = () => {
       console.log('Logged in:', user);
       showSuccessMessage();
       
-      // Delay navigation to allow the message to be displayed
       setTimeout(() => {
         navigate('/product');
-      }, 2000); // Adjust the delay time (2000ms = 2 seconds) as needed
+      }, 2000); 
       
     } catch (error) {
       console.error('Error:', error.code, error.message);
@@ -48,7 +47,7 @@ const Login = () => {
         { name: 'email', errors: [''] },
         { name: 'password', errors: [] },
       ]);
-      showErrorMessage(); // Show error message
+      showErrorMessage(); 
     }finally{
       setLoading(false)
     }
@@ -56,7 +55,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      {contextHolder} {/* Render the context holder for messages */}
+      {contextHolder} 
       <div className="login-box">
         <Typography.Title level={2} className="login-heading">Login</Typography.Title>
 
@@ -82,7 +81,7 @@ const Login = () => {
             name="password"
             rules={[
               { required: true, message: 'Please input your Password!' },
-              { min: 6, message: 'Password must be at least 6 characters!' }, // Password length validation
+              { min: 6, message: 'Password must be at least 6 characters!' }, 
             ]}
           >
             <Input.Password prefix={<LockOutlined />} placeholder="Password" size="large" />

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PlusOutlined, LogoutOutlined, VideoCameraOutlined, UploadOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, Space, Table, Popconfirm } from 'antd';
+import { Button, Layout, Menu, Space, Table, Popconfirm, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import FAQModal from './FAQsModal/FAQsModal';
 import { addFAQ, updateFAQs, fetchFAQs, deleteFAQs } from './Functions/functions';
 import logo from "../../assets/logo2.png";
+import { signOut } from 'firebase/auth';
+import { auth } from "./../../Firebase/firebaseConfig";
 
 const { Header, Sider, Content } = Layout;
 
@@ -36,8 +38,8 @@ const FAQs = () => {
   const handleAddFAQ = async (newFAQ) => {
     try {
       setLoading(true)
-      const addedFAQ = await addFAQ(newFAQ); // Use the addFAQ function to get the added FAQ
-      setFaqs((prevFAQs) => [...prevFAQs, addedFAQ]); // Use the added FAQ with the generated ID
+      const addedFAQ = await addFAQ(newFAQ); 
+      setFaqs((prevFAQs) => [...prevFAQs, addedFAQ]); 
       setModalOpen(false);
     } catch (error) {
       console.error('Error adding FAQ:', error);
@@ -109,6 +111,20 @@ const FAQs = () => {
     },
   ];
 
+  const handleLogout = () => {
+    signOut(auth)
+        .then(() => {
+            navigate("/");
+            notification.success({
+                message: "Logout Successful",
+            });
+        })
+        .catch((error) => {
+            notification.error({
+                message: "Logout Failed",
+            });
+        });
+};
   return (
     <div className="faqs">
       <Layout>
@@ -149,7 +165,7 @@ const FAQs = () => {
                 key: '5',
                 icon: <LogoutOutlined />,
                 label: 'Sign Out',
-                onClick: () => navigate('/'),
+                onClick: () => handleLogout(),
               },
             ]}
           />
