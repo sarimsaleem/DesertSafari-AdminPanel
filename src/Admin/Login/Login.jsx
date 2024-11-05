@@ -38,7 +38,7 @@ const Login = () => {
       showSuccessMessage();
       
       setTimeout(() => {
-        navigate('/product');
+        navigate('/');
       }, 2000); 
       
     } catch (error) {

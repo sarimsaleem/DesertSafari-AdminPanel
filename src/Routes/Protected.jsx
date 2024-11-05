@@ -8,7 +8,7 @@ import Order from '../Admin/Product/Order/Order'
 function Protected() {
     return (
             <Routes>
-                <Route path="/product"  element={<Product />}  />
+                <Route path="/"  element={<Product />}  />
                 <Route path="/categories"  element={<Categories />} />
                 <Route path="/faqs" element={<FAQs />}  />
                 <Route path="/orders"  element={<Order />}  />

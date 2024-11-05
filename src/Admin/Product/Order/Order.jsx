@@ -146,7 +146,7 @@ const Order = () => {
             <img src={logo} alt="Logo" />
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-            <Menu.Item key="1" icon={<UserOutlined />} onClick={() => navigate('/product')}>Product</Menu.Item>
+            <Menu.Item key="1" icon={<UserOutlined />} onClick={() => navigate('/')}>Product</Menu.Item>
             <Menu.Item key="2" icon={<VideoCameraOutlined />} onClick={() => navigate('/categories')}>Categories</Menu.Item>
             <Menu.Item key="3" icon={<UploadOutlined />} onClick={() => navigate('/faqs')}>FAQs</Menu.Item>
             <Menu.Item key="4" icon={<ShoppingCartOutlined />} onClick={() => navigate('/orders')}>Orders</Menu.Item>

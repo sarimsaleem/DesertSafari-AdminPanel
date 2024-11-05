@@ -231,7 +231,7 @@ const Product = () => {
                                 key: '1',
                                 icon: <UserOutlined />,
                                 label: 'Product',
-                                onClick: () => navigate('/product'),
+                                onClick: () => navigate('/'),
                             },
                             {
                                 key: '2',
