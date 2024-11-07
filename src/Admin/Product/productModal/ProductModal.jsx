@@ -14,13 +14,13 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
     const [form] = Form.useForm();
 
     const initialValues = {
-        image_text: 'sarim',
-        event_name: 'sarim',
+        image_text: '',
+        event_name: '',
         most_popular: false,
-        category: 'Desert supari',
-        price: 10,
-        special_note: 'sarim',
-        description: 'sarim',
+        category: '',
+        price: "" ,
+        special_note: 'Pickup and dropoff available in Dubai, Sharjah, and Ajman (within the pickup zone). Contact us for any inquiry.',
+        description: 'Experience the Evening Desert Safari in Dubai for an unforgettable blend of adventure, culture, and relaxation. Enjoy dune bashing, sandboarding, camel rides, and a traditional Bedouin-style camp with live entertainment. Enjoy a delicious buffet and barbecue dinner in the rich heritage of the Arabian desert. Join us for an evening of excitement, culture, and breathtaking scenery.',
         image_url: null,
         banner_image_url: null,
         content: [{ title: " ", data: [{ item: "", itemDescription: "" }] }],

@@ -79,7 +79,7 @@ const Product = () => {
             title: 'Product Name',
             dataIndex: 'image_text',
             key: 'image_text',
-            width: 250
+            // width: 250
         },
         {
             title: 'Product Card Detail',
@@ -288,7 +288,7 @@ const Product = () => {
                                     dataSource={products}
                                     rowKey="_id"
                                     pagination={{
-                                        pageSize: 5,
+                                        pageSize: 10,
                                     }}
                                     scroll={{ x: 'max-content' }}
                                 />
