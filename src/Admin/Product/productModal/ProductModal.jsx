@@ -18,9 +18,9 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
         event_name: '',
         most_popular: false,
         category: '',
-        price: "" ,
-        special_note: 'Pickup and dropoff available in Dubai, Sharjah, and Ajman (within the pickup zone). Contact us for any inquiry.',
-        description: 'Experience the Evening Desert Safari in Dubai for an unforgettable blend of adventure, culture, and relaxation. Enjoy dune bashing, sandboarding, camel rides, and a traditional Bedouin-style camp with live entertainment. Enjoy a delicious buffet and barbecue dinner in the rich heritage of the Arabian desert. Join us for an evening of excitement, culture, and breathtaking scenery.',
+        price: "",
+        special_note: '',
+        description: '',
         image_url: null,
         banner_image_url: null,
         content: [{ title: " ", data: [{ item: "", itemDescription: "" }] }],
@@ -161,8 +161,10 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     </Field>
                                     {touched?.description && errors?.description ? renderError(errors?.description) : null}
                                 </Col>
+
+
                                 <Col className="gutter-row" span={24}>
-                                <Typography.Title level={5}>Content</Typography.Title>
+                                    <Typography.Title level={5}>Content</Typography.Title>
                                     <FieldArray name="content">
                                         {({ insert, remove, push }) => (
                                             <>
@@ -173,16 +175,29 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                                         key={index}
                                                         extra={<CloseOutlined onClick={() => remove(index)} />}
                                                     >
-                                                        <Field name={`content.${index}.title`} as={Input} placeholder="Enter product name" />
+                                                        <Field
+                                                            name={`content.${index}.title`}
+                                                            as={Input}
+                                                            placeholder="Enter title"
+                                                        />
                                                         <Switch
                                                             checked={value?.hide_icon}
-                                                            style={{marginTop:"20px",marginBottom:"20px"}}
+                                                            style={{ marginTop: "20px", marginBottom: "20px" }}
                                                             onChange={(checked) => setFieldValue(`content.${index}.hide_icon`, checked)}
                                                         />
+                                                        <Field
+                                                            name={`content.${index}.description`}
+                                                            as={Input.TextArea}
+                                                            placeholder="Enter a description for the content"
+                                                            rows={4}
+                                                            style={{ marginBottom: "20px" }}
+                                                        />
+
+                                                        {console.log('vavleus',values)}
 
                                                         {/* Nested FieldArray for data items */}
                                                         <FieldArray name={`content.${index}.data`}>
-                                                            {({ remove, push }) => (
+                                                            {({ remove: removeDataItem, push: pushDataItem }) => (
                                                                 <>
                                                                     {value.data?.map((dataItem, dataIndex) => (
                                                                         <Space key={dataIndex} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
@@ -196,12 +211,12 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                                                                 as={Input}
                                                                                 placeholder="Item Description"
                                                                             />
-                                                                            <CloseOutlined onClick={() => remove(dataIndex)} />
+                                                                            <CloseOutlined onClick={() => removeDataItem(dataIndex)} />
                                                                         </Space>
                                                                     ))}
                                                                     <Button
                                                                         type="dashed"
-                                                                        onClick={() => push({ item: '', itemDescription: '' })}
+                                                                        onClick={() => pushDataItem({ item: '', itemDescription: '' })}
                                                                         block
                                                                     >
                                                                         + Add Data Item
@@ -218,7 +233,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                                             _id: uuidv4(),
                                                             title: '',
                                                             hide_icon: true,
-                                                            data: [{ item: '', itemDescription: '' }], 
+                                                            data: [{ item: '', itemDescription: '' }],
                                                         })
                                                     }
                                                     block
@@ -229,10 +244,12 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                         )}
                                     </FieldArray>
                                 </Col>
+
+
+
+
                                 <Col className="gutter-row" span={12}>
-
                                     <Typography.Title level={5}>Product Image</Typography.Title>
-
                                     <Upload
                                         name="image_url"
                                         fileList={fileList}
@@ -273,10 +290,8 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     </Upload>
                                     {touched?.banner_image_url && errors?.banner_image_url ? renderError(errors?.banner_image_url) : null}
                                 </Col>
-
-                               
                             </Row>
-                            <Button type="primary" htmlType="submit" loading={isSubmitting} style={{marginTop:"20px"}}>
+                            <Button type="primary" htmlType="submit" loading={isSubmitting} style={{ marginTop: "20px" }}>
                                 Submit
                             </Button>
                         </MainForm>

@@ -195,6 +195,17 @@ const Product = () => {
                                 key={index}
                                 label={<span style={headingStyle}>{contentItem.title || 'No Title'}</span>}
                             >
+                                {/* Display description if available */}
+                                {contentItem.description ? (
+                                    <p style={{ marginBottom: '10px', fontStyle: 'italic', color: '#666' }}>
+                                        {contentItem.description}
+                                    </p>
+                                ) : (
+                                    <p style={{ marginBottom: '10px', fontStyle: 'italic', color: '#666' }}>
+                                        No description available
+                                    </p>
+                                )}
+
                                 {Array.isArray(contentItem.data) && contentItem.data.length > 0 ? (
                                     <ul style={{ padding: 0, margin: 0 }}>
                                         {contentItem.data.map((dataItem, dataIndex) => (
