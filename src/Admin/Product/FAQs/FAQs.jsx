@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PlusOutlined, LogoutOutlined, VideoCameraOutlined, UploadOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PlusOutlined, LogoutOutlined, VideoCameraOutlined, UploadOutlined, ShoppingCartOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Space, Table, Popconfirm, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import FAQModal from './FAQsModal/FAQsModal';
@@ -163,6 +163,12 @@ const FAQs = () => {
               },
               {
                 key: '5',
+                icon: <QuestionCircleOutlined />,
+                label: 'Queries',
+                onClick: () => navigate('/queries'),
+            },
+              {
+                key: '6',
                 icon: <LogoutOutlined />,
                 label: 'Sign Out',
                 onClick: () => handleLogout(),

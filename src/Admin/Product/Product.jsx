@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined, ShoppingCartOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, Divider, Slider, notification } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
@@ -264,6 +264,12 @@ const Product = () => {
                             },
                             {
                                 key: '5',
+                                icon: <QuestionCircleOutlined />,
+                                label: 'Queries',
+                                onClick: () => navigate('/queries'),
+                            },
+                            {
+                                key: "6",
                                 icon: <LogoutOutlined />,
                                 label: 'Sign Out',
                                 onClick: () => handleLogout(),

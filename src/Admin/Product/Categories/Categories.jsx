@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined, LogoutOutlined, UploadOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined, LogoutOutlined, UploadOutlined, ShoppingCartOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, Space, Table, Popconfirm, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import CategoriesModal from './CategoryModal/CategoriesModal';
@@ -146,18 +146,18 @@ const Categories = () => {
 
   const handleLogout = () => {
     signOut(auth)
-        .then(() => {
-            navigate("/");
-            notification.success({
-                message: "Logout Successful",
-            });
-        })
-        .catch((error) => {
-            notification.error({
-                message: "Logout Failed",
-            });
+      .then(() => {
+        navigate("/");
+        notification.success({
+          message: "Logout Successful",
         });
-};
+      })
+      .catch((error) => {
+        notification.error({
+          message: "Logout Failed",
+        });
+      });
+  };
 
   return (
     <div className="categories">
@@ -197,6 +197,12 @@ const Categories = () => {
               },
               {
                 key: '5',
+                icon: <QuestionCircleOutlined />,
+                label: 'Queries',
+                onClick: () => navigate('/queries'),
+              },
+              {
+                key: '6',
                 icon: <LogoutOutlined />,
                 label: 'Sign Out',
                 onClick: () => handleLogout(),
