@@ -161,8 +161,6 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     </Field>
                                     {touched?.description && errors?.description ? renderError(errors?.description) : null}
                                 </Col>
-
-
                                 <Col className="gutter-row" span={24}>
                                     <Typography.Title level={5}>Content</Typography.Title>
                                     <FieldArray name="content">
@@ -244,10 +242,6 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                         )}
                                     </FieldArray>
                                 </Col>
-
-
-
-
                                 <Col className="gutter-row" span={12}>
                                     <Typography.Title level={5}>Product Image</Typography.Title>
                                     <Upload
