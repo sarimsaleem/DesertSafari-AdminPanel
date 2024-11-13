@@ -4,7 +4,6 @@ import { Formik, Form as MainForm, Field, FieldArray } from 'formik';
 import ProductSchema  from "./ProductSchema";
 import "./productmodal.css";
 import { CloseOutlined } from '@ant-design/icons';
-import TextArea from 'antd/es/input/TextArea';
 
 const { Option } = Select;
 

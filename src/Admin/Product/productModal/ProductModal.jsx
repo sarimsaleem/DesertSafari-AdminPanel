@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form as MainForm, Field, FieldArray } from 'formik';
-import { ProductSchema } from "./ProductSchema";
+import ProductSchema  from "./ProductSchema";
 import "./productmodal.css";
 import { CloseOutlined } from '@ant-design/icons';
 import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card, Space, Switch, Col, Row, Typography } from 'antd';
