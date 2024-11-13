@@ -1,7 +1,7 @@
 // App.js
 import { useEffect, useState } from "react";
 import { auth } from "./Admin/Firebase/firebaseConfig";
-import "./app.css";
+import "./App.css";
 import Auth from "./Routes/Auth";
 import Protected from "./Routes/Protected";
 import LoadingOverlay from './Loading/Loading';

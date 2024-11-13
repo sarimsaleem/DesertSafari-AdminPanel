@@ -28,8 +28,8 @@ const Queries = () => {
                 <Popover
                     content={text}
                     title="Full Message"
-                    getPopupContainer={(trigger) => trigger.parentElement}  // Position relative to the message container
-                    overlayStyle={{ maxWidth: '50vw', maxHeight: '40vh', overflowY: 'auto', whiteSpace: 'pre-wrap' }}  // Limit width and height, allow scroll
+                    getPopupContainer={(trigger) => trigger.parentElement}  
+                    overlayStyle={{ maxWidth: '50vw', maxHeight: '40vh', overflowY: 'auto', whiteSpace: 'pre-wrap' }}  
                 >
                     <span style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                         {text.length > 30 ? `${text.substring(0, 30)}...` : text}
