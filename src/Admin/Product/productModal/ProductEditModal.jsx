@@ -3,6 +3,7 @@ import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card
 import { Formik, Form as MainForm, Field, FieldArray } from 'formik'; 
 import "./productmodal.css";
 import { CloseOutlined } from '@ant-design/icons';
+import * as Yup from 'yup';
 
 const { Option } = Select;
 
