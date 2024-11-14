@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card, Space, Switch, Row, Col, Typography } from 'antd';
 import { Formik, Form as MainForm, Field, FieldArray } from 'formik'; 
-import ProductSchema from "./ProductSchema.js";
 import "./productmodal.css";
 import { CloseOutlined } from '@ant-design/icons';
 
@@ -12,6 +11,15 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
     const [bannerImgList, setBannerImgList] = useState([]);
     const formikRef = useRef();
     const [form] = Form.useForm();
+
+    const ProductSchema = Yup.object().shape({
+        image_text: Yup.string().required('Product Name is required'),
+        event_name: Yup.string().required('Product Card Detail is required'),
+        category: Yup.string().required('Product Category is required'),
+        image_url: Yup.mixed().required('Product Image is required'),
+        banner_image_url: Yup.mixed().required('Banner Image is required'),
+        price: Yup.number().required('Product Price is required').min(1, 'Price must be greater than 0'),
+      });
 
     useEffect(() => {
         if (currentProduct) {

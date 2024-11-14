@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form as MainForm, Field, FieldArray } from 'formik';
-import ProductSchema from "./ProductSchema.js";
 import "./productmodal.css";
+import * as Yup from 'yup';
 import { CloseOutlined } from '@ant-design/icons';
 import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card, Space, Switch, Col, Row, Typography } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,6 +12,15 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
     const [fileList, setFileList] = useState([]);
     const [bannerImgList, setBannerImgList] = useState([]);
     const [form] = Form.useForm();
+
+    const ProductSchema = Yup.object().shape({
+        image_text: Yup.string().required('Product Name is required'),
+        event_name: Yup.string().required('Product Card Detail is required'),
+        category: Yup.string().required('Product Category is required'),
+        image_url: Yup.mixed().required('Product Image is required'),
+        banner_image_url: Yup.mixed().required('Banner Image is required'),
+        price: Yup.number().required('Product Price is required').min(1, 'Price must be greater than 0'),
+      });
 
     const initialValues = {
         image_text: '',
