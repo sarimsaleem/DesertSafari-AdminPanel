@@ -250,7 +250,7 @@ const Product = () => {
                             {
                                 key: '2',
                                 icon: <VideoCameraOutlined />,
-                                label: 'Category',
+                                label: 'Categories',
                                 onClick: () => navigate('/categories'),
                             },
                             {

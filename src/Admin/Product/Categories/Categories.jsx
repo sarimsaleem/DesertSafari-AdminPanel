@@ -180,7 +180,7 @@ const Categories = () => {
               {
                 key: '2',
                 icon: <VideoCameraOutlined />,
-                label: 'Category',
+                label: 'Categories',
                 onClick: () => navigate('/categories'),
               },
               {
@@ -248,12 +248,12 @@ const Categories = () => {
           >
             <div
               style={{
-                maxHeight: 'calc(100vh - 160px)', // Make it scrollable
-                overflow: 'auto', // Enable scrolling
+                maxHeight: 'calc(100vh - 160px)', 
+                overflow: 'auto',
               }}
             >
               <Table
-                scroll={{ x: '100%', y: 'calc(100vh - 200px)' }}  // Adjust the height for scrollable content
+                // scroll={{ x: '100%', y: 'calc(100vh - 200px)' }}  
                 dataSource={categories}
                 columns={columns}
                 rowKey="_id"
