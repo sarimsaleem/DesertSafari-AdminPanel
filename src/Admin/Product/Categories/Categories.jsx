@@ -160,8 +160,8 @@ const Categories = () => {
   };
 
   return (
-    <div className="categories">
-      <Layout>
+    <div className="page" >
+      <Layout >
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="admin-logo">
             <img src={logo} alt="" />
@@ -244,10 +244,16 @@ const Categories = () => {
               padding: 24,
               minHeight: 280,
               background: '#fff',
-              overflowY: "scroll"
+              height:'100%',
+              overflow: 'auto'
             }}
           >
-            <Table dataSource={categories} columns={columns} rowKey="_id" loading={loading} />
+            <Table
+              scroll={{ x: '100%' }}
+              dataSource={categories}
+              columns={columns}
+              rowKey="_id"
+              loading={loading} />
           </Content>
         </Layout>
       </Layout>
