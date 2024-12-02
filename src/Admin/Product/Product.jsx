@@ -91,6 +91,7 @@ const Product = () => {
             dataIndex: 'most_popular',
             key: 'most_popular',
             render: (value) => (value ? 'Yes' : 'No'),
+            width: 170
         },
         {
             title: 'Product Category',
@@ -105,6 +106,8 @@ const Product = () => {
             title: 'Product Price',
             dataIndex: 'price',
             key: 'price',
+            width: 170
+
         },
         {
             title: 'Product Image',
@@ -126,7 +129,7 @@ const Product = () => {
                     View
                 </Button>
             ),
-        },  
+        },
         {
             title: 'Actions',
             key: 'actions',
@@ -296,9 +299,9 @@ const Product = () => {
                             style={{ marginRight: '16px' }}
                         >Add Product</Button>
                     </Header>
-                    <Content style={{ margin: '24px 16px 0', overflowY: "scroll", }}>
-                        <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                            <div className="table-container">
+                    <Content style={{ margin: '24px 16px 0', overflowY: 'scroll', height: 'calc(100vh - 64px)' }}>
+                        <div style={{ padding: 24, minHeight: 360, background: '#fff', overflowY: 'auto' }}>
+                            <div className="table-container" style={{ maxHeight: '70vh', overflow: 'auto' }}>
                                 <Table
                                     loading={loading}
                                     columns={columns}
@@ -307,12 +310,14 @@ const Product = () => {
                                     pagination={{
                                         pageSize: 10,
                                     }}
-                                    scroll={{ x: 'max-content' }}
+                                    scroll={{
+                                        x: 'max-content',
+                                        y: 400, 
+                                    }}
                                 />
                             </div>
                         </div>
                     </Content>
-
                 </Layout>
             </Layout>
             <ProductModal
