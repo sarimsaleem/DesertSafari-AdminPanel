@@ -126,7 +126,7 @@ const Product = () => {
                     View
                 </Button>
             ),
-        },
+        },  
         {
             title: 'Actions',
             key: 'actions',
