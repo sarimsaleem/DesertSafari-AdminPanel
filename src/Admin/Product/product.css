@@ -1,10 +1,9 @@
-.table-container {
+/* .table-container {
     max-height: 70vh;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-/* Scrollbar for WebKit Browsers */
 .table-container::-webkit-scrollbar {
     height: 8px;
     width: 8px;
@@ -21,23 +20,24 @@
 
 .table-container::-webkit-scrollbar-track {
     background: #f1f1f1;
-}
+} */
 
 /* Scrollbar for Firefox */
 .table-container {
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: #888 #f1f1f1; */
 }
+
 @media (max-width: 768px) {
     .admin-logo {
         margin: 15px 5px 10px;
         border-radius: 3px;
     }
 
-    .table-container {
+    /* .table-container {
         max-height: 50vh;
-        font-size: 12px; /* Reduce table font size for better fit */
-    }
+        font-size: 12px;
+    } */
 
     .detail-item strong {
         font-size: 14px;
@@ -48,10 +48,12 @@
         padding: 6px;
     }
 }
+
 .detail-item {
     margin-bottom: 20px;
     padding: 8px 12px;
 }
+
 @media (prefers-color-scheme: dark) {
     .drawer-details {
         background-color: #1e1e1e;
@@ -63,10 +65,12 @@
         border: 1px solid #444;
     }
 
+    /* 
     .table-container::-webkit-scrollbar-thumb {
         background-color: #555;
-    }
+    } */
 }
+
 .admin-logo img {
     object-fit: contain;
     height: auto;
