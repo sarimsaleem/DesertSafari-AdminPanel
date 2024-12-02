@@ -312,7 +312,6 @@ const Product = () => {
                                     }}
                                     scroll={{
                                         x: 'max-content',
-                                        // y: 400, 
                                     }}
                                 />
                             </div>

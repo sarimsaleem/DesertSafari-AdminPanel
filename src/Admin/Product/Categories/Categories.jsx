@@ -147,7 +147,7 @@ const Categories = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        navigate("/");
+        navigate("/"); 
         notification.success({
           message: "Logout Successful",
         });
@@ -242,18 +242,24 @@ const Categories = () => {
             style={{
               margin: '24px 16px',
               padding: 24,
-              minHeight: 280,
               background: '#fff',
-              height:'100%',
-              overflow: 'auto'
+              height: '100%',
             }}
           >
-            <Table
-              scroll={{ x: '100%' }}
-              dataSource={categories}
-              columns={columns}
-              rowKey="_id"
-              loading={loading} />
+            <div
+              style={{
+                maxHeight: 'calc(100vh - 160px)', // Make it scrollable
+                overflow: 'auto', // Enable scrolling
+              }}
+            >
+              <Table
+                scroll={{ x: '100%', y: 'calc(100vh - 200px)' }}  // Adjust the height for scrollable content
+                dataSource={categories}
+                columns={columns}
+                rowKey="_id"
+                loading={loading}
+              />
+            </div>
           </Content>
         </Layout>
       </Layout>

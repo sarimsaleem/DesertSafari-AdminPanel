@@ -34,7 +34,6 @@ const Order = () => {
     loadOrders();
   }, []);
 
-
   const handleViewDetails = (orderInfo) => {
     setDrawerContent(orderInfo);
     setOpenDrawer(true);
@@ -143,7 +142,7 @@ const Order = () => {
         </Descriptions>
       </Drawer>
 
-      <Layout>
+      <Layout style={{ height: '100vh', overflow: 'hidden' }}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="admin-logo">
             <img src={logo} alt="Logo" />
@@ -201,7 +200,7 @@ const Order = () => {
               style={{ fontSize: '16px', width: 64, height: 64 }}
             />
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, minHeight: 280, background: '#fff', overflowY: "scroll" }}>
+          <Content style={{ margin: '24px 16px', padding: 24, height: 'calc(100vh - 64px)', overflowY: 'auto', background: '#fff' }}>
             <Table
               loading={loading}
               columns={columns}

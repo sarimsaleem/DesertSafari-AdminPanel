@@ -37,7 +37,6 @@ const Queries = () => {
                 </Popover>
             ),
         }
-        
     ];
 
     const fetchQueries = async () => {
@@ -70,8 +69,8 @@ const Queries = () => {
     };
 
     return (
-        <Layout>
-            <Sider trigger={null} collapsible collapsed={collapsed}>
+        <Layout style={{ minHeight: '100vh' }}>
+            <Sider trigger={null} collapsible collapsed={collapsed} style={{ height: '100vh' }}>
                 <div className="admin-logo">
                     <img src={logo} alt="Logo" />
                 </div>
@@ -84,7 +83,7 @@ const Queries = () => {
                     <Menu.Item key="6" icon={<LogoutOutlined />} onClick={handleLogout}>Sign Out</Menu.Item>
                 </Menu>
             </Sider>
-            <Layout>
+            <Layout style={{ minHeight: '100vh' }}>
                 <Header style={{ padding: 0, background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Button
                         type="text"
@@ -93,11 +92,12 @@ const Queries = () => {
                         style={{ fontSize: '16px', width: 64, height: 64 }}
                     />
                 </Header>
-                <Content style={{ margin: '24px 16px', padding: 24, minHeight: 280, background: '#fff', overflowY: "scroll" }}>
+                <Content style={{ margin: '0 16px', padding: '24px', background: '#fff', overflowY: 'auto', flex: 1 }}>
                     <Table
                         loading={loading}
                         columns={columns}
                         dataSource={orders}
+                        style={{ width: '100%', overflowX: 'auto' }} // Ensure scrollable in case of large tables
                     />
                 </Content>
             </Layout>
