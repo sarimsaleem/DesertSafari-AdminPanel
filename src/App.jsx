@@ -25,7 +25,6 @@ function App() {
 
   return (
     <>
-    {console.log('user',user)}
       {user ? <Protected /> : <Auth />}
     </>
   );

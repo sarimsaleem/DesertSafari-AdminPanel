@@ -1,19 +1,20 @@
-// src/services/orderService.js
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "../../../Firebase/firebaseConfig";
 
-import { db } from '../../../Firebase/firebaseConfig'; 
-import { collection, getDocs } from 'firebase/firestore';
 
 export const fetchOrders = async () => {
-    try {
-        const ordersCollection = collection(db, 'bookings');
-        const orderSnapshot = await getDocs(ordersCollection);
-        const ordersList = orderSnapshot.docs.map(doc => ({
-            orderId: doc.id,
-            ...doc.data(),
-        }));
-        return ordersList; 
-    } catch (error) {
-        console.error('Error fetching orders: ', error);
-        throw error; 
-    }
+  try {
+    const bookingsCollection = collection(db, 'bookings');
+    const snapshot = await getDocs(bookingsCollection);
+    const orders = snapshot.docs.map(doc => ({
+      ...doc.data(), 
+      orderId: doc.id,
+    }));
+
+    console.log('Fetched orders:', orders);
+    return orders;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw error;
+  }
 };
