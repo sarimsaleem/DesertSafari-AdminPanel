@@ -92,7 +92,7 @@ const Queries = () => {
                         style={{ fontSize: '16px', width: 64, height: 64 }}
                     />
                 </Header>
-                <Content style={{ margin: '0 16px', padding: '24px', background: '#fff', overflowY: 'auto', flex: 1 }}>
+                <Content style={{ margin: '20px 16px', padding: '24px', background: '#fff', overflowY: 'auto', flex: 1 }}>
                     <Table
                         loading={loading}
                         columns={columns}
