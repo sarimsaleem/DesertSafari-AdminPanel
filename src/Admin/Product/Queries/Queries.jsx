@@ -74,14 +74,50 @@ const Queries = () => {
                 <div className="admin-logo">
                     <img src={logo} alt="Logo" />
                 </div>
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['5']}>
-                    <Menu.Item key="1" icon={<UserOutlined />} onClick={() => navigate('/')}>Product</Menu.Item>
-                    <Menu.Item key="2" icon={<VideoCameraOutlined />} onClick={() => navigate('/categories')}>Categories</Menu.Item>
-                    <Menu.Item key="3" icon={<UploadOutlined />} onClick={() => navigate('/faqs')}>FAQs</Menu.Item>
-                    <Menu.Item key="4" icon={<ShoppingCartOutlined />} onClick={() => navigate('/orders')}>Orders</Menu.Item>
-                    <Menu.Item key="5" icon={<QuestionCircleOutlined />} onClick={() => navigate('/queries')}>Queries</Menu.Item>
-                    <Menu.Item key="6" icon={<LogoutOutlined />} onClick={handleLogout}>Sign Out</Menu.Item>
-                </Menu>
+                <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={['5']}
+            items={[
+              {
+                key: '1',
+                icon: <UserOutlined />,
+                label: 'Product',
+                onClick: () => navigate('/'),
+              },
+              {
+                key: '2',
+                icon: <VideoCameraOutlined />,
+                label: 'Categories',
+                onClick: () => navigate('/categories'),
+              },
+              {
+                key: '3',
+                icon: <UploadOutlined />,
+                label: 'FAQs',
+                onClick: () => navigate('/faqs'),
+              },
+              {
+                key: '4',
+                icon: <ShoppingCartOutlined />,
+                label: 'Orders',
+                onClick: () => navigate('/orders'),
+              },
+              {
+                key: '5',
+                icon: <QuestionCircleOutlined />,
+                label: 'Queries',
+                onClick: () => navigate('/queries'),
+              },
+              {
+                key: '6',
+                icon: <LogoutOutlined />,
+                label: 'Sign Out',
+                onClick: () => handleLogout(),
+                style: { marginTop: "162px" },
+              },
+            ]}
+          />
             </Sider>
             <Layout style={{ minHeight: '100vh' }}>
                 <Header style={{ padding: 0, background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

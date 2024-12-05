@@ -17,15 +17,7 @@
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); 
     border-radius: 8px;
   }
-  
-  .login-heading {
-    text-align: center;
-    margin-bottom: 24px;
-    font-size: 35px;
-    margin-top: 0px;
-    color:#787474 ;
-  }
-  
+
   .form-group {
     margin-bottom: 16px;
     display: flex;

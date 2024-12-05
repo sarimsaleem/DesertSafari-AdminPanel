@@ -167,6 +167,7 @@ const Product = () => {
                 });
             });
     };
+    
     return (
         <>
             <Drawer
@@ -276,6 +277,7 @@ const Product = () => {
                                 icon: <LogoutOutlined />,
                                 label: 'Sign Out',
                                 onClick: () => handleLogout(),
+                                style: { marginTop: "162px" },
                             },
                         ]}
                     />
@@ -297,6 +299,7 @@ const Product = () => {
                         <Button onClick={() => setOpenModal(true)}
                             icon={<PlusOutlined />}
                             style={{ marginRight: '16px' }}
+                            disabled={loading}
                         >Add Product</Button>
                     </Header>
                     <Content style={{ margin: '24px 16px 0', overflowY: 'scroll', height: 'calc(100vh - 64px)' }}>

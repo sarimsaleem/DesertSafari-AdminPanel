@@ -187,9 +187,10 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                                             as={Input}
                                                             placeholder="Enter title"
                                                         />
+                                                        <Typography level={5} style={{marginTop: "10px", fontWeight: "600"}}>Hide Icon</Typography>
                                                         <Switch
                                                             checked={value?.hide_icon}
-                                                            style={{ marginTop: "20px", marginBottom: "20px" }}
+                                                            style={{ marginTop: "10px", marginBottom: "20px" }}
                                                             onChange={(checked) => setFieldValue(`content.${index}.hide_icon`, checked)}
                                                         />
                                                         <Field

@@ -147,7 +147,7 @@ const Categories = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        navigate("/"); 
+        navigate("/");
         notification.success({
           message: "Logout Successful",
         });
@@ -206,6 +206,7 @@ const Categories = () => {
                 icon: <LogoutOutlined />,
                 label: 'Sign Out',
                 onClick: () => handleLogout(),
+                style: { marginTop: "162px" },
               },
             ]}
           />
@@ -234,31 +235,28 @@ const Categories = () => {
               icon={<PlusOutlined />}
               onClick={handleAddCategory}
               style={{ marginRight: '16px' }}
+              disabled={loading}
             >
               Add Category
             </Button>
           </Header>
           <Content
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              background: '#fff',
-              height: '100%',
-            }}
-          >
+            style={{ margin: '24px 16px', overflowY: 'scroll', height: 'calc(100vh - 64px)' }}>
             <div
               style={{
-                maxHeight: 'calc(100vh - 160px)', 
-                overflow: 'auto',
+                padding: 24, minHeight: 360, background: '#fff', overflowY: 'auto'
               }}
             >
-              <Table
-                // scroll={{ x: '100%', y: 'calc(100vh - 200px)' }}  
-                dataSource={categories}
-                columns={columns}
-                rowKey="_id"
-                loading={loading}
-              />
+              <div className="table-container">
+                <Table
+                  scroll={{
+                    x: 'max-content',
+                  }} dataSource={categories}
+                  columns={columns}
+                  rowKey="_id"
+                  loading={loading}
+                />
+              </div>
             </div>
           </Content>
         </Layout>

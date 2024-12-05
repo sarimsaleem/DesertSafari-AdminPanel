@@ -183,6 +183,7 @@ const FAQs = () => {
                 icon: <LogoutOutlined />,
                 label: 'Sign Out',
                 onClick: () => handleLogout(),
+                style: { marginTop: "162px" },
               },
             ]}
           />
@@ -214,6 +215,7 @@ const FAQs = () => {
                 setCurrentFAQ(null);
                 setModalOpen(true);
               }}
+              disabled={loading}
               style={{ marginRight: '16px' }}
             >
               Add FAQ

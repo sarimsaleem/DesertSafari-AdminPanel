@@ -10,6 +10,7 @@ function Protected() {
     return (
             <Routes>
                 <Route path="/"  element={<Product />}  />
+                <Route path="*"  element={<Product />}  />
                 <Route path="/categories"  element={<Categories />} />
                 <Route path="/faqs" element={<FAQs />}  />
                 <Route path="/orders"  element={<Order />}  />

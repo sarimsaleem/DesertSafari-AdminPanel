@@ -187,6 +187,7 @@ const Order = () => {
                 icon: <LogoutOutlined />,
                 label: 'Sign Out',
                 onClick: () => handleLogout(),
+                style: { marginTop: "162px" },
               },
             ]}
           />

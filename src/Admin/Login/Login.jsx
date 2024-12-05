@@ -57,7 +57,7 @@ const Login = () => {
     <div className="login-container">
       {contextHolder} 
       <div className="login-box">
-        <Typography.Title level={2} className="login-heading">Login</Typography.Title>
+        <Typography.Title style={{textAlign:"center", marginBottom:"40px", marginTop:"0px", color: "#787474 "}} >Login</Typography.Title>
 
         <Form
           form={form}
