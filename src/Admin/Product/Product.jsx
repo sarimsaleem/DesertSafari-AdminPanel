@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, UploadOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined, ShoppingCartOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, Table, Space, Drawer, Descriptions, Tag, Divider, Slider, notification } from 'antd';
+import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, } from '@ant-design/icons';
+import { Button, Table, Space, Drawer, Descriptions, Tag, Divider } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
 import ProductEditModal from './productModal/ProductEditModal';
 import { Add, fetchProducts, deleteProduct, update } from './Function/productFunction';
-import { useNavigate } from 'react-router-dom';
 import { fetchCategories } from './Categories/CategoriesFunctions/CategoriesFunction';
-import logo from "../assets/logo2.png";
 import { v4 as uuidv4 } from 'uuid';
-import { signOut } from 'firebase/auth';
-import { auth } from "./../Firebase/firebaseConfig";
+import PageWrapper from '../../Component/Wrapper/PageWrapper';
 
-const { Header, Sider, Content } = Layout;
 
 const Product = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -32,8 +28,6 @@ const Product = () => {
         setProducts(fetchedProducts);
         setLoading(false);
     };
-
-    const navigate = useNavigate();
 
     const handleAddProduct = async (product) => {
         setLoading(true);
@@ -79,7 +73,6 @@ const Product = () => {
             title: 'Product Name',
             dataIndex: 'image_text',
             key: 'image_text',
-            // width: 250
         },
         {
             title: 'Product Card Detail',
@@ -153,21 +146,31 @@ const Product = () => {
         fontSize: '14px',
     };
 
-    const handleLogout = () => {
-        signOut(auth)
-            .then(() => {
-                navigate("/");
-                notification.success({
-                    message: "Logout Successful",
-                });
-            })
-            .catch((error) => {
-                notification.error({
-                    message: "Logout Failed",
-                });
-            });
+    const renderRight = () => {
+        return (
+            <div className='btns'>
+                <Button
+                    type="text"
+                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                    onClick={() => { setCollapsed(!collapsed);
+                        // console.log("Collapsed state:", !collapsed);
+                    }}
+                    style={{ fontSize: "16px", width: 64, height: 64 }}
+                />
+                <Button onClick={() => setOpenModal(true)}
+                    icon={<PlusOutlined />}
+                    style={{ marginRight: '16px' }}
+                    disabled={loading}
+                >Add Product</Button>
+            </div>
+        )
+    }
+
+    const headerProps = {
+        title: 'Products',
+        renderRight: () => renderRight(),
     };
-    
+
     return (
         <>
             <Drawer
@@ -199,7 +202,6 @@ const Product = () => {
                                 key={index}
                                 label={<span style={headingStyle}>{contentItem.title || 'No Title'}</span>}
                             >
-                                {/* Display description if available */}
                                 {contentItem.description ? (
                                     <p style={{ marginBottom: '10px', fontStyle: 'italic', color: '#666' }}>
                                         {contentItem.description}
@@ -229,113 +231,38 @@ const Product = () => {
                         'No Content'
                     )}
                 </Descriptions>
-
             </Drawer>
 
-            <Layout>
-                <Sider trigger={null} collapsible collapsed={collapsed}>
-                    <div className="admin-logo">
-                        <img src={logo} alt="Logo" />
-                    </div>
-                    <Menu
-                        theme="dark"
-                        mode="inline"
-                        defaultSelectedKeys={['1']}
-                        items={[
-                            {
-                                key: '1',
-                                icon: <UserOutlined />,
-                                label: 'Product',
-                                onClick: () => navigate('/'),
-                            },
-                            {
-                                key: '2',
-                                icon: <VideoCameraOutlined />,
-                                label: 'Categories',
-                                onClick: () => navigate('/categories'),
-                            },
-                            {
-                                key: '3',
-                                icon: <UploadOutlined />,
-                                label: 'FAQs',
-                                onClick: () => navigate('/faqs'),
-                            },
-                            {
-                                key: '4',
-                                icon: <ShoppingCartOutlined />,
-                                label: 'Orders',
-                                onClick: () => navigate('/orders'),
-                            },
-                            {
-                                key: '5',
-                                icon: <QuestionCircleOutlined />,
-                                label: 'Queries',
-                                onClick: () => navigate('/queries'),
-                            },
-                            {
-                                key: "6",
-                                icon: <LogoutOutlined />,
-                                label: 'Sign Out',
-                                onClick: () => handleLogout(),
-                                style: { marginTop: "162px" },
-                            },
-                        ]}
-                    />
-                </Sider>
-                <Layout>
-                    <Header style={{
-                        padding: 0,
-                        background: '#fff',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}>
-                        <Button
-                            type="text"
-                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
-                            style={{ fontSize: '16px', width: 64, height: 64 }}
-                        />
-                        <Button onClick={() => setOpenModal(true)}
-                            icon={<PlusOutlined />}
-                            style={{ marginRight: '16px' }}
-                            disabled={loading}
-                        >Add Product</Button>
-                    </Header>
-                    <Content style={{ margin: '24px 16px 0', overflowY: 'scroll', height: 'calc(100vh - 64px)' }}>
-                        <div style={{ padding: 24, minHeight: 360, background: '#fff', overflowY: 'auto' }}>
-                            <div className="table-container">
-                                <Table
-                                    loading={loading}
-                                    columns={columns}
-                                    dataSource={products}
-                                    rowKey="_id"
-                                    pagination={{
-                                        pageSize: 10,
-                                    }}
-                                    scroll={{
-                                        x: 'max-content',
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </Content>
-                </Layout>
-            </Layout>
-            <ProductModal
-                open={openModal}
-                setOpen={setOpenModal}
-                addProduct={handleAddProduct}
-                categories={categories}
-            />
+            <PageWrapper collapsed={collapsed} headerProps={headerProps}>
+                <Table
+                    loading={loading}
+                    columns={columns}
+                    dataSource={products}
+                    rowKey="_id"
+                    pagination={{
+                        pageSize: 10,
+                    }}
+                    scroll={{
+                        x: 'max-content',
+                    }}
+                />
 
-            <ProductEditModal
-                open={openEditModal}
-                setOpen={setOpenEditModal}
-                update={handleEditProduct}
-                currentProduct={currentProduct}
-                categories={categories}
-            />
+                <ProductModal
+                    open={openModal}
+                    setOpen={setOpenModal}
+                    addProduct={handleAddProduct}
+                    categories={categories}
+                />
+
+                <ProductEditModal
+                    open={openEditModal}
+                    setOpen={setOpenEditModal}
+                    update={handleEditProduct}
+                    currentProduct={currentProduct}
+                    categories={categories}
+                />
+            </PageWrapper>
+
         </>
     );
 };

@@ -5,9 +5,11 @@ import Categories from '../Admin/Product/Categories/Categories'
 import FAQs from '../Admin/Product/FAQs/FAQs'
 import Order from '../Admin/Product/Order/Order'
 import Queries from '../Admin/Product/Queries/Queries'
+import PageWrapper from '../Component/Wrapper/PageWrapper'
 
 function Protected() {
     return (
+        // <PageWrapper>
             <Routes>
                 <Route path="/"  element={<Product />}  />
                 <Route path="*"  element={<Product />}  />
@@ -16,6 +18,7 @@ function Protected() {
                 <Route path="/orders"  element={<Order />}  />
                 <Route path="/queries"  element={<Queries />}  />
             </Routes>
+        // </PageWrapper> 
     )
 }
 

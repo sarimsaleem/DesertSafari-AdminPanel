@@ -2,23 +2,13 @@ import React, { useState, useEffect } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UserOutlined,
   PlusOutlined,
-  LogoutOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  ShoppingCartOutlined,
-  QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Button, Layout, Menu, Space, Table, Popconfirm, notification } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Button, Space, Table, Popconfirm } from 'antd';
 import FAQModal from './FAQsModal/FAQsModal';
 import { addFAQ, updateFAQs, fetchFAQs, deleteFAQs } from './Functions/functions';
-import logo from '../../assets/logo2.png';
-import { signOut } from 'firebase/auth';
-import { auth } from './../../Firebase/firebaseConfig';
+import PageWrapper from '../../../Component/Wrapper/PageWrapper';
 
-const { Header, Sider, Content } = Layout;
 
 const FAQs = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -27,8 +17,6 @@ const FAQs = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentFAQ, setCurrentFAQ] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
 
   const loadFAQs = async () => {
     try {
@@ -85,10 +73,36 @@ const FAQs = () => {
     }
   };
 
-  const handleEditFAQ = (faq) => {
-    setIsEditing(true);
-    setCurrentFAQ(faq);
-    setModalOpen(true);
+
+
+  const renderRight = () => {
+    return (
+      <div className="btns">
+        <Button
+          type="text"
+          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          onClick={() => setCollapsed(!collapsed)}
+          style={{ fontSize: '16px', width: 64, height: 64 }}
+        />
+        <Button
+          icon={<PlusOutlined />}
+          onClick={() => {
+            setIsEditing(false);
+            setCurrentFAQ(null);
+            setModalOpen(true);
+          }}
+          disabled={loading}
+          style={{ marginRight: '16px' }}
+        >
+          Add FAQ
+        </Button>
+      </div>
+    )
+  }
+
+  const headerProps = {
+    title: 'FAQs',
+    renderRight: () => renderRight(),
   };
 
   const columns = [
@@ -121,133 +135,33 @@ const FAQs = () => {
     },
   ];
 
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        navigate('/');
-        notification.success({
-          message: 'Logout Successful',
-        });
-      })
-      .catch((error) => {
-        notification.error({
-          message: 'Logout Failed',
-        });
-      });
+  const handleEditFAQ = (faq) => {
+    setIsEditing(true);
+    setCurrentFAQ(faq);
+    setModalOpen(true);
   };
 
   return (
     <div className="faqs">
-      <Layout style={{ height: '100vh', overflow: 'hidden' }}>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="admin-logo">
-            <img src={logo} alt="" />
-          </div>
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={['3']}
-            items={[
-              {
-                key: '1',
-                icon: <UserOutlined />,
-                label: 'Product',
-                onClick: () => navigate('/'),
-              },
-              {
-                key: '2',
-                icon: <VideoCameraOutlined />,
-                label: 'Categories',
-                onClick: () => navigate('/categories'),
-              },
-              {
-                key: '3',
-                icon: <UploadOutlined />,
-                label: 'FAQs',
-                onClick: () => navigate('/faqs'),
-              },
-              {
-                key: '4',
-                icon: <ShoppingCartOutlined />,
-                label: 'Orders',
-                onClick: () => navigate('/orders'),
-              },
-              {
-                key: '5',
-                icon: <QuestionCircleOutlined />,
-                label: 'Queries',
-                onClick: () => navigate('/queries'),
-              },
-              {
-                key: '6',
-                icon: <LogoutOutlined />,
-                label: 'Sign Out',
-                onClick: () => handleLogout(),
-                style: { marginTop: "162px" },
-              },
-            ]}
-          />
-        </Sider>
-        <Layout>
-          <Header
-            style={{
-              padding: 0,
-              background: '#fff',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: '16px',
-                width: 64,
-                height: 64,
-              }}
-            />
-            <Button
-              icon={<PlusOutlined />}
-              onClick={() => {
-                setIsEditing(false);
-                setCurrentFAQ(null);
-                setModalOpen(true);
-              }}
-              disabled={loading}
-              style={{ marginRight: '16px' }}
-            >
-              Add FAQ
-            </Button>
-          </Header>
-          <Content
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 'calc(100vh - 112px)',
-              background: '#fff',
-              overflowY: 'auto', // Enable vertical scrolling
-            }}
-          >
-            <Table
-              dataSource={faqs}
-              columns={columns}
-              rowKey="id"
-              loading={loading}
-            />
-          </Content>
-        </Layout>
-      </Layout>
-
-      <FAQModal
-        open={modalOpen}
-        setOpen={setModalOpen}
-        addFAQ={handleAddFAQ}
-        updateFAQ={handleUpdateFAQ}
-        isEditing={isEditing}
-        currentFAQ={currentFAQ}
-      />
+      <PageWrapper
+        collapsed={collapsed}
+        headerProps={headerProps}
+      >
+        <Table
+          dataSource={faqs}
+          columns={columns}
+          rowKey="id"
+          loading={loading}
+        />
+        <FAQModal
+          open={modalOpen}
+          setOpen={setModalOpen}
+          addFAQ={handleAddFAQ}
+          updateFAQ={handleUpdateFAQ}
+          isEditing={isEditing}
+          currentFAQ={currentFAQ}
+        />
+      </PageWrapper>
     </div>
   );
 };

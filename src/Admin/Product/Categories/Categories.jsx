@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined, LogoutOutlined, UploadOutlined, ShoppingCartOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, Space, Table, Popconfirm, notification } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, } from '@ant-design/icons';
+import { Button, Space, Table, Popconfirm, } from 'antd';
 import CategoriesModal from './CategoryModal/CategoriesModal';
 import { Add, Update, fetchCategories, deleteCategory } from './CategoriesFunctions/CategoriesFunction';
 import { v4 as uuidv4 } from 'uuid';
-import logo from "../../assets/logo2.png";
-import { signOut } from 'firebase/auth';
-import { auth } from "./../../Firebase/firebaseConfig";
+import PageWrapper from '../../../Component/Wrapper/PageWrapper';
 
 
-const { Header, Sider, Content } = Layout;
 
 const Categories = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -19,7 +15,7 @@ const Categories = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate();
+
 
   const loadCategories = async () => {
     try {
@@ -144,123 +140,48 @@ const Categories = () => {
     },
   ];
 
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        navigate("/");
-        notification.success({
-          message: "Logout Successful",
-        });
-      })
-      .catch((error) => {
-        notification.error({
-          message: "Logout Failed",
-        });
-      });
+  const headerProps = {
+    title: 'Categories',
+    renderRight: () => renderRight(),
   };
+
+  const renderRight = () => {
+    return (
+      <div className='btns'>
+        <Button
+          type="text"
+          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          onClick={() => setCollapsed(!collapsed)}
+          style={{ fontSize: '16px', width: 64, height: 64 }}
+        />
+        <Button
+          icon={<PlusOutlined />}
+          onClick={handleAddCategory}
+          style={{ marginRight: '16px' }}
+          disabled={loading}
+        >
+          Add Category
+        </Button>
+      </div>
+
+    )
+  }
 
   return (
     <div className="page" >
-      <Layout >
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="admin-logo">
-            <img src={logo} alt="" />
-          </div>
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={['2']}
-            items={[
-              {
-                key: '1',
-                icon: <UserOutlined />,
-                label: 'Product',
-                onClick: () => navigate('/'),
-              },
-              {
-                key: '2',
-                icon: <VideoCameraOutlined />,
-                label: 'Categories',
-                onClick: () => navigate('/categories'),
-              },
-              {
-                key: '3',
-                icon: <UploadOutlined />,
-                label: 'FAQs',
-                onClick: () => navigate('/faqs'),
-              },
-              {
-                key: '4',
-                icon: <ShoppingCartOutlined />,
-                label: 'Orders',
-                onClick: () => navigate('/orders'),
-              },
-              {
-                key: '5',
-                icon: <QuestionCircleOutlined />,
-                label: 'Queries',
-                onClick: () => navigate('/queries'),
-              },
-              {
-                key: '6',
-                icon: <LogoutOutlined />,
-                label: 'Sign Out',
-                onClick: () => handleLogout(),
-                style: { marginTop: "162px" },
-              },
-            ]}
-          />
-        </Sider>
-        <Layout>
-          <Header
-            style={{
-              padding: 0,
-              background: '#fff',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: '16px',
-                width: 64,
-                height: 64,
-              }}
-            />
-            <Button
-              icon={<PlusOutlined />}
-              onClick={handleAddCategory}
-              style={{ marginRight: '16px' }}
-              disabled={loading}
-            >
-              Add Category
-            </Button>
-          </Header>
-          <Content
-            style={{ margin: '24px 16px', overflowY: 'scroll', height: 'calc(100vh - 64px)' }}>
-            <div
-              style={{
-                padding: 24, minHeight: 360, background: '#fff', overflowY: 'auto'
-              }}
-            >
-              <div className="table-container">
-                <Table
-                  scroll={{
-                    x: 'max-content',
-                  }} dataSource={categories}
-                  columns={columns}
-                  rowKey="_id"
-                  loading={loading}
-                />
-              </div>
-            </div>
-          </Content>
-        </Layout>
-      </Layout>
+      <PageWrapper
+        collapsed={collapsed}
+        headerProps={headerProps}
+      >
+        <Table
+          scroll={{
+            x: 'max-content',
+          }} dataSource={categories}
+          columns={columns}
+          rowKey="_id"
+          loading={loading}
+        />
+      </PageWrapper>
 
       <CategoriesModal
         open={modalOpen}

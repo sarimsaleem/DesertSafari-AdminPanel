@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Layout, Menu, Tag, Drawer, Descriptions, notification } from 'antd';
-import { UserOutlined, VideoCameraOutlined, UploadOutlined, ShoppingCartOutlined, LogoutOutlined, MenuUnfoldOutlined, MenuFoldOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, Table, Layout, Tag, Drawer, Descriptions, } from 'antd';
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { fetchOrders } from './OrderFunction/OrderFunction';
-import logo from './../../assets/logo2.png';
-import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { auth } from "./../../Firebase/firebaseConfig";
+import PageWrapper from '../../../Component/Wrapper/PageWrapper';
 
 const { Header, Content, Sider } = Layout;
 
 const Order = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [orders, setOrders] = useState([]);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [drawerContent, setDrawerContent] = useState({});
@@ -33,6 +29,24 @@ const Order = () => {
 
     loadOrders();
   }, []);
+
+  const renderRight = () => {
+    return (
+      <div className='btns'>
+        <Button
+          type="text"
+          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          onClick={() => setCollapsed(!collapsed)}
+          style={{ fontSize: '16px', width: 64, height: 64 }}
+        />
+      </div>
+    )
+  }
+
+  const headerProps = {
+    title: 'Orders',
+    renderRight: () => renderRight(),
+  };
 
   const handleViewDetails = (orderInfo) => {
     setDrawerContent(orderInfo);
@@ -90,20 +104,7 @@ const Order = () => {
     },
   ];
 
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        navigate("/");
-        notification.success({
-          message: "Logout Successful",
-        });
-      })
-      .catch((error) => {
-        notification.error({
-          message: "Logout Failed",
-        });
-      });
-  };
+
 
   const expandedRowRender = (record) => {
     const bookingsColumns = [
@@ -142,79 +143,21 @@ const Order = () => {
         </Descriptions>
       </Drawer>
 
-      <Layout style={{ height: '100vh', overflow: 'hidden' }}>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="admin-logo">
-            <img src={logo} alt="Logo" />
-          </div>
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={['4']}
-            items={[
-              {
-                key: '1',
-                icon: <UserOutlined />,
-                label: 'Product',
-                onClick: () => navigate('/'),
-              },
-              {
-                key: '2',
-                icon: <VideoCameraOutlined />,
-                label: 'Categories',
-                onClick: () => navigate('/categories'),
-              },
-              {
-                key: '3',
-                icon: <UploadOutlined />,
-                label: 'FAQs',
-                onClick: () => navigate('/faqs'),
-              },
-              {
-                key: '4',
-                icon: <ShoppingCartOutlined />,
-                label: 'Orders',
-                onClick: () => navigate('/orders'),
-              },
-              {
-                key: '5',
-                icon: <QuestionCircleOutlined />,
-                label: 'Queries',
-                onClick: () => navigate('/queries'),
-              },
-              {
-                key: "6",
-                icon: <LogoutOutlined />,
-                label: 'Sign Out',
-                onClick: () => handleLogout(),
-                style: { marginTop: "162px" },
-              },
-            ]}
-          />
-        </Sider>
-        <Layout>
-          <Header style={{ padding: 0, background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{ fontSize: '16px', width: 64, height: 64 }}
-            />
-          </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, height: 'calc(100vh - 64px)', overflowY: 'auto', background: '#fff' }}>
-            <Table
-              loading={loading}
-              columns={columns}
-              dataSource={orders}
-              expandable={{
-                expandedRowRender,
-                rowExpandable: (record) => record.bookings.length > 0,
-              }}
-              rowKey="orderId"
-            />
-          </Content>
-        </Layout>
-      </Layout>
+      <PageWrapper  collapsed={collapsed} headerProps={headerProps}>
+
+        <Table
+          loading={loading}
+          columns={columns}
+          dataSource={orders}
+          expandable={{
+            expandedRowRender,
+            rowExpandable: (record) => record.bookings.length > 0,
+          }}
+          rowKey="orderId"
+        />
+      </PageWrapper>
+
+
     </>
   );
 };
