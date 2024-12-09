@@ -9,7 +9,6 @@ import { fetchCategories } from './Categories/CategoriesFunctions/CategoriesFunc
 import { v4 as uuidv4 } from 'uuid';
 import PageWrapper from '../../Component/Wrapper/PageWrapper';
 
-
 const Product = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [openModal, setOpenModal] = useState(false);
@@ -153,7 +152,6 @@ const Product = () => {
                     type="text"
                     icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                     onClick={() => { setCollapsed(!collapsed);
-                        // console.log("Collapsed state:", !collapsed);
                     }}
                     style={{ fontSize: "16px", width: 64, height: 64 }}
                 />

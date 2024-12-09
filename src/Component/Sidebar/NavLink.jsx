@@ -1,4 +1,4 @@
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, message, notification } from 'antd';
 import logo from '../../Admin/assets/logo2.png';
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -12,7 +12,6 @@ const NavLink = ({ collapsed }) => {
   console.log(collapsed)
   const navigate = useNavigate();
   const location = useLocation();
-  // const [collapsed, setCollapsed] = useState(false);
 
   const routeToKeyMap = {
     '/': '1',
@@ -20,6 +19,7 @@ const NavLink = ({ collapsed }) => {
     '/faqs': '3',
     '/orders': '4',
     '/queries': '5',
+    '/blogs': '6',
   };
 
   const selectedKey = routeToKeyMap[location.pathname] || '1';
@@ -56,6 +56,7 @@ const NavLink = ({ collapsed }) => {
         selectedKeys={[selectedKey]}
         items={[
           {
+
             key: '1',
             icon: <UserOutlined />,
             label: 'Product',
@@ -87,10 +88,15 @@ const NavLink = ({ collapsed }) => {
           },
           {
             key: '6',
+            icon: <QuestionCircleOutlined />,
+            label: 'blogs',
+            onClick: () => navigate('/blogs'),
+          },
+          {
+            key: '7',
             icon: <LogoutOutlined />,
             label: 'Sign Out',
             onClick: () => handleLogout(),
-            style: { marginTop: "162px" },
           },
         ]}
       />

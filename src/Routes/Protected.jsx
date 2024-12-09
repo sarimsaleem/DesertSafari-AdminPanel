@@ -5,7 +5,8 @@ import Categories from '../Admin/Product/Categories/Categories'
 import FAQs from '../Admin/Product/FAQs/FAQs'
 import Order from '../Admin/Product/Order/Order'
 import Queries from '../Admin/Product/Queries/Queries'
-import PageWrapper from '../Component/Wrapper/PageWrapper'
+// import PageWrapper from '../Component/Wrapper/PageWrapper'
+import Blog from '../Admin/Product/Blog/Blog'
 
 function Protected() {
     return (
@@ -17,6 +18,7 @@ function Protected() {
                 <Route path="/faqs" element={<FAQs />}  />
                 <Route path="/orders"  element={<Order />}  />
                 <Route path="/queries"  element={<Queries />}  />
+                <Route path="/blogs"  element={<Blog />}  />
             </Routes>
         // </PageWrapper> 
     )
