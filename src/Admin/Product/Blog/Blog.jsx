@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Table, Space, Drawer, Descriptions, Tag, Divider } from 'antd';
+import { Button, Table, Space } from 'antd';
 import "./blog.css";
-import BlogModal from './BlogModal/BlogModal';
-// import BlogEditModal from './BlogModal/BlogModal'; // Component for editing blogs
+import BlogModal from './BlogModal/BlogModal'; // Importing the BlogModal
 import { Add, fetchBlogs, deleteBlog, update } from './Functions/Blog'; // Function handlers for blogs
 import { v4 as uuidv4 } from 'uuid';
 import PageWrapper from '../../../Component/Wrapper/PageWrapper';
@@ -11,12 +10,8 @@ import PageWrapper from '../../../Component/Wrapper/PageWrapper';
 const Blog = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [openModal, setOpenModal] = useState(false);
-    const [openEditModal, setOpenEditModal] = useState(false);
     const [currentBlog, setCurrentBlog] = useState(null);
     const [blogs, setBlogs] = useState([]);
-    const [openDrawer, setOpenDrawer] = useState(false);
-    const [drawerContent, setDrawerContent] = useState({});
-    const [drawerTitle, setDrawerTitle] = useState('');
     const [loading, setLoading] = useState(false);
 
     const loadBlogs = async () => {
@@ -26,19 +21,21 @@ const Blog = () => {
         setLoading(false);
     };
 
-    const handleAddBlog = async (blog) => {
+    const handleSubmitBlog = async (blog) => {
         setLoading(true);
-        const blogId = uuidv4();
-        await Add({ ...blog, _id: blogId });
+
+        if (currentBlog?._id) {
+            // Update the existing blog
+            await update(currentBlog._id, blog);
+        } else {
+            // Add a new blog
+            const blogId = uuidv4();
+            await Add({ ...blog, _id: blogId });
+        }
+
         await loadBlogs();
         setOpenModal(false);
-        setLoading(false);
-    };
-
-    const handleEditBlog = async (blogId, updatedBlog) => {
-        setLoading(true);
-        await update(blogId, updatedBlog);
-        await loadBlogs();
+        setCurrentBlog(null); // Clear the currentBlog state after submission
         setLoading(false);
     };
 
@@ -53,7 +50,6 @@ const Blog = () => {
         loadBlogs();
     }, []);
 
-
     const columns = [
         {
             title: 'Blog Title',
@@ -61,7 +57,7 @@ const Blog = () => {
             key: 'title',
         },
         {
-            title: 'Title',
+            title: 'Tags',
             dataIndex: 'tags',
             key: 'tags',
         },
@@ -69,9 +65,8 @@ const Blog = () => {
             title: 'Content',
             dataIndex: 'content',
             key: 'content',
-            render: (text) => text || 'No Content',
+            // render: (text) => text || 'No Content',
         },
-
         {
             title: 'Image',
             dataIndex: 'banner_image_url',
@@ -95,7 +90,7 @@ const Blog = () => {
                     <Button
                         onClick={() => {
                             setCurrentBlog(record);
-                            setOpenEditModal(true);
+                            setOpenModal(true);
                         }}
                     >
                         Edit
@@ -117,11 +112,17 @@ const Blog = () => {
                     onClick={() => { setCollapsed(!collapsed); }}
                     style={{ fontSize: "16px", width: 64, height: 64 }}
                 />
-                <Button onClick={() => setOpenModal(true)}
+                <Button
+                    onClick={() => {
+                        setCurrentBlog(null); 
+                        setOpenModal(true);
+                    }}
                     icon={<PlusOutlined />}
                     style={{ marginRight: '16px' }}
                     disabled={loading}
-                >Add Blog</Button>
+                >
+                    Add Blog
+                </Button>
             </div>
         );
     };
@@ -133,7 +134,6 @@ const Blog = () => {
 
     return (
         <>
-        {console.log('blogs', blogs)}
             <PageWrapper collapsed={collapsed} headerProps={headerProps}>
                 <Table
                     loading={loading}
@@ -151,7 +151,9 @@ const Blog = () => {
                 <BlogModal
                     open={openModal}
                     setOpen={setOpenModal}
-                    addBlog={handleAddBlog}
+                    handleSubmitBlog={handleSubmitBlog}
+                    currentBlog={currentBlog}
+                    setCurrentBlog={setCurrentBlog}
                 />
             </PageWrapper>
         </>

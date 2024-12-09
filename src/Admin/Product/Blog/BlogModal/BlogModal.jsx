@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Formik, Form as MainForm, Field, FieldArray } from 'formik';
-import "../blog.css";
+import React, { useState, useEffect, useRef } from 'react';
+import { Modal, Input, Upload, Button, Row, Col, Typography } from 'antd';
+import { Formik, Form as MainForm, Field } from 'formik';
 import * as Yup from 'yup';
-import { Modal, Input, Upload, InputNumber, Button, Form, Card, Space, Switch, Col, Row, Typography, Select } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 
-
-const BlogModal = ({ open, setOpen, addBlog, categories }) => {
-    const [fileList, setFileList] = useState([]);
-    const [bannerImgList, setBannerImgList] = useState([]);
+const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCurrentBlog }) => {
+    const formRef = useRef(); // Create a ref for the Formik form
+    console.log(currentBlog, "blog")
+    const [bannerImgList, setBannerImgList] = useState(
+        currentBlog ? [{ uid: currentBlog._id, url: currentBlog.banner_image_url }] : []
+    );
 
     const BlogSchema = Yup.object().shape({
         title: Yup.string().required('Blog Title is required'),
@@ -17,45 +18,53 @@ const BlogModal = ({ open, setOpen, addBlog, categories }) => {
     });
 
     const initialValues = {
-        title: '',
-        banner_image_url: null,
-        content: '',
-        tags: '',
-        hide_icon: false,
+        title: currentBlog ? currentBlog.title : '',
+        banner_image_url: currentBlog ? currentBlog.banner_image_url : null,
+        content: currentBlog ? currentBlog.content : '',
+        tags: currentBlog ? currentBlog.tags : '',
     };
 
     useEffect(() => {
         if (!open) {
-            setFileList([]);
-            setBannerImgList([]);
+            setBannerImgList(currentBlog ? [{ uid: currentBlog._id, url: currentBlog.banner_image_url }] : []);
         }
-    }, [open]);
+    }, [open, currentBlog]);
+
+    const handleCancel = () => {
+        setOpen(false);
+        if (formRef.current) {
+            formRef.current.resetForm(); 
+        }
+        setBannerImgList([]); 
+        setCurrentBlog(null); 
+    };
 
     return (
         <Modal
             centered
             open={open}
-            onCancel={() => setOpen(false)}
+            onCancel={handleCancel}
             width={1000}
+            destroyOnClose={true}
             footer={null}
         >
             <Formik
+                innerRef={formRef}
                 initialValues={initialValues}
                 validationSchema={BlogSchema}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
-                    console.log("Submitted Values:", values);
-                    addBlog({
+                    handleSubmitBlog({
                         ...values,
-                        banner_image_url: values.banner_image_url, // Adjust as needed
+                        // _id: currentBlog ? currentBlog._id : uuidv4(),
                     });
                     setSubmitting(false);
-                    resetForm({ values: initialValues });
-                    setFileList([]);
-                    setBannerImgList([]);
+                    resetForm(); 
+                    setBannerImgList([]); 
                     setOpen(false);
+                    setCurrentBlog(null);
                 }}
             >
-                {({ setFieldValue, handleSubmit, isSubmitting, values, errors, touched }) => (
+                {({ setFieldValue, handleSubmit, isSubmitting, touched, errors }) => (
                     <MainForm onSubmit={handleSubmit}>
                         <Row gutter={20}>
                             <Col span={12}>
@@ -111,8 +120,13 @@ const BlogModal = ({ open, setOpen, addBlog, categories }) => {
                             </Col>
                         </Row>
 
-                        <Button type="primary" htmlType="submit" loading={isSubmitting} style={{ marginTop: 20 }}>
-                            Submit
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isSubmitting}
+                            style={{ marginTop: 20 }}
+                        >
+                            {currentBlog ? 'Update Blog' : 'Add Blog'}
                         </Button>
                     </MainForm>
                 )}
@@ -122,3 +136,4 @@ const BlogModal = ({ open, setOpen, addBlog, categories }) => {
 };
 
 export default BlogModal;
+

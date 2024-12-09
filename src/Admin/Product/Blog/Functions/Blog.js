@@ -4,7 +4,6 @@ import { db, storage } from '../../../Firebase/firebaseConfig';
 
 const blogCollectionRef = collection(db, 'blogs');
 
-// Function to upload image to Firebase Storage and return the URL
 const uploadImage = async (file) => {
   if (!file) return null;
 
@@ -15,7 +14,6 @@ const uploadImage = async (file) => {
   return url;
 };
 
-// Function to delete image from Firebase Storage
 const deleteImage = async (imageUrl) => {
   if (!imageUrl) return;
 
@@ -32,11 +30,13 @@ const deleteImage = async (imageUrl) => {
 export const Add = async (blog) => {
   try {
     // Upload images if provided
+    const imageUrl = blog.image_url ? await uploadImage(blog.image_url) : null;
     const bannerImageUrl = blog.banner_image_url ? await uploadImage(blog.banner_image_url) : null;
 
     // Construct the blog data object
     const blogData = {
       ...blog,
+      image_url: imageUrl,
       banner_image_url: bannerImageUrl,
       category: blog.category || null,
     };
