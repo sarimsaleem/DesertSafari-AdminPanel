@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Table, Space } from 'antd';
+import { Button, Table, Space, Drawer, Descriptions } from 'antd';
 import "./blog.css";
 import BlogModal from './BlogModal/BlogModal'; // Importing the BlogModal
 import { Add, fetchBlogs, deleteBlog, update } from './Functions/Blog'; // Function handlers for blogs
@@ -13,6 +13,8 @@ const Blog = () => {
     const [currentBlog, setCurrentBlog] = useState(null);
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [drawerVisible, setDrawerVisible] = useState(false);
+    const [fullContent, setFullContent] = useState('');
 
     const loadBlogs = async () => {
         setLoading(true);
@@ -57,15 +59,22 @@ const Blog = () => {
             key: 'title',
         },
         {
-            title: 'Tags',
-            dataIndex: 'tags',
-            key: 'tags',
-        },
-        {
             title: 'Content',
             dataIndex: 'content',
             key: 'content',
-            // render: (text) => text || 'No Content',
+            render: (text) => {
+                const isLongText = text.length > 50;
+                return isLongText ? (
+                    <div>
+                        {text.slice(0, 50)}...
+                        <Button type="link" onClick={() => showFullContent(text)}>
+                            Read More
+                        </Button>
+                    </div>
+                ) : (
+                    text
+                );
+            },
         },
         {
             title: 'Image',
@@ -103,6 +112,7 @@ const Blog = () => {
         },
     ];
 
+
     const renderRight = () => {
         return (
             <div className='btns'>
@@ -114,7 +124,7 @@ const Blog = () => {
                 />
                 <Button
                     onClick={() => {
-                        setCurrentBlog(null); 
+                        setCurrentBlog(null);
                         setOpenModal(true);
                     }}
                     icon={<PlusOutlined />}
@@ -130,6 +140,24 @@ const Blog = () => {
     const headerProps = {
         title: 'Blogs',
         renderRight: () => renderRight(),
+    };
+
+    const showFullContent = (content) => {
+        setFullContent(content);
+        setDrawerVisible(true);
+    };
+
+    const closeDrawer = () => {
+        setDrawerVisible(false);
+        setFullContent('');
+    };
+    const headingStyle = {
+        fontWeight: 'bold',
+        fontSize: '16px',
+    };
+
+    const contentStyle = {
+        fontSize: '14px',
     };
 
     return (
@@ -155,9 +183,26 @@ const Blog = () => {
                     currentBlog={currentBlog}
                     setCurrentBlog={setCurrentBlog}
                 />
+
+                <Drawer
+                    title="Blog Content"
+                    placement="right"
+                    width={400}
+                    onClose={closeDrawer}
+                    open={drawerVisible}
+                >
+                    <Descriptions bordered column={1} layout="vertical">
+                        <Descriptions.Item label={<span style={headingStyle}>Content</span>}>
+                            <p style={contentStyle}>
+                                {fullContent || 'fullContent'}
+                            </p>
+                        </Descriptions.Item>
+                    </Descriptions>
+                </Drawer>
             </PageWrapper>
         </>
     );
+
 };
 
 export default Blog;

@@ -89,7 +89,7 @@ const NavLink = ({ collapsed }) => {
           {
             key: '6',
             icon: <QuestionCircleOutlined />,
-            label: 'blogs',
+            label: 'Blogs',
             onClick: () => navigate('/blogs'),
           },
           {

@@ -6,10 +6,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCurrentBlog }) => {
     const formRef = useRef(); // Create a ref for the Formik form
-    console.log(currentBlog, "blog")
-    const [bannerImgList, setBannerImgList] = useState(
-        currentBlog ? [{ uid: currentBlog._id, url: currentBlog.banner_image_url }] : []
-    );
+
+    const [bannerImgList, setBannerImgList] = useState([]);
+
+    useEffect(() => {
+        if (open) {
+            if (currentBlog?.banner_image_url) {
+                setBannerImgList([{ uid: currentBlog?._id, url: currentBlog?.banner_image_url }])
+            }
+        }
+    }, [open])
 
     const BlogSchema = Yup.object().shape({
         title: Yup.string().required('Blog Title is required'),
@@ -21,7 +27,7 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
         title: currentBlog ? currentBlog.title : '',
         banner_image_url: currentBlog ? currentBlog.banner_image_url : null,
         content: currentBlog ? currentBlog.content : '',
-        tags: currentBlog ? currentBlog.tags : '',
+        // tags: currentBlog ? currentBlog.tags : '',
     };
 
     useEffect(() => {
@@ -33,10 +39,10 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
     const handleCancel = () => {
         setOpen(false);
         if (formRef.current) {
-            formRef.current.resetForm(); 
+            formRef.current.resetForm();
         }
-        setBannerImgList([]); 
-        setCurrentBlog(null); 
+        setBannerImgList([]);
+        setCurrentBlog(null);
     };
 
     return (
@@ -55,11 +61,10 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                 onSubmit={(values, { setSubmitting, resetForm }) => {
                     handleSubmitBlog({
                         ...values,
-                        // _id: currentBlog ? currentBlog._id : uuidv4(),
                     });
                     setSubmitting(false);
-                    resetForm(); 
-                    setBannerImgList([]); 
+                    resetForm();
+                    setBannerImgList([]);
                     setOpen(false);
                     setCurrentBlog(null);
                 }}
@@ -67,7 +72,7 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                 {({ setFieldValue, handleSubmit, isSubmitting, touched, errors }) => (
                     <MainForm onSubmit={handleSubmit}>
                         <Row gutter={20}>
-                            <Col span={12}>
+                            <Col span={24}>
                                 <Typography.Title level={5}>Blog Title</Typography.Title>
                                 <Field name="title" as={Input} placeholder="Enter blog title" />
                                 {touched.title && errors.title && (
@@ -91,10 +96,6 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                                 )}
                             </Col>
 
-                            <Col span={12}>
-                                <Typography.Title level={5}>Tags</Typography.Title>
-                                <Field name="tags" as={Input} placeholder="Enter tags (comma-separated)" />
-                            </Col>
 
                             <Col span={12}>
                                 <Typography.Title level={5}>Banner Image</Typography.Title>

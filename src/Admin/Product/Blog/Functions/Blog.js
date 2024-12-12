@@ -26,7 +26,6 @@ const deleteImage = async (imageUrl) => {
   }
 };
 
-// Add a new blog to Firestore
 export const Add = async (blog) => {
   try {
     // Upload images if provided
@@ -91,6 +90,7 @@ export const deleteBlog = async (blogId, imageUrl) => {
 // Update an existing blog
 export const update = async (blogId, updatedBlog) => {
   try {
+    console.log('updatedBlog', updatedBlog)
     const blogDocRef = doc(db, 'blogs', blogId);
     console.log(blogDocRef, "Blog Document Reference");
 
@@ -100,19 +100,17 @@ export const update = async (blogId, updatedBlog) => {
       return;
     }
 
-    const imageUrl = updatedBlog.image_url || null;
-    const bannerImageUrl = updatedBlog.banner_image_url || null;
+    const bannerImageUrl = updatedBlog?.banner_image_url || null;
+    const newBannerImageUrl = updatedBlog?.banner_image_url || null;
 
-    let newImageUrl = imageUrl ? await uploadImage(imageUrl) : null;
-    let newBannerImageUrl = bannerImageUrl ? await uploadImage(bannerImageUrl) : null;
-
+    if (typeof updatedBlog?.banner_image_url !== 'string') {
+      newBannerImageUrl = bannerImageUrl ? await uploadImage(bannerImageUrl) : null;
+    }
     const blogData = {
       ...updatedBlog,
-      ...(newImageUrl ? { image_url: newImageUrl } : {}),
       ...(newBannerImageUrl ? { banner_image_url: newBannerImageUrl } : {}),
     };
 
-    // Only add category if it is defined
     if (updatedBlog.category) {
       blogData.category = updatedBlog.category;
     }
