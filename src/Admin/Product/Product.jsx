@@ -148,17 +148,11 @@ const Product = () => {
     const renderRight = () => {
         return (
             <div className='btns'>
-                <Button
-                    type="text"
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    onClick={() => { setCollapsed(!collapsed);
-                    }}
-                    style={{ fontSize: "16px", width: 64, height: 64 }}
-                />
                 <Button onClick={() => setOpenModal(true)}
                     icon={<PlusOutlined />}
                     style={{ marginRight: '16px' }}
                     disabled={loading}
+                    className='modalBtn'
                 >Add Product</Button>
             </div>
         )

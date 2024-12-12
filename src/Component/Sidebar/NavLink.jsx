@@ -1,7 +1,7 @@
-import { Layout, Menu, message, notification } from 'antd';
+import { Layout, Menu, notification } from 'antd';
 import logo from '../../Admin/assets/logo2.png';
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
 import { UploadOutlined, UserOutlined, VideoCameraOutlined, ShoppingCartOutlined, QuestionCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import { signOut } from 'firebase/auth';
 import { auth } from "../../Admin/Firebase/firebaseConfig";
@@ -9,25 +9,15 @@ import { auth } from "../../Admin/Firebase/firebaseConfig";
 const { Sider } = Layout;
 
 const NavLink = ({ collapsed }) => {
-  console.log(collapsed)
+
+  console.log(collapsed , "collapsed")
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const routeToKeyMap = {
-    '/': '1',
-    '/categories': '2',
-    '/faqs': '3',
-    '/orders': '4',
-    '/queries': '5',
-    '/blogs': '6',
-  };
-
-  const selectedKey = routeToKeyMap[location.pathname] || '1';
-
+  // Handle logout logic
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        navigate("/");
+        navigate("/"); 
         notification.success({
           message: "Logout Successful",
         });
@@ -53,54 +43,51 @@ const NavLink = ({ collapsed }) => {
       <Menu
         theme="dark"
         mode="inline"
-        selectedKeys={[selectedKey]}
         items={[
           {
-
             key: '1',
             icon: <UserOutlined />,
             label: 'Product',
-            onClick: () => navigate('/'),
+            onClick: () => navigate('/'), // Navigate to the Product page
           },
           {
             key: '2',
             icon: <VideoCameraOutlined />,
             label: 'Categories',
-            onClick: () => navigate('/categories'),
+            onClick: () => navigate('/categories'), // Navigate to Categories
           },
           {
             key: '3',
             icon: <UploadOutlined />,
             label: 'FAQs',
-            onClick: () => navigate('/faqs'),
+            onClick: () => navigate('/faqs'), // Navigate to FAQs page
           },
           {
             key: '4',
             icon: <ShoppingCartOutlined />,
             label: 'Orders',
-            onClick: () => navigate('/orders'),
+            onClick: () => navigate('/orders'), // Navigate to Orders page
           },
           {
             key: '5',
             icon: <QuestionCircleOutlined />,
             label: 'Queries',
-            onClick: () => navigate('/queries'),
+            onClick: () => navigate('/queries'), // Navigate to Queries page
           },
           {
             key: '6',
             icon: <QuestionCircleOutlined />,
             label: 'Blogs',
-            onClick: () => navigate('/blogs'),
+            onClick: () => navigate('/blogs'), // Navigate to Blogs page
           },
           {
             key: '7',
             icon: <LogoutOutlined />,
             label: 'Sign Out',
-            onClick: () => handleLogout(),
+            onClick: handleLogout, // Trigger logout function
           },
         ]}
       />
-      {/* <Footer>Footer</Footer>   */}
     </Sider>
   );
 };

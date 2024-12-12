@@ -117,12 +117,6 @@ const Blog = () => {
         return (
             <div className='btns'>
                 <Button
-                    type="text"
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    onClick={() => { setCollapsed(!collapsed); }}
-                    style={{ fontSize: "16px", width: 64, height: 64 }}
-                />
-                <Button
                     onClick={() => {
                         setCurrentBlog(null);
                         setOpenModal(true);
@@ -130,6 +124,7 @@ const Blog = () => {
                     icon={<PlusOutlined />}
                     style={{ marginRight: '16px' }}
                     disabled={loading}
+                    className='modalBtn'
                 >
                     Add Blog
                 </Button>
@@ -199,7 +194,9 @@ const Blog = () => {
                         </Descriptions.Item>
                     </Descriptions>
                 </Drawer>
+                    
             </PageWrapper>
+            
         </>
     );
 

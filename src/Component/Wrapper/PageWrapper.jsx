@@ -3,6 +3,7 @@ import Navbar from './../Navbar/Navbar';
 import { Layout } from "antd";
 import NavLink from "./../Sidebar/NavLink";
 import './pageWrapper.css';
+import Protected from "../../Routes/Protected";
 
 const { Content } = Layout;
 
@@ -14,7 +15,7 @@ function PageWrapper({
 }) {
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            <NavLink collapsed={collapsed} />
+            {/* <NavLink collapsed={collapsed} /> */}
 
             <Layout>
                 {noNavar ? null : <Navbar  {...headerProps}  />}
