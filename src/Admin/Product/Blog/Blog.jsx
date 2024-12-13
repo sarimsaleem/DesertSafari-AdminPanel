@@ -25,19 +25,16 @@ const Blog = () => {
 
     const handleSubmitBlog = async (blog) => {
         setLoading(true);
-
         if (currentBlog?._id) {
-            // Update the existing blog
             await update(currentBlog._id, blog);
         } else {
-            // Add a new blog
             const blogId = uuidv4();
             await Add({ ...blog, _id: blogId });
         }
 
         await loadBlogs();
         setOpenModal(false);
-        setCurrentBlog(null); // Clear the currentBlog state after submission
+        setCurrentBlog(null);
         setLoading(false);
     };
 
@@ -194,9 +191,9 @@ const Blog = () => {
                         </Descriptions.Item>
                     </Descriptions>
                 </Drawer>
-                    
+
             </PageWrapper>
-            
+
         </>
     );
 

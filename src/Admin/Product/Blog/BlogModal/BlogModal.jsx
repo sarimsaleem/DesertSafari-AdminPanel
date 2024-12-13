@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
 
 const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCurrentBlog }) => {
-    const formRef = useRef(); // Create a ref for the Formik form
+    const formRef = useRef();
 
     const [bannerImgList, setBannerImgList] = useState([]);
 
@@ -27,7 +27,6 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
         title: currentBlog ? currentBlog.title : '',
         banner_image_url: currentBlog ? currentBlog.banner_image_url : null,
         content: currentBlog ? currentBlog.content : '',
-        // tags: currentBlog ? currentBlog.tags : '',
     };
 
     useEffect(() => {
@@ -59,6 +58,7 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                 initialValues={initialValues}
                 validationSchema={BlogSchema}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
+                    console.log(values,"valuesvalues")
                     handleSubmitBlog({
                         ...values,
                     });
