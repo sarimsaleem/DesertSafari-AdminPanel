@@ -30,7 +30,7 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
 
     const modalTitle = (
         <Title className='categoryTitle' level={3} style={{ marginTop: "10px", marginBottom: "20px", fontWeight:"700" }}>
-            {isEditing ? 'Edit Category' : 'Add Category'}
+            {isEditing ? 'Update Category' : 'Add Category'}
         </Title>
     );
 

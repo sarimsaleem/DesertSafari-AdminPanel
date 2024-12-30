@@ -12,10 +12,10 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
     useEffect(() => {
         if (open) {
             if (currentBlog?.banner_image_url) {
-                setBannerImgList([{ uid: currentBlog?._id, url: currentBlog?.banner_image_url }])
+                setBannerImgList([{ uid: currentBlog?._id, url: currentBlog?.banner_image_url }]);
             }
         }
-    }, [open])
+    }, [open]);
 
     const BlogSchema = Yup.object().shape({
         title: Yup.string().required('Blog Title is required'),
@@ -53,12 +53,17 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
             destroyOnClose={true}
             footer={null}
         >
+            <div style={{ marginTop: "10px", textAlign: "center", marginBottom: "20px", fontWeight: "900" }}>
+                <Typography.Title level={3}>
+                    {currentBlog ? 'Update Blog' : 'Add Blog'}
+                </Typography.Title>
+            </div>
+
             <Formik
                 innerRef={formRef}
                 initialValues={initialValues}
                 validationSchema={BlogSchema}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
-                    console.log(values,"valuesvalues")
                     handleSubmitBlog({
                         ...values,
                     });
@@ -96,9 +101,8 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                                 )}
                             </Col>
 
-
                             <Col span={12}>
-                                <Typography.Title level={5}>Banner Image</Typography.Title>
+                                <Typography.Title level={5}>Select Image</Typography.Title>
                                 <Upload
                                     fileList={bannerImgList}
                                     beforeUpload={(file) => {
@@ -110,10 +114,10 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                                         setFieldValue('banner_image_url', null);
                                         setBannerImgList([]);
                                     }}
-                                    listType="picture"
+                                    listType="picture-card"
                                     maxCount={1}
                                 >
-                                    <Button>Select Banner Image</Button>
+                                    <Button>Select Image</Button>
                                 </Upload>
                                 {touched.banner_image_url && errors.banner_image_url && (
                                     <Typography.Text type="danger">{errors.banner_image_url}</Typography.Text>
@@ -127,7 +131,8 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                             loading={isSubmitting}
                             style={{ marginTop: 20 }}
                         >
-                            {currentBlog ? 'Update Blog' : 'Add Blog'}
+                            {/* {currentBlog ? 'Update Blog' : 'Submit'} */}
+                            Submit
                         </Button>
                     </MainForm>
                 )}
@@ -137,4 +142,3 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
 };
 
 export default BlogModal;
-

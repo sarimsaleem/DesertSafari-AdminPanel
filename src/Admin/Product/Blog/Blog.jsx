@@ -65,14 +65,14 @@ const Blog = () => {
                     <div>
                         {text.slice(0, 50)}...
                         <Button type="link" onClick={() => showFullContent(text)}>
-                            Read More
+                            {/* Read More */}
                         </Button>
                     </div>
                 ) : (
                     text
                 );
             },
-        },
+        },  
         {
             title: 'Image',
             dataIndex: 'banner_image_url',
@@ -82,7 +82,7 @@ const Blog = () => {
                     <img
                         src={url}
                         alt="Blog Banner"
-                        style={{ width: '100px', height: 'auto', borderRadius: '4px' }}
+                        style={{ width: '100px', height: '70px', borderRadius: '4px' }}
                     />
                 ) : (
                     'No Image'

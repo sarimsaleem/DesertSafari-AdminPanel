@@ -74,6 +74,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
     // console.log(currentProduct,'currentProduct')
     return (
         <Modal
+            title={<Typography.Title level={4} style={{ margin: 0, fontWeight: "700" , textAlign:"center" }}>Update Product</Typography.Title>}
             centered
             open={open}
             onCancel={handleCancel}
@@ -276,6 +277,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                 <Typography.Title level={5}>Product Image</Typography.Title>
 
                                 <Upload
+                                    // listType="picture-card"
                                     name="image_url"
                                     fileList={fileList}
                                     beforeUpload={(file) => {
@@ -287,7 +289,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                         setFieldValue('image_url', null);
                                         setFileList([]);
                                     }}
-                                    listType="picture"
+                                    listType="picture-card"
                                     maxCount={1}
                                 >
                                     <Button>Select Image</Button>
@@ -308,7 +310,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                         setFieldValue('banner_image_url', null);
                                         setBannerImgList([]);
                                     }}
-                                    listType="picture"
+                                    listType="picture-card"
                                     maxCount={1}
                                 >
                                     <Button>Select Banner Image</Button>

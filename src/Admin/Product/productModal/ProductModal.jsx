@@ -49,8 +49,11 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
         ) : null
     }
 
+    
+
     return (
         <Modal
+            title={<Typography.Title level={4} style={{ margin: 0, fontWeight: "700" , textAlign:"center" }}>Add Product</Typography.Title>}
             centered
             open={open}
             onCancel={() => setOpen(false)}
@@ -266,7 +269,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                             setFieldValue('image_url', null);
                                             setFileList([]);
                                         }}
-                                        listType="picture"
+                                        listType="picture-card"
                                         maxCount={1}
                                     >
                                         <Button>Select Image</Button>
@@ -287,7 +290,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                             setFieldValue('banner_image_url', null);
                                             setBannerImgList([]);
                                         }}
-                                        listType="picture"
+                                        listType="picture-card"
                                         maxCount={1}
                                     >
                                         <Button>Select Banner Image</Button>
