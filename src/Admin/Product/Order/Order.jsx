@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Layout, Tag, Drawer, Descriptions, } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
-import { fetchOrders } from './OrderFunction/OrderFunction';
+import { Button, Table, Layout, Tag, Drawer, Descriptions } from 'antd';
 import PageWrapper from '../../../Component/Wrapper/PageWrapper';
+import { fetchOrders } from './OrderFunction/OrderFunction';
 
 const { Header, Content, Sider } = Layout;
 
@@ -30,18 +29,6 @@ const Order = () => {
     loadOrders();
   }, []);
 
-  const renderRight = () => {
-    return (
-      <div className='btns'>
-      </div>
-    )
-  }
-
-  const headerProps = {
-    title: 'Orders',
-    renderRight: () => renderRight(),
-  };
-
   const handleViewDetails = (orderInfo) => {
     setDrawerContent(orderInfo);
     setOpenDrawer(true);
@@ -53,7 +40,7 @@ const Order = () => {
       dataIndex: 'orderInfo',
       key: 'fullName',
       render: (val) => val?.fullName,
-      width: 150
+      width: 150,
     },
     {
       title: 'Order ID',
@@ -70,35 +57,31 @@ const Order = () => {
       title: 'Total Amount',
       dataIndex: 'totalAmount',
       key: 'totalAmount',
-      width: 120
+      width: 120,
     },
-
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (val, obj) => {
-        const bookingStatus = obj.bookings?.[0]?.status;
+      render: (_, record) => {
+        const bookingStatus = record.bookings?.[0]?.status;
         return (
           <Tag color={bookingStatus === 'Pending' ? 'orange' : 'green'}>
             {bookingStatus || 'N/A'}
           </Tag>
         );
-      }
+      },
     },
-
     {
       title: 'Actions',
       key: 'actions',
-      render: (text, record) => (
+      render: (_, record) => (
         <Button onClick={() => handleViewDetails(record.orderInfo)}>
           View Details
         </Button>
       ),
     },
   ];
-
-
 
   const expandedRowRender = (record) => {
     const bookingsColumns = [
@@ -112,8 +95,18 @@ const Order = () => {
     ];
 
     return (
-      <Table columns={bookingsColumns} dataSource={record.bookings} rowKey="packageId" pagination={false} />
+      <Table
+        columns={bookingsColumns}
+        dataSource={record.bookings}
+        rowKey="packageId"
+        pagination={false}
+      />
     );
+  };
+
+  const headerProps = {
+    title: 'Orders',
+    renderRight: () => <div className="btns" />,
   };
 
   return (
@@ -122,11 +115,11 @@ const Order = () => {
         title="Order Details"
         placement="right"
         closable
-        width={"60%"}
+        width="60%"
         onClose={() => setOpenDrawer(false)}
         open={openDrawer}
       >
-        <Descriptions bordered column={1} layout='vertical'>
+        <Descriptions bordered column={1} layout="vertical">
           <Descriptions.Item label="Full Name">{drawerContent.fullName || 'N/A'}</Descriptions.Item>
           <Descriptions.Item label="Additional Info">{drawerContent.additionalInfo || 'N/A'}</Descriptions.Item>
           <Descriptions.Item label="Phone Number">{drawerContent.phoneNo || 'N/A'}</Descriptions.Item>
@@ -137,8 +130,7 @@ const Order = () => {
         </Descriptions>
       </Drawer>
 
-      <PageWrapper  collapsed={collapsed} headerProps={headerProps}>
-
+      <PageWrapper collapsed={collapsed} headerProps={headerProps}>
         <Table
           loading={loading}
           columns={columns}
@@ -150,8 +142,6 @@ const Order = () => {
           rowKey="orderId"
         />
       </PageWrapper>
-
-
     </>
   );
 };

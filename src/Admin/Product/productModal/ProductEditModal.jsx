@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card, Space, Switch, Row, Col, Typography } from 'antd';
-import { Formik, Form as MainForm, Field, FieldArray } from 'formik'; 
+import { Formik, Form as MainForm, Field, FieldArray } from 'formik';
 import "./productmodal.css";
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import * as Yup from 'yup';
 
 const { Option } = Select;
@@ -20,7 +20,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
         image_url: Yup.mixed().required('Product Image is required'),
         banner_image_url: Yup.mixed().required('Banner Image is required'),
         price: Yup.number().required('Product Price is required').min(1, 'Price must be greater than 0'),
-      });
+    });
 
     useEffect(() => {
         if (currentProduct) {
@@ -74,7 +74,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
     // console.log(currentProduct,'currentProduct')
     return (
         <Modal
-            title={<Typography.Title level={4} style={{ margin: 0, fontWeight: "700" , textAlign:"center" }}>Update Product</Typography.Title>}
+            title={<Typography.Title level={4} style={{ margin: 0, fontWeight: "700", textAlign: "center" }}>Update Product</Typography.Title>}
             centered
             open={open}
             onCancel={handleCancel}
@@ -257,7 +257,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                                 type="dashed"
                                                 onClick={() =>
                                                     push({
-                                                        _id: uuidv4(),  
+                                                        _id: uuidv4(),
                                                         title: '',
                                                         hide_icon: true,
                                                         data: [{ item: '', itemDescription: '' }],
@@ -292,7 +292,10 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                     listType="picture-card"
                                     maxCount={1}
                                 >
-                                    <Button>Select Image</Button>
+                                    <div>
+                                        <PlusOutlined />
+                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                    </div>
                                 </Upload>
                                 {touched?.image_url && errors?.image_url ? renderError(errors?.image_url) : null}
                             </Col>
@@ -313,7 +316,10 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                     listType="picture-card"
                                     maxCount={1}
                                 >
-                                    <Button>Select Banner Image</Button>
+                                    <div>
+                                        <PlusOutlined />
+                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                    </div>
                                 </Upload>
                                 {touched?.banner_image_url && errors?.banner_image_url ? renderError(errors?.banner_image_url) : null}
                             </Col>

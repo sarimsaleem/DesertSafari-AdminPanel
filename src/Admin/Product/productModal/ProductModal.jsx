@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Form as MainForm, Field, FieldArray } from 'formik';
 import "./productmodal.css";
 import * as Yup from 'yup';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { Modal, Input, Checkbox, Select, Upload, InputNumber, Button, Form, Card, Space, Switch, Col, Row, Typography } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,7 +20,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
         image_url: Yup.mixed().required('Product Image is required'),
         banner_image_url: Yup.mixed().required('Banner Image is required'),
         price: Yup.number().required('Product Price is required').min(1, 'Price must be greater than 0'),
-      });
+    });
 
     const initialValues = {
         image_text: '',
@@ -49,11 +49,11 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
         ) : null
     }
 
-    
+
 
     return (
         <Modal
-            title={<Typography.Title level={4} style={{ margin: 0, fontWeight: "700" , textAlign:"center" }}>Add Product</Typography.Title>}
+            title={<Typography.Title level={4} style={{ margin: 0, fontWeight: "700", textAlign: "center" }}>Add Product</Typography.Title>}
             centered
             open={open}
             onCancel={() => setOpen(false)}
@@ -190,7 +190,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                                             as={Input}
                                                             placeholder="Enter title"
                                                         />
-                                                        <Typography level={5} style={{marginTop: "10px", fontWeight: "600"}}>Hide Icon</Typography>
+                                                        <Typography level={5} style={{ marginTop: "10px", fontWeight: "600" }}>Hide Icon</Typography>
                                                         <Switch
                                                             checked={value?.hide_icon}
                                                             style={{ marginTop: "10px", marginBottom: "20px" }}
@@ -204,7 +204,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                                             style={{ marginBottom: "20px" }}
                                                         />
 
-                                                        {console.log('vavleus',values)}
+                                                        {console.log('vavleus', values)}
 
                                                         {/* Nested FieldArray for data items */}
                                                         <FieldArray name={`content.${index}.data`}>
@@ -272,8 +272,11 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                         listType="picture-card"
                                         maxCount={1}
                                     >
-                                        <Button>Select Image</Button>
-                                    </Upload>
+                                        <div>
+                                            <PlusOutlined />
+                                            <div style={{ marginTop: 8 }}>Upload</div>
+                                        </div>                                    
+                                        </Upload>
                                     {touched?.image_url && errors?.image_url ? renderError(errors?.image_url) : null}
                                 </Col>
                                 <Col className="gutter-row" span={12}>
@@ -293,7 +296,10 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                         listType="picture-card"
                                         maxCount={1}
                                     >
-                                        <Button>Select Banner Image</Button>
+                                        <div>
+                                            <PlusOutlined />
+                                            <div style={{ marginTop: 8 }}>Upload</div>
+                                        </div>
                                     </Upload>
                                     {touched?.banner_image_url && errors?.banner_image_url ? renderError(errors?.banner_image_url) : null}
                                 </Col>

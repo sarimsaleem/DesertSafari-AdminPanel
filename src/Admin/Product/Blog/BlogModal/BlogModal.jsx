@@ -3,6 +3,7 @@ import { Modal, Input, Upload, Button, Row, Col, Typography } from 'antd';
 import { Formik, Form as MainForm, Field } from 'formik';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
+import { PlusOutlined } from '@ant-design/icons';
 
 const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCurrentBlog }) => {
     const formRef = useRef();
@@ -117,7 +118,10 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                                     listType="picture-card"
                                     maxCount={1}
                                 >
-                                    <Button>Select Image</Button>
+                                    <div>
+                                        <PlusOutlined />
+                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                    </div>                                
                                 </Upload>
                                 {touched.banner_image_url && errors.banner_image_url && (
                                     <Typography.Text type="danger">{errors.banner_image_url}</Typography.Text>

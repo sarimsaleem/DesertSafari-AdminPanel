@@ -116,7 +116,7 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
                                 >
                                     {fileList?.length < 1 && (
                                         <div>
-                                            <PlusOutlined />
+                                            <PlusOutlined /> 
                                             <div style={{ marginTop: 8 }}>Upload</div>
                                         </div>
                                     )}

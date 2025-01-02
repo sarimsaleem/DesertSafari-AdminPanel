@@ -15,8 +15,6 @@ function PageWrapper({
 }) {
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            {/* <NavLink collapsed={collapsed} /> */}
-
             <Layout>
                 {noNavar ? null : <Navbar  {...headerProps}  />}
 

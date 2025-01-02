@@ -1,7 +1,7 @@
 import { Layout, Menu, notification } from 'antd';
 import logo from '../../Admin/assets/logo2.png';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined, ShoppingCartOutlined, QuestionCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import { signOut } from 'firebase/auth';
 import { auth } from "../../Admin/Firebase/firebaseConfig";
@@ -10,14 +10,13 @@ const { Sider } = Layout;
 
 const NavLink = ({ collapsed }) => {
 
-  console.log(collapsed , "collapsed")
+  console.log(collapsed, "collapsed")
   const navigate = useNavigate();
 
-  // Handle logout logic
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        navigate("/"); 
+        navigate("/");
         notification.success({
           message: "Logout Successful",
         });
@@ -48,44 +47,48 @@ const NavLink = ({ collapsed }) => {
             key: '1',
             icon: <UserOutlined />,
             label: 'Product',
-            onClick: () => navigate('/'), // Navigate to the Product page
+            onClick: () => navigate('/'),
           },
           {
             key: '2',
             icon: <VideoCameraOutlined />,
             label: 'Categories',
-            onClick: () => navigate('/categories'), // Navigate to Categories
+            onClick: () => navigate('/categories'),
           },
           {
             key: '3',
             icon: <UploadOutlined />,
             label: 'FAQs',
-            onClick: () => navigate('/faqs'), // Navigate to FAQs page
+            onClick: () => navigate('/faqs'),
+
           },
           {
             key: '4',
             icon: <ShoppingCartOutlined />,
             label: 'Orders',
-            onClick: () => navigate('/orders'), // Navigate to Orders page
+            onClick: () => navigate('/orders'),
+
           },
           {
             key: '5',
             icon: <QuestionCircleOutlined />,
             label: 'Queries',
-            onClick: () => navigate('/queries'), // Navigate to Queries page
+            onClick: () => navigate('/queries'),
+
           },
           {
             key: '6',
             icon: <QuestionCircleOutlined />,
             label: 'Blogs',
-            onClick: () => navigate('/blogs'), // Navigate to Blogs page
+            onClick: () => navigate('/blogs'),
+
           },
           {
             key: '7',
             icon: <LogoutOutlined />,
             label: 'Sign Out',
-            onClick: handleLogout, // Trigger logout function
-          },
+            onClick: handleLogout,
+          }
         ]}
       />
     </Sider>
