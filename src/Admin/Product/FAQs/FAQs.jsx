@@ -137,27 +137,33 @@ const FAQs = () => {
   };
 
   return (
-    <div className="faqs">
-      <PageWrapper
-        collapsed={collapsed}
-        headerProps={headerProps}
-      >
-        <Table
-          dataSource={faqs}
-          columns={columns}
-          rowKey="id"
-          loading={loading}
-        />
-        <FAQModal
-          open={modalOpen}
-          setOpen={setModalOpen}
-          addFAQ={handleAddFAQ}
-          updateFAQ={handleUpdateFAQ}
-          isEditing={isEditing}
-          currentFAQ={currentFAQ}
-        />
-      </PageWrapper>
-    </div>
+
+    <PageWrapper
+      collapsed={collapsed}
+      headerProps={headerProps}
+    >
+
+      <Table
+        loading={loading}
+        columns={columns}
+        dataSource={faqs}
+        rowKey="_id"
+        pagination={{
+          pageSize: 10,
+          showSizeChanger: false,
+          defaultCurrent: 1,
+        }}
+
+      />
+      <FAQModal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        addFAQ={handleAddFAQ}
+        updateFAQ={handleUpdateFAQ}
+        isEditing={isEditing}
+        currentFAQ={currentFAQ}
+      />
+    </PageWrapper>
   );
 };
 

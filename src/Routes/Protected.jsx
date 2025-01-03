@@ -11,17 +11,15 @@ function Protected() {
 
     const [collapsed, setCollapsed] = useState(false);
 
-    // Function to toggle collapse state
     const toggleCollapse = () => {
         setCollapsed((prev) => !prev);
     };
 
     console.log(collapsed)
     return (
-        // <PageWrapper>
-        <Layout>
+        <Layout style={{ height: '100%', overflow: 'auto' }}>
             <NavLink collapsed={collapsed} />
-            <Layout style={{background: "white"}}>
+            <Layout style={{ background: "white" }}>
 
                 <Button
                     type="text"
@@ -29,7 +27,7 @@ function Protected() {
                     onClick={() => {
                         setCollapsed(!collapsed);
                     }}
-                    style={{ fontSize: "16px", width: 64, height: 64 }}
+                    style={{ fontSize: "16px", width: 64, height: 64, padding: "30px" }}
                 />
                 <Routes>
                     <Route path="/" element={<Product />} />
@@ -38,11 +36,9 @@ function Protected() {
                     <Route path="/orders" element={<Order />} />
                     <Route path="/queries" element={<Queries />} />
                     <Route path="/blogs" element={<Blog />} />
-                    {/* Add other routes here */}
                 </Routes>
             </Layout>
         </Layout>
-        // </PageWrapper> 
     )
 }
 

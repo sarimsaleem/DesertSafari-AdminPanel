@@ -111,7 +111,7 @@ const Categories = () => {
       key: 'show_on_menu',
       render: (show_on_menu) => (
         show_on_menu ? 'Yes' : 'No'
-      ),
+      ),  
     },
     {
       title: "Background Image",
@@ -163,7 +163,7 @@ const Categories = () => {
   }
 
   return (
-    <div className="page" >
+    <>
       <PageWrapper
         collapsed={collapsed}
         headerProps={headerProps}
@@ -186,7 +186,7 @@ const Categories = () => {
         isEditing={isEditing}
         currentCategory={currentCategory}
       />
-    </div>
+      </>
   );
 };
 

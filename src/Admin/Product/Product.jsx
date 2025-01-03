@@ -235,30 +235,33 @@ const Product = () => {
                     columns={columns}
                     dataSource={products}
                     rowKey="_id"
+                    // style={{padding:"20px"}}
                     pagination={{
                         pageSize: 10,
+                        // total: 70,
+                        showSizeChanger: false,
+                        // current: 1,
+                        defaultCurrent: 1,
                     }}
                     scroll={{
                         x: 'max-content',
                     }}
                 />
-
-                <ProductModal
-                    open={openModal}
-                    setOpen={setOpenModal}
-                    addProduct={handleAddProduct}
-                    categories={categories}
-                />
-
-                <ProductEditModal
-                    open={openEditModal}
-                    setOpen={setOpenEditModal}
-                    update={handleEditProduct}
-                    currentProduct={currentProduct}
-                    categories={categories}
-                />
             </PageWrapper>
+            <ProductModal
+                open={openModal}
+                setOpen={setOpenModal}
+                addProduct={handleAddProduct}
+                categories={categories}
+            />
 
+            <ProductEditModal
+                open={openEditModal}
+                setOpen={setOpenEditModal}
+                update={handleEditProduct}
+                currentProduct={currentProduct}
+                categories={categories}
+            />
         </>
     );
 };
