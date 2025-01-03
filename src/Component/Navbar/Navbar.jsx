@@ -13,7 +13,7 @@ function Navbar(props) {
         <div className="navbar-left">
         </div>
         <div className="navbar-right">
-        {renderRight() ? <div className="navbar-right">{renderRight()}</div> : null}
+        {renderRight() ? <div className="navbar-right"><h1 className="title">{title}</h1> {renderRight()}</div> : null}
         </div>
     </div>
   );

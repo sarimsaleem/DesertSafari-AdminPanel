@@ -62,6 +62,8 @@ const Queries = () => {
 
     const headerProps = {
         renderRight: () => renderRight(),
+        title: 'Queries',
+
     };
 
     return (

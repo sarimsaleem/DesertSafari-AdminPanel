@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, } from '@ant-design/icons';
-import { Button, Table, Space, Drawer, Descriptions, Tag, Divider } from 'antd';
+import { Button, Table, Space, Drawer, Descriptions, Tag, Divider, Popconfirm } from 'antd';
 import "./product.css";
 import ProductModal from './productModal/ProductModal';
 import ProductEditModal from './productModal/ProductEditModal';
@@ -114,24 +114,25 @@ const Product = () => {
             render: (image) => image ? <img src={image} alt="Product" width={100} /> : 'No Image',
         },
         {
-            title: 'Details',
-            key: 'details',
-            render: (_, record) => (
-                <Button onClick={() => showDrawer(record)}>
-                    View
-                </Button>
-            ),
-        },
-        {
             title: 'Actions',
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
+                    <Button onClick={() => showDrawer(record)}>
+                        View
+                    </Button>
                     <Button onClick={() => {
                         setCurrentProduct(record);
                         setOpenEditModal(true);
                     }}>Edit</Button>
-                    <Button danger onClick={() => handleDeleteProduct(record._id, record.image_url)}>Delete</Button>
+                    <Popconfirm
+                        title="Are you sure you want to delete this product?"
+                        onConfirm={() => handleDeleteProduct(record._id, record.image_url)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button danger>Delete</Button>
+                    </Popconfirm>
                 </Space>
             )
         }

@@ -71,14 +71,14 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
         resetForm();
         setOpen(false);
     }
-    // console.log(currentProduct,'currentProduct')
     return (
         <Modal
             title={<Typography.Title level={4} style={{ margin: 0, fontWeight: "700", textAlign: "center" }}>Update Product</Typography.Title>}
             centered
             open={open}
             onCancel={handleCancel}
-            width={1000}
+            width={1000}    
+            footer={null}
         >
             <Formik
                 innerRef={formikRef}
@@ -323,8 +323,6 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                                 </Upload>
                                 {touched?.banner_image_url && errors?.banner_image_url ? renderError(errors?.banner_image_url) : null}
                             </Col>
-
-
                         </Row>
 
                         <Button type="primary" htmlType="submit" loading={isSubmitting} style={{ marginTop: "20px" }}>

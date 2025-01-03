@@ -19,3 +19,11 @@
   align-items: center;
   background-color: none !important;
 }
+.title{
+  position: absolute;
+  top: -6px;
+  right: 0;
+  left: 50%;
+  bottom: 0;
+  /* margin: 20px 0 0 15px; */
+}

@@ -4,6 +4,8 @@ import { Formik, Form as MainForm, Field } from 'formik';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
 import { PlusOutlined } from '@ant-design/icons';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCurrentBlog }) => {
     const formRef = useRef();
@@ -90,10 +92,12 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                                 <Typography.Title level={5}>Blog Content</Typography.Title>
                                 <Field name="content">
                                     {({ field }) => (
-                                        <Input.TextArea
-                                            {...field}
+                                        <ReactQuill
+                                            theme="snow"
+                                            value={field.value}
+                                            onChange={(value) => setFieldValue('content', value)}
                                             placeholder="Enter blog content"
-                                            rows={6}
+                                            style={{ height: '200px', marginBottom: '50px' }}
                                         />
                                     )}
                                 </Field>
@@ -121,7 +125,7 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                                     <div>
                                         <PlusOutlined />
                                         <div style={{ marginTop: 8 }}>Upload</div>
-                                    </div>                                
+                                    </div>
                                 </Upload>
                                 {touched.banner_image_url && errors.banner_image_url && (
                                     <Typography.Text type="danger">{errors.banner_image_url}</Typography.Text>
@@ -135,7 +139,6 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                             loading={isSubmitting}
                             style={{ marginTop: 20 }}
                         >
-                            {/* {currentBlog ? 'Update Blog' : 'Submit'} */}
                             Submit
                         </Button>
                     </MainForm>

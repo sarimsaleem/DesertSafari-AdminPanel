@@ -16,15 +16,15 @@ function PageWrapper({
     return (
         <Layout style={{ minHeight: "100vh" }}>
             <Layout>
-                {noNavar ? null : <Navbar  {...headerProps}  />}
+                {noNavar ? null : <Navbar  {...headerProps} />}
 
                 <Content style={{ margin: '24px 16px 0', overflowY: 'scroll', height: 'calc(100vh - 64px)' }}>
-                        <div style={{ padding: 24, minHeight: 360, background: '#fff', overflowY: 'auto' }}>
-                            <div className="table-container">
+                    <div style={{ padding: 24, minHeight: 360, background: '#fff', overflowY: 'auto' }}>
+                        <div className="table-container">
                             {children}
-                            </div>
                         </div>
-                    </Content>
+                    </div>
+                </Content>
             </Layout>
         </Layout>
     );

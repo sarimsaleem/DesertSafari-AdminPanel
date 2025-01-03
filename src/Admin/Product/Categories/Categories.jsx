@@ -127,14 +127,14 @@ const Categories = () => {
       render: (_, record) => (
         <Space size="middle">
           <Button onClick={() => handleEditCategory(record)}>Edit</Button>
-          {/* <Popconfirm
+          <Popconfirm
             title="Are you sure to delete this category?"
             onConfirm={() => handleDelete(record._id, record.background_image)}
             okText="Yes"
             cancelText="No"
-          > */}
+          >
             <Button danger>Delete</Button>
-          {/* </Popconfirm> */}
+          </Popconfirm>
         </Space>
       ),
     },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Table, Space, Drawer, Descriptions } from 'antd';
+import { Button, Table, Space, Drawer, Descriptions, Popconfirm } from 'antd';
 import "./blog.css";
 import BlogModal from './BlogModal/BlogModal'; // Importing the BlogModal
 import { Add, fetchBlogs, deleteBlog, update } from './Functions/Blog'; // Function handlers for blogs
@@ -72,7 +72,7 @@ const Blog = () => {
                     text
                 );
             },
-        },  
+        },
         {
             title: 'Image',
             dataIndex: 'banner_image_url',
@@ -101,9 +101,14 @@ const Blog = () => {
                     >
                         Edit
                     </Button>
-                    <Button danger onClick={() => handleDeleteBlog(record._id)}>
-                        Delete
-                    </Button>
+                    <Popconfirm
+                        title="Are you sure you want to delete this blog?"
+                        onConfirm={() => handleDeleteBlog(record._id)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button danger>Delete</Button>
+                    </Popconfirm>
                 </Space>
             ),
         },
