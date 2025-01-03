@@ -5,7 +5,7 @@ import "./productmodal.css";
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
-
+  
 const { Option } = Select;
 
 const ProductEditModal = ({ open, setOpen, update, currentProduct, categories }) => {
