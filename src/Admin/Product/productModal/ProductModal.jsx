@@ -88,12 +88,12 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                         <MainForm onSubmit={handleSubmit}>
                             <Row gutter={20}>
                                 <Col className="gutter-row" span={12}>
-                                    <Typography.Title level={5}>Prouct Name</Typography.Title>
+                                    <Typography.Title level={5}>Name</Typography.Title>
                                     <Field name="image_text" as={Input} placeholder="Enter product name" />
                                     {touched?.image_text && errors?.image_text ? renderError(errors?.image_text) : null}
                                 </Col>
                                 <Col className="gutter-row" span={12}>
-                                    <Typography.Title level={5}>Product Card Detail</Typography.Title>
+                                    <Typography.Title level={5}>Card Detail</Typography.Title>
                                     <Field name="event_name" as={Input} placeholder="Enter product card detail" />
                                     {touched?.event_name && errors?.event_name ? renderError(errors?.event_name) : null}
                                 </Col>
@@ -110,7 +110,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     </Field>
                                 </Col>
                                 <Col className="gutter-row" span={12}>
-                                    <Typography.Title level={5}>Product Category</Typography.Title>
+                                    <Typography.Title level={5}>Category</Typography.Title>
                                     <Field name="category">
                                         {({ field }) => (
                                             <Select
@@ -132,7 +132,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
 
                                 </Col>
                                 <Col className="gutter-row" span={12}>
-                                    <Typography.Title level={5}>Product Price</Typography.Title>
+                                    <Typography.Title level={5}>Price</Typography.Title>
                                     <Field name="price">
                                         {({ field }) => (
                                             <InputNumber
@@ -147,7 +147,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     {touched?.price && errors?.price ? renderError(errors?.price) : null}
                                 </Col>
                                 <Col className="gutter-row" span={12}>
-                                    <Typography.Title level={5}>special Note</Typography.Title>
+                                    <Typography.Title level={5}>Special Note</Typography.Title>
                                     <Field name="special_note">
                                         {({ field }) => (
                                             <Input.TextArea
@@ -160,7 +160,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     {touched?.special_note && errors?.special_note ? renderError(errors?.special_note) : null}
                                 </Col>
                                 <Col className="gutter-row" span={12}>
-                                    <Typography.Title level={5}>Product description</Typography.Title>
+                                    <Typography.Title level={5}>Description</Typography.Title>
 
                                     <Field name="description">
                                         {({ field }) => (
@@ -256,7 +256,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     </FieldArray>
                                 </Col>
                                 <Col className="gutter-row" span={12}>
-                                    <Typography.Title level={5}>Product Image</Typography.Title>
+                                    <Typography.Title level={5}>Image</Typography.Title>
                                     <Upload
                                         name="image_url"
                                         fileList={fileList}

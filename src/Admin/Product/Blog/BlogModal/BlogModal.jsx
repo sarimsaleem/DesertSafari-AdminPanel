@@ -81,7 +81,7 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                     <MainForm onSubmit={handleSubmit}>
                         <Row gutter={20}>
                             <Col span={24}>
-                                <Typography.Title level={5}>Blog Title</Typography.Title>
+                                <Typography.Title level={5}>Title</Typography.Title>
                                 <Field name="title" as={Input} placeholder="Enter blog title" />
                                 {touched.title && errors.title && (
                                     <Typography.Text type="danger">{errors.title}</Typography.Text>
@@ -89,7 +89,7 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                             </Col>
 
                             <Col span={24}>
-                                <Typography.Title level={5}>Blog Content</Typography.Title>
+                                <Typography.Title level={5}>Content</Typography.Title>
                                 <Field name="content">
                                     {({ field }) => (
                                         <ReactQuill
@@ -107,7 +107,7 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
                             </Col>
 
                             <Col span={12}>
-                                <Typography.Title level={5}>Select Image</Typography.Title>
+                                <Typography.Title level={5}>Image</Typography.Title>
                                 <Upload
                                     fileList={bannerImgList}
                                     beforeUpload={(file) => {

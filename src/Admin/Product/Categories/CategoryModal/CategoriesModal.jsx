@@ -78,7 +78,7 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
 
                         <Row gutter={20}>
                             <Col className="gutter-row" span={24}>
-                                <Typography.Title level={5}>Category Name</Typography.Title>
+                                <Typography.Title level={5}>Name</Typography.Title>
                                 <Field name="category_name" as={Input} placeholder="Enter category name" />
                                 {touched.category_name && errors.category_name ? (
                                     <div className="ant-form-item-explain">{errors.category_name}</div>
@@ -103,7 +103,7 @@ const CategoriesModal = ({ open, setOpen, addCategory, updateCategory, isEditing
                                 </Checkbox>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <Typography.Title level={5}>Category Image</Typography.Title>
+                                <Typography.Title level={5}>Image</Typography.Title>
                                 <Upload
                                     listType="picture-card"
                                     fileList={fileList}
