@@ -8,6 +8,7 @@ import { Add, fetchProducts, deleteProduct, update } from './Function/productFun
 import { fetchCategories } from './Categories/CategoriesFunctions/CategoriesFunction';
 import { v4 as uuidv4 } from 'uuid';
 import PageWrapper from '../../Component/Wrapper/PageWrapper';
+import { Image } from 'antd';
 
 const Product = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -105,13 +106,15 @@ const Product = () => {
             title: 'Product Image',
             dataIndex: 'image_url',
             key: 'image_url',
-            render: (image) => image ? <img src={image} alt="Product" width={100} /> : 'No Image',
+            render: (image) =>
+                image ? <Image src={image} alt="Product" width={100} preview /> : 'No Image',
         },
         {
             title: 'Banner Image',
             dataIndex: 'banner_image_url',
             key: 'banner_image_url',
-            render: (image) => image ? <img src={image} alt="Product" width={100} /> : 'No Image',
+            render: (image) =>
+                image ? <Image src={image} alt="Banner" width={100} preview /> : 'No Image',
         },
         {
             title: 'Actions',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Table, Space, Drawer, Descriptions, Popconfirm } from 'antd';
+import { Button, Table, Space, Drawer, Descriptions, Popconfirm, Image } from 'antd';
 import "./blog.css";
 import BlogModal from './BlogModal/BlogModal'; // Importing the BlogModal
 import { Add, fetchBlogs, deleteBlog, update } from './Functions/Blog'; // Function handlers for blogs
@@ -79,7 +79,7 @@ const Blog = () => {
             key: 'banner_image_url',
             render: (url) =>
                 url ? (
-                    <img
+                    <Image
                         src={url}
                         alt="Blog Banner"
                         style={{ width: '100px', height: '70px', borderRadius: '4px' }}

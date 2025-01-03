@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined, PlusOutlined, } from '@ant-design/icons';
-import { Button, Space, Table, Popconfirm, Typography, } from 'antd';
+import { Button, Space, Table, Popconfirm, Typography, Image, } from 'antd';
 import CategoriesModal from './CategoryModal/CategoriesModal';
 import { Add, Update, fetchCategories, deleteCategory } from './CategoriesFunctions/CategoriesFunction';
 import { v4 as uuidv4 } from 'uuid';
@@ -118,7 +118,7 @@ const Categories = () => {
       dataIndex: "image_url",
       key: "image_url",
       render: (text, record) => (
-        <img src={record.image_url} style={{ width: 100 }} />
+        <Image src={record.image_url} style={{ width: 100 }} />
       ),
     },
     {
