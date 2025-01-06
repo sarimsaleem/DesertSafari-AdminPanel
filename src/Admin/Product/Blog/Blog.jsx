@@ -15,6 +15,7 @@ const Blog = () => {
     const [loading, setLoading] = useState(false);
     const [drawerVisible, setDrawerVisible] = useState(false);
     const [fullContent, setFullContent] = useState('');
+    const [fullTitle, setFullTitle] = useState('');
 
     const loadBlogs = async () => {
         setLoading(true);
@@ -93,6 +94,7 @@ const Blog = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
+                    <Button onClick={() => showFullContent(record.content, record.title)}>View</Button>
                     <Button
                         onClick={() => {
                             setCurrentBlog(record);
@@ -111,7 +113,7 @@ const Blog = () => {
                     </Popconfirm>
                 </Space>
             ),
-        },
+        }
     ];
 
 
@@ -139,14 +141,17 @@ const Blog = () => {
         renderRight: () => renderRight(),
     };
 
-    const showFullContent = (content) => {
+    const showFullContent = (content,title) => {
         setFullContent(content);
+        setFullTitle(title);
         setDrawerVisible(true);
+
     };
 
     const closeDrawer = () => {
         setDrawerVisible(false);
         setFullContent('');
+        setFullTitle('')
     };
     const headingStyle = {
         fontWeight: 'bold',
@@ -184,14 +189,19 @@ const Blog = () => {
                 <Drawer
                     title="Blog Content"
                     placement="right"
-                    width={400}
+                    width={"60%"}
                     onClose={closeDrawer}
                     open={drawerVisible}
                 >
                     <Descriptions bordered column={1} layout="vertical">
+                        <Descriptions.Item label={<span style={headingStyle}>Title</span>}>
+                            <p style={contentStyle}>
+                                { fullTitle || 'No Title'}
+                            </p>
+                        </Descriptions.Item>
                         <Descriptions.Item label={<span style={headingStyle}>Content</span>}>
                             <p style={contentStyle}>
-                                {fullContent || 'fullContent'}
+                                {fullContent || 'No Content'}
                             </p>
                         </Descriptions.Item>
                     </Descriptions>

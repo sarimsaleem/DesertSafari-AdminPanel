@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Layout, notification, Popover } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import { Button, Table, notification, Popover, Drawer, Descriptions } from 'antd';
 import { db } from "./../../Firebase/firebaseConfig";
 import { collection, getDocs } from 'firebase/firestore';
 import PageWrapper from '../../../Component/Wrapper/PageWrapper';
-
 
 const Queries = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [loading, setLoading] = useState(false);
     const [orders, setOrders] = useState([]);
+    const [drawerVisible, setDrawerVisible] = useState(false);
+    const [selectedQuery, setSelectedQuery] = useState(null);
+
+    const headingStyle = {
+        fontWeight: 'bold',
+        fontSize: '16px',
+    };
+
+    const contentStyle = {
+        fontSize: '14px',
+    };
 
     const columns = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
@@ -32,7 +41,16 @@ const Queries = () => {
                     </span>
                 </Popover>
             ),
-        }
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Button  onClick={() => handleViewQuery(record)}>
+                    View Details
+                </Button>
+            ),
+        },
     ];
 
     const fetchQueries = async () => {
@@ -53,17 +71,23 @@ const Queries = () => {
         fetchQueries();
     }, []);
 
+    const handleViewQuery = (record) => {
+        setSelectedQuery(record);
+        setDrawerVisible(true);
+    };
+
+    const closeDrawer = () => {
+        setDrawerVisible(false);
+        setSelectedQuery(null);
+    };
+
     const renderRight = () => {
-        return (
-            <div className='btns'>
-            </div>
-        )
-    }
+        return <div className='btns'></div>;
+    };
 
     const headerProps = {
         renderRight: () => renderRight(),
         title: 'Queries',
-
     };
 
     return (
@@ -74,6 +98,33 @@ const Queries = () => {
                 dataSource={orders}
                 style={{ width: '100%', overflowX: 'auto' }}
             />
+            <Drawer
+                title="Query Details"
+                placement="right"
+                onClose={closeDrawer}
+                visible={drawerVisible}
+                width={"40%"}
+            >
+                {selectedQuery && (
+                    <Descriptions bordered column={1} layout='vertical'>
+                        <Descriptions.Item label={<span style={headingStyle}>Name</span>}>
+                            <span style={contentStyle}>{selectedQuery.name}</span>
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span style={headingStyle}>Email</span>}>
+                            <span style={contentStyle}>{selectedQuery.email}</span>
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span style={headingStyle}>Number</span>}>
+                            <span style={contentStyle}>{selectedQuery.number}</span>
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span style={headingStyle}>Subject</span>}>
+                            <span style={contentStyle}>{selectedQuery.subject}</span>
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span style={headingStyle}>Message</span>}>
+                            <span style={contentStyle}>{selectedQuery.message}</span>
+                        </Descriptions.Item>
+                    </Descriptions>
+                )}
+            </Drawer>
         </PageWrapper>
     );
 };
