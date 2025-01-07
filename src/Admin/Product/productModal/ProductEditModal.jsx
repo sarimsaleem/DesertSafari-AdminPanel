@@ -72,6 +72,20 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
         resetForm();
         setOpen(false);
     }
+
+    const handleConfirm = (formikSubmit) => {
+            Modal.confirm({
+                title: "Are you sure?",
+                content: "Do you want to proceed with submitting this form?",
+                okText: "Yes",
+                cancelText: "No",
+                onOk: () => {
+                    // Trigger the Formik submit handler
+                    formikSubmit();
+                },
+            });
+        };
+
     return (
         <Modal
             title={<Typography.Title level={4} style={{ margin: 0, fontWeight: "700", textAlign: "center" }}>Update Product</Typography.Title>}
@@ -326,7 +340,7 @@ const ProductEditModal = ({ open, setOpen, update, currentProduct, categories })
                             </Col>
                         </Row>
 
-                        <Button type="primary" htmlType="submit" loading={isSubmitting} style={{ marginTop: "20px" }}>
+                        <Button type="primary" htmlType="button" loading={isSubmitting} style={{ marginTop: "20px",padding: "20px 25px", fontSize: "16px" }} onClick={() => handleConfirm(handleSubmit)}>
                             Update
                         </Button>
                     </MainForm>

@@ -47,6 +47,19 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
         setCurrentBlog(null);
     };
 
+    const handleConfirm = (formikSubmit) => {
+        Modal.confirm({
+            title: "Are you sure?",
+            content: "Do you want to proceed with submitting this form?",
+            okText: "Yes",
+            cancelText: "No",
+            onOk: () => {
+                // Trigger the Formik submit handler
+                formikSubmit();
+            },
+        });
+    };
+
     return (
         <Modal
             centered
@@ -135,9 +148,10 @@ const BlogModal = ({ open, setOpen, handleSubmitBlog, currentBlog = null, setCur
 
                         <Button
                             type="primary"
-                            htmlType="submit"
+                            htmlType="button"
                             loading={isSubmitting}
-                            style={{ marginTop: 20 }}
+                            style={{ marginTop: "20px", padding: "20px 25px", fontSize: "16px" }}
+                            onClick={() => handleConfirm(handleSubmit)} 
                         >
                             Submit
                         </Button>

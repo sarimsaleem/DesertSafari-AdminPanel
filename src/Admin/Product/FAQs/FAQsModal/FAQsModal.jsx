@@ -24,6 +24,19 @@ const FAQModal = ({ open, setOpen, addFAQ, updateFAQ, isEditing, currentFAQ }) =
         </Title>
     );
 
+    const handleConfirm = (formikSubmit) => {
+            Modal.confirm({
+                title: "Are you sure?",
+                content: "Do you want to proceed with submitting this form?",
+                okText: "Yes",
+                cancelText: "No",
+                onOk: () => {
+                    // Trigger the Formik submit handler
+                    formikSubmit();
+                },
+            });
+        };
+
     return (
         <Modal
             centered
@@ -71,9 +84,10 @@ const FAQModal = ({ open, setOpen, addFAQ, updateFAQ, isEditing, currentFAQ }) =
 
                         <Button
                             type="primary"
-                            htmlType="submit"
+                            htmlType="button"
                             loading={isSubmitting}
-                            style={{ marginTop: "20px" }}
+                            style={{ marginTop: "20px",padding: "20px 25px", fontSize: "16px" }}
+                            onClick={() => handleConfirm(handleSubmit)}
                         >
                             {isEditing ? 'Update' : 'Submit'}
                         </Button>

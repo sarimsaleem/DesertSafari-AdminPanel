@@ -49,7 +49,18 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
         ) : null
     }
 
-
+    const handleConfirm = (formikSubmit) => {
+        Modal.confirm({
+            title: "Are you sure?",
+            content: "Do you want to proceed with submitting this form?",
+            okText: "Yes",
+            cancelText: "No",
+            onOk: () => {
+                // Trigger the Formik submit handler
+                formikSubmit();
+            },
+        });
+    };
 
     return (
         <Modal
@@ -304,7 +315,7 @@ const ProductModal = ({ open, setOpen, addProduct, categories }) => {
                                     {touched?.banner_image_url && errors?.banner_image_url ? renderError(errors?.banner_image_url) : null}
                                 </Col>
                             </Row>
-                            <Button type="primary" htmlType="submit" loading={isSubmitting} style={{ marginTop: "20px" }}>
+                            <Button type="primary" htmlType="button" loading={isSubmitting} style={{ marginTop: "20px",padding: "20px 25px", fontSize: "16px" }} onClick={() => handleConfirm(handleSubmit)}>
                                 Submit
                             </Button>
                         </MainForm>
